@@ -7,10 +7,6 @@ CSC_FLAGS += -target:library
 
 GEN_FILES = AssemblyInfo.cs
 
-REFS =
-
-RES_FILES =
-
 SRC_FILES =                    \
 	$(srcdir)/IJsonWrapper.cs  \
 	$(srcdir)/JsonData.cs      \
@@ -25,3 +21,5 @@ assemblydir = $(pkglibdir)
 assembly_DATA = $(ASSEMBLY)
 
 EXTRA_DIST = $(SRC_FILES)
+
+all-local: $(ASSEMBLY)

@@ -5,8 +5,6 @@ ASSEMBLY = $(top_builddir)/bin/LitJson.Tests.dll
 
 CSC_FLAGS += -target:library
 
-GEN_FILES =
-
 REFS =                                 \
 	$(MONO_NUNIT_LIBS)                 \
 	-r:$(top_builddir)/bin/LitJson.dll

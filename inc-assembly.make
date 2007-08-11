@@ -46,5 +46,3 @@ CLEANFILES = $(ASSEMBLY) $(GEN_FILES) $(MDB_FILE)
 $(ASSEMBLY): $(build_sources) $(RES)
 	$(CSC) $(CSC_FLAGS) -out:$@ $(REFS) $(RES_FILES:%=-resource:%) $(build_sources)
 
-all-local: $(ASSEMBLY)
-
