@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<part xmlns="http://docbook.org/ns/docbook"
+      xmlns:xi="http://www.w3.org/2001/XInclude"
+      xml:id="appendices">
+  <title>Appendices</title>
+
+  <xi:include href="parser/parser.xml" />
+  <xi:include href="benchmarks/benchmarks.xml" />
+
+</part>

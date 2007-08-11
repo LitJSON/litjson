@@ -1,0 +1,33 @@
+LitJSON Manual
+==============
+
+This directory contains the XML sources for this library's manual in
+DocBook[1] (v5.0) format.
+
+Normally LitJSON is distributed with a pre-built HTML version of the manual,
+so building it again is not strictly necessary. However, if you are
+interested in building it yourself for any reason, you need to do the
+following:
+
+* Make sure you have a recent version of libxml[2] and libxslt[3] installed
+  on your system.
+
+* Create the 'docbook' folder in this directory. Under it, create the 'xsd'
+  and 'xsl' directories.
+
+* Download the XSD schemas for DocBook 5.0[4] and place them under
+  'docbook/xsd'.
+
+* Download the docbook-xsl-ns package[5], uncompress it and place it under
+  'docbook/xsl'.
+
+Once this is done, you can check the validity of the manual by running 'make
+test' on this directory, or build the HTML version with 'make html'.
+
+---
+[1] http://www.docbook.org/tdg5/en/html/docbook.html
+[2] http://xmlsoft.org/
+[3] http://xmlsoft.org/XSLT/
+[4] http://www.docbook.org/xml/5.0CR5/xsd/ or see
+    http://www.docbook.org/schemas/5x for other revisions
+[5] http://sourceforge.net/project/showfiles.php?group_id=21935&package_id=219178

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<part xmlns="http://docbook.org/ns/docbook"
+      xmlns:xi="http://www.w3.org/2001/XInclude"
+      xml:id="reference">
+  <title>API Reference</title>
+
+  <chapter>
+    <para>
+      To be added.
+    </para>
+  </chapter>
+  <!--
+  <xi:include href="LitJson/LitJson.xml" />
+  -->
+
+</part>

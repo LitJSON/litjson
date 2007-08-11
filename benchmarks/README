@@ -1,0 +1,49 @@
+LitJSON Benchmarks
+==================
+
+This directory contains a number of benchmarks to verify the speed and heap
+usage of different pieces of LitJSON, and compare these items against two
+alternative JSON libraries: Jayrock[1] and Newtonsoft Json.NET[2].
+
+Although raw speed is not the main priority of LitJSON, it's intended to
+have fairly good performance. The purpose of these benchmarks is mainly to
+keep track of this, and make sure it is not significantly worse than
+average. These benchmarks have certainly helped spot several problems with
+the original way things were being done, and much gratitude goes towards the
+creators of Jayrock and Newtonsoft Json.NET; without their excellent work,
+this library would not be what it is now.
+
+The benchmarks are split in several files, according to functionality and
+library being tested. With that in mind, source files follow the naming
+convention 'Bm[LIB][FUNC].cs' where 'LIB' is one of 'Jayrock', 'LitJson' or
+'Newtonsoft', and [FUNC] is one of:
+
+* Reader: Test the Reader interface of the libraries
+* Writer: Test the Writer interface of the libraries
+* Import: Test the conversion from JSON to .Net objects
+* Export: Test the conversion from .Net objects to JSON
+* Output: Not really benchmarks, just simple methods that output some
+          data to a .txt file just for debugging purposes
+
+The main benchmarking program is Benchmark.cs by Jon Skeet[3].
+
+To compile and run the benchmarks you may use GNU make. A 'GNUmakefile' is
+provided, so all you need is to run 'make' (or 'gmake', if that's the name
+of the binary on your system) on this directory.
+
+Please notice that in order to compile the benchmarks you have to put the
+required .dll's on this directory as well. LitJson.dll can be copied from
+the bin/ directory once 'make' is run in the top directory. Jayrock's and
+Newtonsoft's dll files are not distributed with LitJSON, so you need to get
+them from their websites, and then put them here.
+
+If you want to get information regarding heap usage of the different
+benchmarks, you need to have heap-buddy[4] installed as well. Running 'make'
+without arguments should give you further instructions on how to proceed.
+
+---
+[1] http://jayrock.berlios.de/
+[2] http://www.newtonsoft.com/products/json/
+[3] Benchmark.cs by Jon Skeet, copied verbatim from
+    http://www.yoda.arachsys.com/csharp/benchmark.html
+[4] http://www.mono-project.com/HeapBuddy

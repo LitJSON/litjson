@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<refentry xmlns="http://docbook.org/ns/docbook"
+          xml:id="ref.LitJson.JsonReader.HasReachedEnd">
+  <refnamediv>
+    <refname>HasReachedEnd</refname>
+    <refpurpose>
+      Indicates whether the reader has made it to the end of the input
+      stream
+    </refpurpose>
+  </refnamediv>
+
+  <refsection role="description">
+    <fieldsynopsis language="c#">
+      <modifier>public</modifier>
+      <type>bool</type>
+      <varname role="property">HasReachedEnd</varname>
+    </fieldsynopsis>
+  </refsection>
+</refentry>

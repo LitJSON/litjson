@@ -1,0 +1,10 @@
+prefix=@prefix@
+exec_prefix=@exec_prefix@
+libdir=@libdir@
+assemblies_dir=@libdir@/litjson
+Libraries=${assemblies_dir}/LitJson.dll
+
+Name: LitJSON
+Description: Library to handle JSON data in .Net programs
+Version: @VERSION@
+Libs: -r:LitJson.dll

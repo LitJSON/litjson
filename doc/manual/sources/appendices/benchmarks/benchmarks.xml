@@ -1,0 +1,725 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE appendix [
+  <!ENTITY % urls SYSTEM "../../entities/urls.ent">
+  %urls;
+]>
+
+<appendix xmlns="http://docbook.org/ns/docbook"
+          xmlns:xl="http://www.w3.org/1999/xlink"
+          xml:id="appendix.benchmarks">
+  <info>
+    <title>Performance Benchmarks</title>
+    <abstract>
+      <para>
+        One of the main design goals of LitJSON is to be a small and fast
+        library.
+      </para>
+      <para>
+        This doesn't mean that it should perform every operation as fast as
+        possible down to the last nano-second (which would be a pointless
+        exercise anyway). However, a set of simple benchmarks to keep track
+        of its performance as the library grows, and to compare it against
+        other JSON libraries for .Net does serve a useful purpose. In simple
+        terms, a set of benchmarks has been created to make sure LitJSON's
+        performance doesn't suck.
+      </para>
+    </abstract>
+  </info>
+
+  <section xml:id="appendix.benchmarks.description">
+    <title>Description</title>
+
+    <section>
+      <title>Figures Being Measured</title>
+
+      <para>
+        In an attempt to keep the benchmarks useful and organised, different
+        binaries are created, each one with its own set of micro-benchmarks
+        measuring different features of the libraries.
+      </para>
+      <para>
+        The benchmarks are split in 4 main categories:
+      </para>
+      <itemizedlist>
+        <listitem>
+          <para>
+            Readers.
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+            Writers.
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+            Importing data into objects.
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+            Exporting data from objects.
+          </para>
+        </listitem>
+      </itemizedlist>
+      <para>
+        Aditionally, information about heap memory used is gathered using
+        <link xl:href="&url.heap-buddy;">heap-buddy</link>.
+      </para>
+      <para>
+        The complete source code of the benchmarks can be found under the
+        <filename class="directory">benchmarks</filename> directory included
+        in the library's source tree. More information about this code is
+        included in the <filename>README</filename> file under that
+        directory.
+      </para>
+    </section>
+
+    <section>
+      <title>Software Being Measured</title>
+
+      <para>
+        The benchmarks included test related capabilities of the following
+        .Net libraries:
+      </para>
+      <itemizedlist>
+        <listitem>
+          <para>
+            <link xl:href="&url.jayrock;">Jayrock</link> version 0.9.8316.
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+            <link xl:href="&url.litjson;">LitJSON</link> version 0.1.0.
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+            <link xl:href="&url.newtonsoft;">Newtonsoft Json.NET</link>
+            version 1.1.
+          </para>
+        </listitem>
+      </itemizedlist>
+      <para>
+        Much gratitude goes out to the developers of Jayrock and Json.NET
+        for their excellent work, and, needless to say, LitJSON wouldn't be
+        what it is now without them.
+      </para>
+    </section>
+
+    <section>
+      <title>Environment</title>
+
+      <para>
+        It is important to notice that, although benchmarks like these can
+        show trends in performance and help the developers notice when
+        something goes notably wrong, in general they are not meant to
+        produce conclusive results in general.
+      </para>
+      <para>
+        For this reason, every number presented here is a relative figure,
+        that depends on a number of variables (hardware, operating system,
+        runtime, system load, etc.) Also notice that different libraries may
+        have been designed with different purposes in mind, so benchmark
+        suites that only focus on a common subset of functionality, like
+        this one, don't present the full picture to the potential developer
+        that is deciding whether to use a given tool or not.
+      </para>
+      <para>
+        These benchmarks have been run while trying to keep the environment
+        as consistent as possible. The machine used is an old Pentium III,
+        running Linux 2.6.19. The binaries are executed using Mono 1.2.4.
+      </para>
+    </section>
+  </section>
+
+  <section xml:id="appendix.benchmarks.results">
+    <info>
+      <title>Results</title>
+      <abstract>
+        <para>
+          The results below are presented in the form
+          <literallayout class="monospaced">
+Benchmarking type <replaceable>TYPE</replaceable>
+  <replaceable>TEST</replaceable> <replaceable>TIME</replaceable>
+          </literallayout>
+          where <replaceable>TEST</replaceable> is the name of the specific
+          micro-benchmark, and <replaceable>TIME</replaceable> is the amount
+          of time spent  running the benchmark a constant number of times.
+          The number of iterations used was 10000.
+        </para>
+      </abstract>
+    </info>
+
+    <section>
+      <title>Readers</title>
+
+      <para>
+        The benchmarks implemented are:
+      </para>
+      <variablelist>
+        <varlistentry>
+          <term>ReaderNumbers</term>
+          <listitem>
+            <para>
+              Using a reader class (<classname>JsonTextReader</classname> in
+              Jayrock, <classname>JsonReader</classname> in LitJSON and
+              Json.NET), read the following input:
+              <literallayout class="monospaced">
+<![CDATA[
+[
+    42,
+    1,
+    1,
+    2,
+    3,
+    5,
+    8,
+    -50,
+    -678.56,
+    3.1415,
+    1.4e10,
+    4.0e5,
+    8.0e-3
+]
+]]>
+              </literallayout>
+            </para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term>ReaderStrings</term>
+          <listitem>
+            <para>
+              Using a reader class, the following input is read:
+              <literallayout class="monospaced">
+<![CDATA[
+[
+    "Hello World!",
+    "The quick brown fox jumps over the lazy dog",
+    "Lorem ipsum dolor sit amet, consectetur adipisicing elit",  // .. more text
+    "$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^"
+]
+]]>
+              </literallayout>
+            </para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term>ReaderFirstProperty</term>
+          <listitem>
+            <para>
+              Given the following input:
+              <literallayout class="monospaced">
+{
+    "Image": {
+        "FirstProperty": true,
+        "Width":  800,
+        "Height": 600,
+        "Title":  "View from 15th Floor",
+        "Comment": "Sample text:\t\"abcdef\"\nSecond Line",
+        "Comment2": "\u03c0\u03c1\u03cc\u03b3\u03c1\u03b1\u03bc\u03bc\u03b1",
+        "Default": true,
+        "Active": false,
+        "Resource": null,
+        "Thumbnail": {
+            "Url":    "http://www.example.com/image/481989943",
+            "Height": 125,
+            "Width":  "100" },
+        "IDs": [ 116, 943, 234, 38793 ],
+        "Score": 9.40,
+        "Scale": 1.0e-1,
+        "Views": 3000000000,
+        "LastProperty": true
+    }
+}
+              </literallayout>
+              A reader is created and tokens are read until the
+              <literal>"FirstProperty"</literal> element is found.
+            </para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term>ReaderLastProperty</term>
+          <listitem>
+            <para>
+              Given the same input as the last benchmark, a reader is
+              created and tokens are read until
+              <literal>"LastProperty"</literal> is found.
+            </para>
+          </listitem>
+        </varlistentry>
+      </variablelist>
+      <para>
+        The results:
+      </para>
+      <screen>
+<![CDATA[
+Benchmarking type BenchmarkJayrock
+  JayrockReaderNumbers 00:00:02.0536990
+  JayrockReaderStrings 00:00:01.7865170
+  JayrockReaderFirstProperty 00:00:00.5703040
+  JayrockReaderLastProperty 00:00:04.3971340
+
+Benchmarking type BenchmarkLitJson
+  LitJsonReaderNumbers 00:00:02.1392270
+  LitJsonReaderStrings 00:00:01.8588060
+  LitJsonReaderFirstProperty 00:00:00.3318240
+  LitJsonReaderLastProperty 00:00:03.6514090
+
+Benchmarking type BenchmarkNewtonsoft
+  NewtonsoftReaderNumbers 00:00:02.8536600
+  NewtonsoftReaderStrings 00:00:02.4541820
+  NewtonsoftReaderFirstProperty 00:00:01.2762880
+  NewtonsoftReaderLastProperty 00:00:03.7789130
+]]>
+      </screen>
+      <para>
+        Heap memory usage:
+      </para>
+      <screen>
+<![CDATA[
+           SUMMARY                         
+                                           
+         Filename: BmJayrockReader-heap.out
+  Allocated Bytes: 132.3M                  
+Allocated Objects: 2511436                 
+              GCs: 980                     
+          Resizes: 5                       
+  Final heap size: 468k                    
+                                           
+   Distinct Types: 81                      
+       Backtraces: 565                     
+
+
+           SUMMARY                         
+                                           
+         Filename: BmLitJsonReader-heap.out
+  Allocated Bytes: 65.2M                   
+Allocated Objects: 1251596                 
+              GCs: 480                     
+          Resizes: 5                       
+  Final heap size: 468k                    
+                                           
+   Distinct Types: 92                      
+       Backtraces: 667                     
+
+
+           SUMMARY                            
+                                              
+         Filename: BmNewtonsoftReader-heap.out
+  Allocated Bytes: 353.5M                     
+Allocated Objects: 1361535                    
+              GCs: 3122                       
+          Resizes: 5                          
+  Final heap size: 476k                       
+                                              
+   Distinct Types: 81                         
+       Backtraces: 527
+]]>
+      </screen>
+    </section>
+    <section>
+      <title>Writers</title>
+
+      <para>
+        The benchmarks implemented are:
+      </para>
+      <variablelist>
+        <varlistentry>
+          <term>WriterNumbers</term>
+          <listitem>
+            <para>
+              Using a writer object (<classname>JsonTextWriter</classname> in
+              Jayrock, <classname>JsonWriter</classname> in LitJSON and
+              Json.NET), write the following numbers in an array:
+              <literallayout class="monospaced">
+0.0,
+10.0,
+3.1416,
+0.0000001,
+-789.123,
+0.00056,
+50000000000.0
+0,
+42,
+100000,
+-1,
+-123,
+7777,
+25
+              </literallayout>
+            </para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term>WriterObjects</term>
+          <listitem>
+            <para>
+              Using a writer, write the following information:
+              <literallayout class="monospaced">
+'[', null,
+'{', null,
+'P', "precision",
+'S', "zip",
+'P', "Latitude",
+'D', 37.7668,
+'P', "Longitude",
+'D', -122.3959,
+'P', "Address",
+'S', "",
+'P', "City",
+'S', "SAN FRANCISCO",
+'P', "State",
+'S', "CA",
+'P', "Zip",
+'S', "94107",
+'P', "Country",
+'S', "US",
+'P', "Visited",
+'B', true,
+'P', "Ref",
+'N', null,
+'P', "Comment",
+'S', "This is a \"comment\"\tColumn2\nLine2. " +
+    "\u00c6nema is a good album.",
+'}', null,
+
+'{', null,
+'P', "precision",
+'S', "zip",
+'P', "Latitude",
+'D', 37.371991,
+'P', "Longitude",
+'D', -122.026020,
+'P', "Address",
+'S', "",
+'P', "City",
+'S', "SUNNYVALE",
+'P', "State",
+'S', "CA",
+'P', "Zip",
+'S', "94085",
+'P', "Country",
+'S', "US",
+'P', "Visited",
+'B', false,
+'P', "Ref",
+'N', null,
+'}', null,
+']', null
+              </literallayout>
+              This information is processed in pairs, the first item
+              indicates the type of token to write: <literal>{</literal>,
+              <literal>}</literal>, <literal>[</literal> and
+              <literal>]</literal> for opening/closing objects and arrays,
+              <literal>P</literal> for properties, <literal>S</literal> for
+              strings, <literal>B</literal> for booleans,
+              <literal>D</literal> for double numbers and
+              <literal>N</literal> for null.
+            </para>
+          </listitem>
+        </varlistentry>
+      </variablelist>
+      <para>
+        The results:
+      </para>
+      <screen>
+<![CDATA[
+Benchmarking type BenchmarkJayrock
+  JayrockWriterNumbers 00:00:10.9054500
+  JayrockWriterObjects 00:00:09.1167770
+
+Benchmarking type BenchmarkLitJson
+  LitJsonWriterNumbers 00:00:10.8502530
+  LitJsonWriterObjects 00:00:08.4659320
+
+Benchmarking type BenchmarkNewtonsoft
+  NewtonsoftWriterNumbers 00:00:10.8526390
+  NewtonsoftWriterObjects 00:00:08.6239890
+]]>
+      </screen>
+      <para>
+        Heap memory usage:
+      </para>
+      <screen>
+<![CDATA[
+           SUMMARY                         
+                                           
+         Filename: BmJayrockWriter-heap.out
+  Allocated Bytes: 88.8M                   
+Allocated Objects: 1890928                 
+              GCs: 671                     
+          Resizes: 5                       
+  Final heap size: 468k                    
+                                           
+   Distinct Types: 64                      
+       Backtraces: 419                     
+
+
+           SUMMARY                         
+                                           
+         Filename: BmLitJsonWriter-heap.out
+  Allocated Bytes: 69.9M                   
+Allocated Objects: 1320942                 
+              GCs: 537                     
+          Resizes: 5                       
+  Final heap size: 468k                    
+                                           
+   Distinct Types: 66                      
+       Backtraces: 434                     
+
+
+           SUMMARY                            
+                                              
+         Filename: BmNewtonsoftWriter-heap.out
+  Allocated Bytes: 74.0M                      
+Allocated Objects: 1470936                    
+              GCs: 563                        
+          Resizes: 5                          
+  Final heap size: 468k                       
+                                              
+   Distinct Types: 64                         
+       Backtraces: 422
+]]>
+      </screen>
+    </section>
+    <section>
+      <title>Importing</title>
+
+      <para>
+        These benchmarks receive the following as input:
+        <literallayout class="monospaced">
+{
+    "Name"    : "Art Vandelay",
+    "Age"     : 30,
+    "Height"  : 1.65,
+    "Retired" : false,
+    "Urls"    : [
+        "http://example.com/artvandelay",
+        "http://artvandelay.org/" ],
+
+    "Job" : {
+        "Title"       : "Importer/Exporter",
+        "Description" : "import matches... long matches"
+    }
+}
+        </literallayout>
+      </para>
+      <para>
+        The benchmarks implemented are:
+      </para>
+      <variablelist>
+        <varlistentry>
+          <term>ConversionToGenericObject</term>
+          <listitem>
+            <para>
+              Using the specific API to import JSON data
+              (<methodname>JsonConvert.Import</methodname> in Jayrock,
+              <methodname>JsonMapper.ToObject</methodname> in LitJSON and
+              <methodname>JavaScriptConvert.DeserializeObject</methodname>
+              in Json.NET), the input data is imported into a
+              general-purpose data type defined by the library:
+              <classname>JsonObject</classname> in Jayrock,
+              <classname>JsonData</classname> in LitJSON and
+              <classname>JavaScriptObject</classname> in Json.NET.
+            </para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term>ConversionToHashtable</term>
+          <listitem>
+            <para>
+              Import the input JSON into an object of type
+              <type>System.Collections.Hashtable</type>. Unfortunately,
+              Jayrock doesn't seem to be able to perform this conversion, so
+              it's not included in the results. Notice that this also
+              affects the heap memory usage results (Jayrock's summary
+              corresponds to running 2 of the 3 benchmarks).
+            </para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term>ConversionToObject</term>
+          <listitem>
+            <para>
+              A custom <classname>Person</classname> class is used to import
+              the input data.
+            </para>
+          </listitem>
+        </varlistentry>
+      </variablelist>
+      <para>
+        The results:
+      </para>
+      <screen>
+<![CDATA[
+Benchmarking type BenchmarkJayrock
+  JayrockConversionToGenericObject 00:00:03.9930830
+  JayrockConversionToObject 00:00:12.9083840
+
+Benchmarking type BenchmarkLitJson
+  LitJsonConversionToGenericObject 00:00:02.6499500
+  LitJsonConversionToHashtable 00:00:06.1666880
+  LitJsonConversionToObject 00:00:06.6222020
+
+Benchmarking type BenchmarkNewtonsoft
+  NewtonsoftConversionToGenericObject 00:00:10.8741050
+  NewtonsoftConversionToHashtable 00:00:11.8969750
+  NewtonsoftConversionToObject 00:00:25.9335310
+]]>
+      </screen>
+      <para>
+        Heap memory usage:
+      </para>
+      <screen>
+<![CDATA[
+           SUMMARY                         
+                                           
+         Filename: BmJayrockImport-heap.out
+  Allocated Bytes: 111.0M                  
+Allocated Objects: 2923200                 
+              GCs: 677                     
+          Resizes: 6                       
+  Final heap size: 628k                    
+                                           
+   Distinct Types: 162                     
+       Backtraces: 1236                    
+
+
+           SUMMARY                         
+                                           
+         Filename: BmLitJsonImport-heap.out
+  Allocated Bytes: 87.5M                   
+Allocated Objects: 2132092                 
+              GCs: 591                     
+          Resizes: 6                       
+  Final heap size: 628k                    
+                                           
+   Distinct Types: 124                     
+       Backtraces: 879                     
+
+
+           SUMMARY                            
+                                              
+         Filename: BmNewtonsoftImport-heap.out
+  Allocated Bytes: 504.1M                     
+Allocated Objects: 8801931                    
+              GCs: 3797                       
+          Resizes: 6                          
+  Final heap size: 644k                       
+                                              
+   Distinct Types: 107                        
+       Backtraces: 811
+]]>
+      </screen>
+    </section>
+    <section>
+      <title>Exporting</title>
+
+      <para>
+        The benchmarks implemented are:
+      </para>
+      <variablelist>
+        <varlistentry>
+          <term>ConversionFromGenericObject</term>
+          <listitem>
+            <para>
+              Using an object of the same type as in the
+              ConversionToGenericObject benchmark, convert it into a JSON
+              string via <methodname>JsonConvert.ExportToString</methodname>
+              in Jayrock, <methodname>JsonMapper.ToJson</methodname> in
+              LitJSON, and
+              <methodname>JavaScriptConvert.SerializeObject</methodname> in
+              Json.NET.
+            </para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term>ConversionFromHashtable</term>
+          <listitem>
+            <para>
+              Convert an object with the same structure and data, but of
+              type <type>System.Collections.Hashtable</type> into JSON.
+            </para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term>ConversionFromObject</term>
+          <listitem>
+            <para>
+              Convert from the custom <classname>Person</classname> type
+              into JSON.
+            </para>
+          </listitem>
+        </varlistentry>
+      </variablelist>
+      <para>
+        The results:
+      </para>
+      <screen>
+<![CDATA[
+Benchmarking type BenchmarkJayrock
+  JayrockConversionFromGenericObject 00:00:02.0131600
+  JayrockConversionFromHashtable 00:00:04.0686330
+  JayrockConversionFromObject 00:00:08.0439940
+
+Benchmarking type BenchmarkLitJson
+  LitJsonConversionFromGenericObject 00:00:00.2049410
+  LitJsonConversionFromHashtable 00:00:03.1260010
+  LitJsonConversionFromObject 00:00:04.1872060
+
+Benchmarking type BenchmarkNewtonsoft
+  NewtonsoftConversionFromGenericObject 00:00:03.1988890
+  NewtonsoftConversionFromHashtable 00:00:03.0914350
+  NewtonsoftConversionFromObject 00:00:09.1955350
+]]>
+      </screen>
+      <para>
+        Heap memory usage:
+      </para>
+      <screen>
+<![CDATA[
+           SUMMARY                         
+                                           
+         Filename: BmJayrockExport-heap.out
+  Allocated Bytes: 104.7M                  
+Allocated Objects: 2744490                 
+              GCs: 639                     
+          Resizes: 6                       
+  Final heap size: 632k                    
+                                           
+   Distinct Types: 191                     
+       Backtraces: 1667                    
+
+
+           SUMMARY                         
+                                           
+         Filename: BmLitJsonExport-heap.out
+  Allocated Bytes: 43.9M                   
+Allocated Objects: 981842                  
+              GCs: 306                     
+          Resizes: 5                       
+  Final heap size: 472k                    
+                                           
+   Distinct Types: 131                     
+       Backtraces: 870                     
+
+
+           SUMMARY                            
+                                              
+         Filename: BmNewtonsoftExport-heap.out
+  Allocated Bytes: 83.5M                      
+Allocated Objects: 2081974                    
+              GCs: 586                        
+          Resizes: 5                          
+  Final heap size: 476k                       
+                                              
+   Distinct Types: 110                        
+       Backtraces: 762
+]]>
+      </screen>
+    </section>
+  </section>
+
+</appendix>

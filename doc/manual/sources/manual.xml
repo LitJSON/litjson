@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE book [
+  <!ENTITY % gen-entities SYSTEM "../generated.ent">
+  %gen-entities;
+  <!ENTITY % urls         SYSTEM "entities/urls.ent">
+  %urls;
+]>
+
+<book xmlns="http://docbook.org/ns/docbook"
+      xmlns:xl="http://www.w3.org/1999/xlink"
+      xmlns:xi="http://www.w3.org/2001/XInclude"
+      xml:id="manual" xml:lang="en" version="5.0">
+  <info>
+    <title>LitJSON Manual</title>
+    <authorgroup>
+      <author>
+        <personname>
+          <firstname>Leonardo</firstname>
+          <surname>Boshell</surname>
+        </personname>
+        <email>leonardoboshell@users.sourceforge.net</email>
+      </author>
+    </authorgroup>
+    <pubdate>&manual.pubdate;</pubdate>
+    <legalnotice>
+      <title>Terms Of Use</title>
+      <para>
+        This manual is dedicated to the public domain. Anyone is free to
+        copy, modify, publish, use, or distribute the manual for any
+        purpose, commercial or non-commercial, and by any means. Have fun.
+      </para>
+    </legalnotice>
+  </info>
+
+  <preface xml:id="preface">
+    <info>
+      <title>Preface</title>
+      <abstract>
+        <para>
+          This is the manual of LitJSON, a library for the .Net framework,
+          which purpose is to handle data in the JSON format.
+        </para>
+        <para>
+          It covers version &manual.version; of the library and at the
+          moment it includes a quick start section and some appendices
+          containing specific information about features of LitJSON, such as
+          the specific approach used in the parser component, and some notes
+          regarding performance as measured by a set of benchmarks.
+        </para>
+        <para>
+          Due to some problems in the generation of HTML output from the XML
+          sources, the complete API reference is not included yet, although
+          this shortcoming will likely be fixed in a future release. Until
+          that time, it is recommended that developers familiarise with the
+          API by reading the unit tests distributed with its sources.
+        </para>
+      </abstract>
+    </info>
+
+    <para>
+      JSON is a simple, yet powerful notation to specify data. It defines
+      simple scalar types such as boolean, number (integers and reals) and
+      string, and a couple of data structures: arrays (lists) and objects
+      (dictionaries). For more information on the JSON format, visit <link
+      xl:href="&url.json;">JSON.org</link>.
+    </para>
+    <para>
+      LitJSON is written in C#, and it's intended to be small, fast and easy
+      to use. It was developed on a GNU/Linux environment, using the <link
+      xl:href="&url.mono;">Mono</link> framework.
+    </para>
+  </preface>
+
+  <xi:include href="quickstart/quickstart.xml" />
+  <xi:include href="reference/reference.xml" />
+  <xi:include href="appendices/appendices.xml" />
+
+</book>

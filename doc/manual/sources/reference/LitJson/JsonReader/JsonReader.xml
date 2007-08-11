@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<section xmlns="http://docbook.org/ns/docbook"
+         xmlns:xi="http://www.w3.org/2001/XInclude"
+         xml:id="ref.LitJson.JsonReader">
+  <info>
+    <title>JsonReader</title>
+    <abstract>
+      <simpara>Streamed reading of JSON data</simpara>
+    </abstract>
+  </info>
+
+  <classsynopsis language="c#">
+    <ooclass>
+      <modifier>public</modifier>
+      <classname role="class">JsonReader</classname>
+    </ooclass>
+  </classsynopsis>
+
+  <para>
+    <classname>JsonReader</classname> provides a stream-like interface to
+    read data from a certain source, normally a string, or a
+    <classname>TextReader</classname>.
+  </para>
+
+  <xi:include href="properties/HasReachedEnd.xml" />
+
+</section>
