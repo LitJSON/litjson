@@ -1,3 +1,9 @@
+2007-08-11  Leonardo Boshell  <leonardoboshell@users.sourceforge.net>
+
+	* src/LitJson/AssemblyInfo.cs.in: Added CLSCompliant attribute.
+	* doc/manual/Makefile.am: Added rules to avoid breaking compilation if
+	the support docbook files are not available.
+
 2007-08-09  Leonardo Boshell  <leonardoboshell@users.sourceforge.net>
 
 	=== Release 0.1.0 ===

@@ -15,6 +15,13 @@ manualdir = $(htmldir)
 manual_DATA = $(MANUAL_HTML)
 
 
+$(MANUAL_HTML):
+	@if test -d $(srcdir)/docbook; then \
+		echo "Run $(MAKE) html"; \
+	else \
+		echo "No docbook support files found, skipping.."; \
+	fi
+
 dist-hook:
 	if test -d $(srcdir)/docbook; then \
 		cd $(srcdir) && $(MAKE) html ; \
