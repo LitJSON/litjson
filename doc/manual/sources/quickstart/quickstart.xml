@@ -81,7 +81,7 @@ public class JsonSample
     {
         JsonData data = JsonMapper.ToObject (json_text);
 
-        // Dictionaries are accesed like a hash-table
+        // Dictionaries are accessed like a hash-table
         Console.WriteLine ("Album's name: {0}", data["album"]["name"]);
 
         // Scalar elements stored in a JsonData instance can be cast to
@@ -89,8 +89,8 @@ public class JsonSample
         string artist = (string) data["album"]["name"];
         int year = (int) data["album"]["year"];
 
-        // Arrays are accesed like regular lists as well
-        Console.WriteLine ("First track", data["album"]["tracks"][0]);
+        // Arrays are accessed like regular lists as well
+        Console.WriteLine ("First track: {0}", data["album"]["tracks"][0]);
     }
 }
 ]]>
