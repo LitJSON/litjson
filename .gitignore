@@ -1,3 +1,5 @@
+*.bz2
+*.zip
 Makefile
 Makefile.in
 aclocal.m4
