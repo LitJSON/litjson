@@ -25,5 +25,7 @@ EXTRA_DIST =     \
 CLEANFILES += $(top_builddir)/bin/TestResult.xml
 
 
+$(ASSEMBLY): $(top_builddir)/bin/LitJson.dll
+
 check-local: $(ASSEMBLY)
 	$(NUNIT) /nologo /labels $(ASSEMBLY)

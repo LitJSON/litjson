@@ -33,7 +33,7 @@ namespace LitJson
         private static int[]          fsm_return_table;
         private static StateHandler[] fsm_handler_table;
 
-        private bool          has_reached_end;
+        private bool          end_of_input;
         private FsmContext    fsm_context;
         private int           input_buffer;
         private int           input_char;
@@ -47,8 +47,8 @@ namespace LitJson
 
 
         #region Properties
-        public bool HasReachedEnd {
-            get { return has_reached_end; }
+        public bool EndOfInput {
+            get { return end_of_input; }
         }
 
         public int Token {
@@ -72,7 +72,7 @@ namespace LitJson
             input_buffer = 0;
             string_buffer = new StringBuilder (128);
             state = 1;
-            has_reached_end = false;
+            end_of_input = false;
             this.reader = reader;
 
             fsm_context = new FsmContext ();
@@ -287,13 +287,13 @@ namespace LitJson
         private static bool State3 (FsmContext ctx)
         {
             while (ctx.L.GetChar ()) {
-                if (ctx.L.input_char >= '0' && ctx.L.input_char<= '9') {
+                if (ctx.L.input_char >= '0' && ctx.L.input_char <= '9') {
                     ctx.L.string_buffer.Append ((char) ctx.L.input_char);
                     continue;
                 }
 
                 if (ctx.L.input_char == ' ' ||
-                    ctx.L.input_char >= '\t' && ctx.L.input_char<= '\r') {
+                    ctx.L.input_char >= '\t' && ctx.L.input_char <= '\r') {
                     ctx.Return = true;
                     ctx.NextState = 1;
                     return true;
@@ -331,7 +331,7 @@ namespace LitJson
             ctx.L.GetChar ();
 
             if (ctx.L.input_char == ' ' ||
-                ctx.L.input_char >= '\t' && ctx.L.input_char<= '\r') {
+                ctx.L.input_char >= '\t' && ctx.L.input_char <= '\r') {
                 ctx.Return = true;
                 ctx.NextState = 1;
                 return true;
@@ -366,7 +366,7 @@ namespace LitJson
         {
             ctx.L.GetChar ();
 
-            if (ctx.L.input_char >= '0' && ctx.L.input_char<= '9') {
+            if (ctx.L.input_char >= '0' && ctx.L.input_char <= '9') {
                 ctx.L.string_buffer.Append ((char) ctx.L.input_char);
                 ctx.NextState = 6;
                 return true;
@@ -378,13 +378,13 @@ namespace LitJson
         private static bool State6 (FsmContext ctx)
         {
             while (ctx.L.GetChar ()) {
-                if (ctx.L.input_char >= '0' && ctx.L.input_char<= '9') {
+                if (ctx.L.input_char >= '0' && ctx.L.input_char <= '9') {
                     ctx.L.string_buffer.Append ((char) ctx.L.input_char);
                     continue;
                 }
 
                 if (ctx.L.input_char == ' ' ||
-                    ctx.L.input_char >= '\t' && ctx.L.input_char<= '\r') {
+                    ctx.L.input_char >= '\t' && ctx.L.input_char <= '\r') {
                     ctx.Return = true;
                     ctx.NextState = 1;
                     return true;
@@ -694,9 +694,9 @@ namespace LitJson
         {
             ctx.L.GetChar ();
 
-            if (ctx.L.input_char >= '0' && ctx.L.input_char<= '9' ||
-                ctx.L.input_char >= 'A' && ctx.L.input_char<= 'F' ||
-                ctx.L.input_char >= 'a' && ctx.L.input_char<= 'f') {
+            if (ctx.L.input_char >= '0' && ctx.L.input_char <= '9' ||
+                ctx.L.input_char >= 'A' && ctx.L.input_char <= 'F' ||
+                ctx.L.input_char >= 'a' && ctx.L.input_char <= 'f') {
 
                 ctx.L.unichar = HexValue (ctx.L.input_char) * 4096;
                 ctx.NextState = 24;
@@ -710,9 +710,9 @@ namespace LitJson
         {
             ctx.L.GetChar ();
 
-            if (ctx.L.input_char >= '0' && ctx.L.input_char<= '9' ||
-                ctx.L.input_char >= 'A' && ctx.L.input_char<= 'F' ||
-                ctx.L.input_char >= 'a' && ctx.L.input_char<= 'f') {
+            if (ctx.L.input_char >= '0' && ctx.L.input_char <= '9' ||
+                ctx.L.input_char >= 'A' && ctx.L.input_char <= 'F' ||
+                ctx.L.input_char >= 'a' && ctx.L.input_char <= 'f') {
 
                 ctx.L.unichar += HexValue (ctx.L.input_char) * 256;
                 ctx.NextState = 25;
@@ -726,9 +726,9 @@ namespace LitJson
         {
             ctx.L.GetChar ();
 
-            if (ctx.L.input_char >= '0' && ctx.L.input_char<= '9' ||
-                ctx.L.input_char >= 'A' && ctx.L.input_char<= 'F' ||
-                ctx.L.input_char >= 'a' && ctx.L.input_char<= 'f') {
+            if (ctx.L.input_char >= '0' && ctx.L.input_char <= '9' ||
+                ctx.L.input_char >= 'A' && ctx.L.input_char <= 'F' ||
+                ctx.L.input_char >= 'a' && ctx.L.input_char <= 'f') {
 
                 ctx.L.unichar += HexValue (ctx.L.input_char) * 16;
                 ctx.NextState = 26;
@@ -742,9 +742,9 @@ namespace LitJson
         {
             ctx.L.GetChar ();
 
-            if (ctx.L.input_char >= '0' && ctx.L.input_char<= '9' ||
-                ctx.L.input_char >= 'A' && ctx.L.input_char<= 'F' ||
-                ctx.L.input_char >= 'a' && ctx.L.input_char<= 'f') {
+            if (ctx.L.input_char >= '0' && ctx.L.input_char <= '9' ||
+                ctx.L.input_char >= 'A' && ctx.L.input_char <= 'F' ||
+                ctx.L.input_char >= 'a' && ctx.L.input_char <= 'f') {
 
                 ctx.L.unichar += HexValue (ctx.L.input_char);
                 ctx.L.string_buffer.Append (Convert.ToChar (ctx.L.unichar));
@@ -762,7 +762,7 @@ namespace LitJson
             if ((input_char = NextChar ()) != -1)
                 return true;
 
-            has_reached_end = true;
+            end_of_input = true;
             return false;
         }
 
@@ -789,7 +789,7 @@ namespace LitJson
                 if (! handler (fsm_context))
                     throw new JsonException (input_char);
 
-                if (has_reached_end)
+                if (end_of_input)
                     return false;
 
                 if (fsm_context.Return) {

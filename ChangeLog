@@ -1,3 +1,14 @@
+2007-08-12  Leonardo Boshell  <leonardoboshell@users.sourceforge.net>
+
+	* src/LitJson/JsonWriter.cs: Renamed private method Check() to
+	DoValidation().
+	* src/LitJson/Lexer.cs: Whitespace cleanups. Renamed HasReachedEnd to
+	EndOfInput.
+	* test/JsonReaderTest.cs:
+	* src/LitJson/JsonReader.cs: Renamed HasReachedEnd to EndOfJson.
+	* test/Makefile.am: Added LitJson.dll as a dependency to the Tests
+	assembly.
+
 2007-08-11  Leonardo Boshell  <leonardoboshell@users.sourceforge.net>
 
 	* inc-assembly.make:

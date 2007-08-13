@@ -109,37 +109,7 @@ namespace LitJson
 
 
         #region Private Methods
-        private void Init ()
-        {
-            has_reached_end = false;
-            hex_seq = new char[4];
-            indentation = 0;
-            indent_value = 4;
-            pretty_print = false;
-            validate = true;
-
-            ctx_stack = new Stack<WriterContext> ();
-            context = new WriterContext ();
-            ctx_stack.Push (context);
-        }
-
-        private static void IntToHex (int n, char[] hex)
-        {
-            int num;
-
-            for (int i = 0; i < 4; i++) {
-                num = n % 16;
-
-                if (num < 10)
-                    hex[3 - i] = (char) ('0' + num);
-                else
-                    hex[3 - i] = (char) ('A' + (num - 10));
-
-                n >>= 4;
-            }
-        }
-
-        private void Check (Condition cond)
+        private void DoValidation (Condition cond)
         {
             if (! context.ExpectingValue)
                 context.Count++;
@@ -183,6 +153,36 @@ namespace LitJson
                         "Can't add a value here");
 
                 break;
+            }
+        }
+
+        private void Init ()
+        {
+            has_reached_end = false;
+            hex_seq = new char[4];
+            indentation = 0;
+            indent_value = 4;
+            pretty_print = false;
+            validate = true;
+
+            ctx_stack = new Stack<WriterContext> ();
+            context = new WriterContext ();
+            ctx_stack.Push (context);
+        }
+
+        private static void IntToHex (int n, char[] hex)
+        {
+            int num;
+
+            for (int i = 0; i < 4; i++) {
+                num = n % 16;
+
+                if (num < 10)
+                    hex[3 - i] = (char) ('0' + num);
+                else
+                    hex[3 - i] = (char) ('A' + (num - 10));
+
+                n >>= 4;
             }
         }
 
@@ -278,14 +278,14 @@ namespace LitJson
         public override string ToString ()
         {
             if (! (writer is StringWriter))
-                return String.Empty;
+               return String.Empty;
 
             return ((StringWriter) writer).ToString ();
         }
 
         public void Write (bool boolean)
         {
-            Check (Condition.Value);
+            DoValidation (Condition.Value);
             PutNewline ();
 
             Put (boolean ? "true" : "false");
@@ -295,7 +295,7 @@ namespace LitJson
 
         public void Write (decimal number)
         {
-            Check (Condition.Value);
+            DoValidation (Condition.Value);
             PutNewline ();
 
             Put (Convert.ToString (number, number_format));
@@ -305,7 +305,7 @@ namespace LitJson
 
         public void Write (double number)
         {
-            Check (Condition.Value);
+            DoValidation (Condition.Value);
             PutNewline ();
 
             string str = Convert.ToString (number, number_format);
@@ -320,7 +320,7 @@ namespace LitJson
 
         public void Write (int number)
         {
-            Check (Condition.Value);
+            DoValidation (Condition.Value);
             PutNewline ();
 
             Put (Convert.ToString (number, number_format));
@@ -330,7 +330,7 @@ namespace LitJson
 
         public void Write (long number)
         {
-            Check (Condition.Value);
+            DoValidation (Condition.Value);
             PutNewline ();
 
             Put (Convert.ToString (number, number_format));
@@ -340,7 +340,7 @@ namespace LitJson
 
         public void Write (string str)
         {
-            Check (Condition.Value);
+            DoValidation (Condition.Value);
             PutNewline ();
 
             if (str == null)
@@ -353,7 +353,7 @@ namespace LitJson
 
         public void WriteArrayEnd ()
         {
-            Check (Condition.InArray);
+            DoValidation (Condition.InArray);
             PutNewline (false);
 
             ctx_stack.Pop ();
@@ -370,7 +370,7 @@ namespace LitJson
 
         public void WriteArrayStart ()
         {
-            Check (Condition.NotAProperty);
+            DoValidation (Condition.NotAProperty);
             PutNewline ();
 
             Put ("[");
@@ -384,7 +384,7 @@ namespace LitJson
 
         public void WriteObjectEnd ()
         {
-            Check (Condition.InObject);
+            DoValidation (Condition.InObject);
             PutNewline (false);
 
             ctx_stack.Pop ();
@@ -401,7 +401,7 @@ namespace LitJson
 
         public void WriteObjectStart ()
         {
-            Check (Condition.NotAProperty);
+            DoValidation (Condition.NotAProperty);
             PutNewline ();
 
             Put ("{");
@@ -415,7 +415,7 @@ namespace LitJson
 
         public void WritePropertyName (string property_name)
         {
-            Check (Condition.Property);
+            DoValidation (Condition.Property);
             PutNewline ();
 
             PutString (property_name);

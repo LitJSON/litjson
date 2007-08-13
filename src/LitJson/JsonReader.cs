@@ -47,7 +47,7 @@ namespace LitJson
         private Stack<int>    automaton_stack;
         private int           current_input;
         private int           current_symbol;
-        private bool          has_reached_end;
+        private bool          end_of_json;
         private Lexer         lexer;
         private bool          parser_in_string;
         private bool          parser_return;
@@ -60,8 +60,8 @@ namespace LitJson
 
 
         #region Public Properties
-        public bool HasReachedEnd {
-            get { return has_reached_end; }
+        public bool EndOfJson {
+            get { return end_of_json; }
         }
 
         public JsonToken Token {
@@ -104,7 +104,7 @@ namespace LitJson
             automaton_stack.Push ((int) ParserToken.Text);
 
             lexer = new Lexer (reader);
-            has_reached_end = false;
+            end_of_json = false;
 
             this.reader = reader;
             reader_is_owned = owned;
@@ -330,12 +330,12 @@ namespace LitJson
 
         private bool ReadToken ()
         {
-            if (has_reached_end)
+            if (end_of_json)
                 return false;
 
             lexer.NextToken ();
 
-            if (lexer.HasReachedEnd) {
+            if (lexer.EndOfInput) {
                 Close ();
 
                 return false;
@@ -350,10 +350,10 @@ namespace LitJson
 
         public void Close ()
         {
-            if (has_reached_end)
+            if (end_of_json)
                 return;
 
-            has_reached_end = true;
+            end_of_json = true;
             if (reader_is_owned)
                 reader.Close ();
 
@@ -362,7 +362,7 @@ namespace LitJson
 
         public bool Read ()
         {
-            if (has_reached_end)
+            if (end_of_json)
                 return false;
 
             parser_in_string = false;

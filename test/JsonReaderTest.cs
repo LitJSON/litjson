@@ -311,7 +311,7 @@ namespace LitJson.Test
             reader.Read ();
             Assert.AreEqual (reader.Token, JsonToken.ArrayEnd, "A10");
             reader.Read ();
-            Assert.IsTrue (reader.HasReachedEnd, "A11");
+            Assert.IsTrue (reader.EndOfJson, "A11");
         }
 
         [Test]
@@ -341,7 +341,7 @@ namespace LitJson.Test
             reader.Read ();
             Assert.AreEqual (reader.Token, JsonToken.ObjectEnd, "A10");
             reader.Read ();
-            Assert.IsTrue (reader.HasReachedEnd, "A11");
+            Assert.IsTrue (reader.EndOfJson, "A11");
         }
 
         [Test]
