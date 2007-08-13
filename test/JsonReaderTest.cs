@@ -345,7 +345,7 @@ namespace LitJson.Test
         }
 
         [Test]
-        public void StringTest ()
+        public void StringsTest ()
         {
             string json =
                 "[ \"abc 123 \\n\\f\\b\\t\\r \\\" \\\\ \\u263a \\u25CF\" ]";
@@ -354,9 +354,20 @@ namespace LitJson.Test
 
             JsonReader reader = new JsonReader (json);
             reader.Read ();
-
             reader.Read ();
-            Assert.AreEqual (reader.Value, str);
+
+            Assert.AreEqual (str, reader.Value, "A1");
+
+            reader.Close ();
+
+            json = " [ '\"Hello\" \\'world\\'' ] ";
+            str  = "\"Hello\" 'world'";
+
+            reader = new JsonReader (json);
+            reader.Read ();
+            reader.Read ();
+
+            Assert.AreEqual (str, reader.Value, "A2");
 
             reader.Close ();
         }

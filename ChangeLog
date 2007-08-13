@@ -1,3 +1,12 @@
+2007-08-13  Leonardo Boshell  <leonardoboshell@users.sourceforge.net>
+
+	* src/LitJson/JsonReader.cs:
+	* src/LitJson/Lexer.cs: Added property to indicate whether single-quoted
+	strings are allowed or not. This parameter is true by default.
+	* test/JsonReaderTest.cs: Added test for single-quoted strings.
+	* doc/manual/sources/appendices/parser/parser.xml: Simplify lexer table
+	and include the new behaviour regarding single-quoted strings.
+
 2007-08-12  Leonardo Boshell  <leonardoboshell@users.sourceforge.net>
 
 	* src/LitJson/JsonWriter.cs: Renamed private method Check() to

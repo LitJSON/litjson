@@ -22,6 +22,7 @@ namespace LitJson
         public bool  Return;
         public int   NextState;
         public Lexer L;
+        public int   StateStack;
     }
 
 
@@ -33,6 +34,7 @@ namespace LitJson
         private static int[]          fsm_return_table;
         private static StateHandler[] fsm_handler_table;
 
+        private bool          allow_single_quoted_strings;
         private bool          end_of_input;
         private FsmContext    fsm_context;
         private int           input_buffer;
@@ -47,6 +49,11 @@ namespace LitJson
 
 
         #region Properties
+        public bool AllowSingleQuotedStrings {
+            get { return allow_single_quoted_strings; }
+            set { allow_single_quoted_strings = value; }
+        }
+
         public bool EndOfInput {
             get { return end_of_input; }
         }
@@ -116,7 +123,7 @@ namespace LitJson
 
         private static void PopulateFsmTables ()
         {
-            fsm_handler_table = new StateHandler[26] {
+            fsm_handler_table = new StateHandler[24] {
                 State1,
                 State2,
                 State3,
@@ -140,12 +147,10 @@ namespace LitJson
                 State21,
                 State22,
                 State23,
-                State24,
-                State25,
-                State26
+                State24
             };
 
-            fsm_return_table = new int[26] {
+            fsm_return_table = new int[24] {
                 (int) ParserToken.Char,
                 0,
                 (int) ParserToken.Number,
@@ -168,10 +173,8 @@ namespace LitJson
                 (int) ParserToken.Char,
                 0,
                 0,
-                0,
-                0,
-                0,
-                0
+                (int) ParserToken.CharSeq,
+                (int) ParserToken.Char
             };
         }
 
@@ -179,6 +182,7 @@ namespace LitJson
         {
             switch (esc_char) {
             case '"':
+            case '\'':
             case '\\':
             case '/':
                 return Convert.ToChar (esc_char);
@@ -220,6 +224,15 @@ namespace LitJson
                 switch (ctx.L.input_char) {
                 case '"':
                     ctx.NextState = 19;
+                    ctx.Return = true;
+                    return true;
+
+                case '\'':
+                    if (! ctx.L.allow_single_quoted_strings)
+                        return false;
+
+                    ctx.L.input_char = '"';
+                    ctx.NextState = 23;
                     ctx.Return = true;
                     return true;
 
@@ -621,7 +634,7 @@ namespace LitJson
                     return true;
 
                 case '\\':
-                    ctx.L.UngetChar ();
+                    ctx.StateStack = 19;
                     ctx.NextState = 21;
                     return true;
 
@@ -654,25 +667,12 @@ namespace LitJson
             ctx.L.GetChar ();
 
             switch (ctx.L.input_char) {
-            case '\\':
+            case 'u':
                 ctx.NextState = 22;
                 return true;
 
-            default:
-                return false;
-            }
-        }
-
-        private static bool State22 (FsmContext ctx)
-        {
-            ctx.L.GetChar ();
-
-            switch (ctx.L.input_char) {
-            case 'u':
-                ctx.NextState = 23;
-                return true;
-
             case '"':
+            case '\'':
             case '/':
             case '\\':
             case 'b':
@@ -682,7 +682,7 @@ namespace LitJson
             case 't':
                 ctx.L.string_buffer.Append (
                     ProcessEscChar (ctx.L.input_char));
-                ctx.NextState = 19;
+                ctx.NextState = ctx.StateStack;
                 return true;
 
             default:
@@ -690,69 +690,78 @@ namespace LitJson
             }
         }
 
-        private static bool State23 (FsmContext ctx)
+        private static bool State22 (FsmContext ctx)
         {
-            ctx.L.GetChar ();
+            int counter = 0;
+            int mult    = 4096;
 
-            if (ctx.L.input_char >= '0' && ctx.L.input_char <= '9' ||
-                ctx.L.input_char >= 'A' && ctx.L.input_char <= 'F' ||
-                ctx.L.input_char >= 'a' && ctx.L.input_char <= 'f') {
+            ctx.L.unichar = 0;
 
-                ctx.L.unichar = HexValue (ctx.L.input_char) * 4096;
-                ctx.NextState = 24;
-                return true;
+            while (ctx.L.GetChar ()) {
+
+                if (ctx.L.input_char >= '0' && ctx.L.input_char <= '9' ||
+                    ctx.L.input_char >= 'A' && ctx.L.input_char <= 'F' ||
+                    ctx.L.input_char >= 'a' && ctx.L.input_char <= 'f') {
+
+                    ctx.L.unichar += HexValue (ctx.L.input_char) * mult;
+
+                    counter++;
+                    mult /= 16;
+
+                    if (counter == 4) {
+                        ctx.L.string_buffer.Append (
+                            Convert.ToChar (ctx.L.unichar));
+                        ctx.NextState = ctx.StateStack;
+                        return true;
+                    }
+
+                    continue;
+                }
+
+                return false;
             }
 
-            return false;
+            return true;
+        }
+
+        private static bool State23 (FsmContext ctx)
+        {
+            while (ctx.L.GetChar ()) {
+                switch (ctx.L.input_char) {
+                case '\'':
+                    ctx.L.UngetChar ();
+                    ctx.Return = true;
+                    ctx.NextState = 24;
+                    return true;
+
+                case '\\':
+                    ctx.StateStack = 23;
+                    ctx.NextState = 21;
+                    return true;
+
+                default:
+                    ctx.L.string_buffer.Append ((char) ctx.L.input_char);
+                    continue;
+                }
+            }
+
+            return true;
         }
 
         private static bool State24 (FsmContext ctx)
         {
             ctx.L.GetChar ();
 
-            if (ctx.L.input_char >= '0' && ctx.L.input_char <= '9' ||
-                ctx.L.input_char >= 'A' && ctx.L.input_char <= 'F' ||
-                ctx.L.input_char >= 'a' && ctx.L.input_char <= 'f') {
-
-                ctx.L.unichar += HexValue (ctx.L.input_char) * 256;
-                ctx.NextState = 25;
+            switch (ctx.L.input_char) {
+            case '\'':
+                ctx.L.input_char = '"';
+                ctx.Return = true;
+                ctx.NextState = 1;
                 return true;
+
+            default:
+                return false;
             }
-
-            return false;
-        }
-
-        private static bool State25 (FsmContext ctx)
-        {
-            ctx.L.GetChar ();
-
-            if (ctx.L.input_char >= '0' && ctx.L.input_char <= '9' ||
-                ctx.L.input_char >= 'A' && ctx.L.input_char <= 'F' ||
-                ctx.L.input_char >= 'a' && ctx.L.input_char <= 'f') {
-
-                ctx.L.unichar += HexValue (ctx.L.input_char) * 16;
-                ctx.NextState = 26;
-                return true;
-            }
-
-            return false;
-        }
-
-        private static bool State26 (FsmContext ctx)
-        {
-            ctx.L.GetChar ();
-
-            if (ctx.L.input_char >= '0' && ctx.L.input_char <= '9' ||
-                ctx.L.input_char >= 'A' && ctx.L.input_char <= 'F' ||
-                ctx.L.input_char >= 'a' && ctx.L.input_char <= 'f') {
-
-                ctx.L.unichar += HexValue (ctx.L.input_char);
-                ctx.L.string_buffer.Append (Convert.ToChar (ctx.L.unichar));
-                ctx.NextState = 19;
-                return true;
-            }
-
-            return false;
         }
         #endregion
 
