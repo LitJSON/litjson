@@ -1,5 +1,14 @@
 2007-08-14  Leonardo Boshell  <leonardoboshell@users.sourceforge.net>
 
+	* src/LitJson/JsonWriter.cs: Added Reset() method to make it possible to
+	re-use a JsonWriter instance.
+	* src/LitJson/JsonMapper.cs: When performing the default ToJson()
+	operation, use a static instance of JsonWriter, improving performance
+	for multiple object->JSON conversions.
+	* test/JsonMapperTest.cs: Added use of JsonWriter.Reset().
+
+2007-08-14  Leonardo Boshell  <leonardoboshell@users.sourceforge.net>
+
 	* src/LitJson/JsonData.cs: Added public Count property. Fix int indexer
 	logic to work both when it's an array and an object.
 	* src/LitJson/JsonMapper.cs: Added two new methods, ToJson(object,

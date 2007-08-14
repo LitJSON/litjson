@@ -106,6 +106,9 @@ namespace LitJson
         private static IDictionary<Type,
                 IList<PropertyMetadata>> type_properties;
         private static readonly object type_properties_lock = new Object ();
+
+        private static JsonWriter      static_writer;
+        private static readonly object static_writer_lock = new Object ();
         #endregion
 
 
@@ -116,6 +119,8 @@ namespace LitJson
             object_metadata = new Dictionary<Type, ObjectMetadata> ();
             type_properties = new Dictionary<Type,
                             IList<PropertyMetadata>> ();
+
+            static_writer = new JsonWriter ();
         }
 
 
@@ -548,13 +553,13 @@ namespace LitJson
 
         public static string ToJson (object obj)
         {
-            StringWriter sw = new StringWriter ();
+            lock (static_writer_lock) {
+                static_writer.Reset ();
 
-            JsonWriter writer = new JsonWriter (sw);
+                WriteValue (obj, static_writer, true);
 
-            WriteValue (obj, writer, true);
-
-            return sw.ToString ();
+                return static_writer.ToString ();
+            }
         }
 
         public static void ToJson (object obj, JsonWriter writer)

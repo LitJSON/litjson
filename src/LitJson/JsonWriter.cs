@@ -47,6 +47,7 @@ namespace LitJson
         private char[]               hex_seq;
         private int                  indentation;
         private int                  indent_value;
+        private StringBuilder        inst_string_builder;
         private bool                 pretty_print;
         private bool                 validate;
         private TextWriter           writer;
@@ -86,7 +87,8 @@ namespace LitJson
 
         public JsonWriter ()
         {
-            writer = new StringWriter ();
+            inst_string_builder = new StringBuilder ();
+            writer = new StringWriter (inst_string_builder);
 
             Init ();
         }
@@ -277,10 +279,22 @@ namespace LitJson
 
         public override string ToString ()
         {
-            if (! (writer is StringWriter))
-               return String.Empty;
+            if (inst_string_builder == null)
+                return String.Empty;
 
-            return ((StringWriter) writer).ToString ();
+            return inst_string_builder.ToString ();
+        }
+
+        public void Reset ()
+        {
+            has_reached_end = false;
+
+            ctx_stack = new Stack<WriterContext> ();
+            context = new WriterContext ();
+            ctx_stack.Push (context);
+
+            if (inst_string_builder != null)
+                inst_string_builder.Remove (0, inst_string_builder.Length);
         }
 
         public void Write (bool boolean)

@@ -185,7 +185,20 @@ namespace LitJson.Test
 
             JsonMapper.ToJson (sample, writer);
 
-            Assert.AreEqual (expected, writer.ToString ());
+            Assert.AreEqual (expected, writer.ToString (), "A1");
+
+            writer.Reset ();
+            writer.IndentValue = 8;
+
+            expected = @"
+{
+        ""rolling"" : ""stones"",
+        ""flaming"" : ""pie"",
+        ""nine""    : 9
+}";
+            JsonMapper.ToJson (sample, writer);
+
+            Assert.AreEqual (expected, writer.ToString (), "A2");
         }
 
         [Test]
