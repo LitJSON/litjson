@@ -452,7 +452,8 @@ namespace LitJson
             return instance;
         }
 
-        private static void WriteValue (object obj, JsonWriter writer)
+        private static void WriteValue (object obj, JsonWriter writer,
+                                        bool writer_is_private)
         {
             if (obj == null) {
                 writer.Write (null);
@@ -460,7 +461,11 @@ namespace LitJson
             }
 
             if (obj is IJsonWrapper) {
-                writer.TextWriter.Write (((IJsonWrapper) obj).ToJson ());
+                if (writer_is_private)
+                    writer.TextWriter.Write (((IJsonWrapper) obj).ToJson ());
+                else
+                    ((IJsonWrapper) obj).ToJson (writer);
+
                 return;
             }
 
@@ -493,7 +498,7 @@ namespace LitJson
                 writer.WriteArrayStart ();
 
                 foreach (object elem in (Array) obj)
-                    WriteValue (elem, writer);
+                    WriteValue (elem, writer, writer_is_private);
 
                 writer.WriteArrayEnd ();
 
@@ -503,7 +508,7 @@ namespace LitJson
             if (obj is IList) {
                 writer.WriteArrayStart ();
                 foreach (object elem in (IList) obj)
-                    WriteValue (elem, writer);
+                    WriteValue (elem, writer, writer_is_private);
                 writer.WriteArrayEnd ();
 
                 return;
@@ -513,7 +518,7 @@ namespace LitJson
                 writer.WriteObjectStart ();
                 foreach (DictionaryEntry entry in (IDictionary) obj) {
                     writer.WritePropertyName ((string) entry.Key);
-                    WriteValue (entry.Value, writer);
+                    WriteValue (entry.Value, writer, writer_is_private);
                 }
                 writer.WriteObjectEnd ();
 
@@ -531,10 +536,10 @@ namespace LitJson
 
                 if (p_data.IsField)
                     WriteValue (((FieldInfo) p_data.Info).GetValue (obj),
-                                writer);
+                                writer, writer_is_private);
                 else
                     WriteValue (((PropertyInfo) p_data.Info).GetValue (
-                            obj, null), writer);
+                            obj, null), writer, writer_is_private);
             }
             writer.WriteObjectEnd ();
         }
@@ -547,21 +552,39 @@ namespace LitJson
 
             JsonWriter writer = new JsonWriter (sw);
 
-            WriteValue (obj, writer);
+            WriteValue (obj, writer, true);
 
             return sw.ToString ();
         }
 
-        public static JsonData ToObject (TextReader reader)
+        public static void ToJson (object obj, JsonWriter writer)
+        {
+            WriteValue (obj, writer, false);
+        }
+
+        public static JsonData ToObject (JsonReader reader)
         {
             return (JsonData) ToWrapper (
                 delegate { return new JsonData (); }, reader);
+        }
+
+        public static JsonData ToObject (TextReader reader)
+        {
+            JsonReader json_reader = new JsonReader (reader);
+
+            return (JsonData) ToWrapper (
+                delegate { return new JsonData (); }, json_reader);
         }
 
         public static JsonData ToObject (string json)
         {
             return (JsonData) ToWrapper (
                 delegate { return new JsonData (); }, json);
+        }
+
+        public static T ToObject<T> (JsonReader reader)
+        {
+            return (T) ReadValue (typeof (T), reader);
         }
 
         public static T ToObject<T> (TextReader reader)
@@ -579,11 +602,9 @@ namespace LitJson
         }
 
         public static IJsonWrapper ToWrapper (WrapperFactory factory,
-                                              TextReader reader)
+                                              JsonReader reader)
         {
-            JsonReader json_reader = new JsonReader (reader);
-
-            return ReadValue (factory, json_reader);
+            return ReadValue (factory, reader);
         }
 
         public static IJsonWrapper ToWrapper (WrapperFactory factory,

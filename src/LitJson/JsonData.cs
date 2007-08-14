@@ -52,6 +52,10 @@ namespace LitJson
 
 
         #region Properties
+        public int Count {
+            get { return EnsureCollection ().Count; }
+        }
+
         public bool IsArray {
             get { return type == JsonDataType.Array; }
         }
@@ -85,7 +89,7 @@ namespace LitJson
         #region ICollection Properties
         int ICollection.Count {
             get {
-                return EnsureCollection ().Count;
+                return Count;
             }
         }
 
@@ -281,15 +285,30 @@ namespace LitJson
             }
         }
 
-        public JsonData this[int array_index] {
+        public JsonData this[int index] {
             get {
-                EnsureList ();
-                return inst_array[array_index];
+                EnsureCollection ();
+
+                if (type == JsonDataType.Array)
+                    return inst_array[index];
+
+                return object_list[index].Value;
             }
 
             set {
-                EnsureList ();
-                inst_array[array_index] = value;
+                EnsureCollection ();
+
+                if (type == JsonDataType.Array)
+                    inst_array[index] = value;
+                else {
+                    KeyValuePair<string, JsonData> entry = object_list[index];
+                    KeyValuePair<string, JsonData> new_entry =
+                        new KeyValuePair<string, JsonData> (entry.Key, value);
+
+                    object_list[index] = new_entry;
+                    inst_object[entry.Key] = value;
+                }
+
                 json = null;
             }
         }

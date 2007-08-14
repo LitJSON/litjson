@@ -165,6 +165,30 @@ namespace LitJson.Test
         }
 
         [Test]
+        public void ExportPrettyPrint ()
+        {
+            OrderedDictionary sample = new OrderedDictionary ();
+
+            sample["rolling"] = "stones";
+            sample["flaming"] = "pie";
+            sample["nine"] = 9;
+
+            string expected = @"
+{
+    ""rolling"" : ""stones"",
+    ""flaming"" : ""pie"",
+    ""nine""    : 9
+}";
+
+            JsonWriter writer = new JsonWriter ();
+            writer.PrettyPrint = true;
+
+            JsonMapper.ToJson (sample, writer);
+
+            Assert.AreEqual (expected, writer.ToString ());
+        }
+
+        [Test]
         public void ImportArrayOfStringsTest ()
         {
             string json = @"[
@@ -178,6 +202,27 @@ namespace LitJson.Test
 
             Assert.IsTrue (names.Length == 4, "A1");
             Assert.AreEqual (names[1], "Danny", "A2");
+        }
+
+        [Test]
+        public void ImportExtendedGrammarTest ()
+        {
+            string json = @"
+                {
+                    // The domain name
+                    ""domain"" : ""example.com"",
+
+                    /******************
+                     * The IP address *
+                     ******************/
+                    'ip_address' : '127.0.0.1'
+                }
+                ";
+
+            JsonData data = JsonMapper.ToObject (json);
+
+            Assert.AreEqual ("example.com", (string) data["domain"], "A1");
+            Assert.AreEqual ("127.0.0.1", (string) data["ip_address"], "A2");
         }
 
         [Test]
@@ -206,6 +251,17 @@ namespace LitJson.Test
                 "cofax.tld",
                 (string) data["web-app"]["taglib"]["taglib-uri"],
                 "A1");
+        }
+
+        [Test]
+        public void ImportJsonDataArrayTest ()
+        {
+            string json = " [ 1, 10, 100, 1000 ] ";
+
+            JsonData data = JsonMapper.ToObject (json);
+
+            Assert.AreEqual (4, data.Count, "A1");
+            Assert.AreEqual (1000, (int) data[3], "A2");
         }
 
         [Test]
@@ -252,6 +308,42 @@ namespace LitJson.Test
             Assert.AreEqual (500, sample.widget.window.width, "A3");
             Assert.AreEqual ("sun1", sample.widget.image.name, "A4");
             Assert.AreEqual ("Click Here", sample.widget.text.data, "A5");
+        }
+
+        [Test]
+        [ExpectedException (typeof (JsonException))]
+        public void ImportStrictCommentsTest ()
+        {
+            string json = @"
+                [
+                    /* This is a comment */
+                    1,
+                    2,
+                    3
+                ]";
+
+            JsonReader reader = new JsonReader (json);
+            reader.AllowComments = false;
+
+            JsonData data = JsonMapper.ToObject (reader);
+
+            if (data.Count != 3)
+                data = JsonMapper.ToObject (reader);
+        }
+
+        [Test]
+        [ExpectedException (typeof (JsonException))]
+        public void ImportStrictStringsTest ()
+        {
+            string json = "[ 'Look! Single quotes' ]";
+
+            JsonReader reader = new JsonReader (json);
+            reader.AllowSingleQuotedStrings = false;
+
+            JsonData data = JsonMapper.ToObject (reader);
+
+            if (data[0] == null)
+                data = JsonMapper.ToObject (reader);
         }
     }
 }

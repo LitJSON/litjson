@@ -1,3 +1,13 @@
+2007-08-14  Leonardo Boshell  <leonardoboshell@users.sourceforge.net>
+
+	* src/LitJson/JsonData.cs: Added public Count property. Fix int indexer
+	logic to work both when it's an array and an object.
+	* src/LitJson/JsonMapper.cs: Added two new methods, ToJson(object,
+	JsonWriter) and ToObject(JsonReader), so the mapping can be customized
+	through JsonWriter and JsonReader objects.
+	* test/JsonMapperTest.cs: Added new tests for the new JsonMapper
+	methods.
+
 2007-08-13  Leonardo Boshell  <leonardoboshell@users.sourceforge.net>
 
 	* src/LitJson/JsonReader.cs:
