@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE appendix [
+  <!ENTITY % urls SYSTEM "../../entities/urls.ent">
+  %urls;
+]>
 
 <appendix xmlns="http://docbook.org/ns/docbook"
+          xmlns:xl="http://www.w3.org/1999/xlink"
           xml:id="appendix.parser">
   <info>
     <title>Parser Implementation</title>
@@ -30,7 +35,7 @@
 
     <para>
       A finite state machine recognizes tokens from the input text, in
-      effect acting as a lexer. It's composed of 26 states, listed below:
+      effect acting as a lexer. It's composed of 28 states, listed below:
       <orderedlist>
         <listitem>
           <simpara>Default</simpara>
@@ -99,18 +104,33 @@
           <simpara>EscChar2</simpara>
         </listitem>
         <listitem>
-          <simpara>EscChar3</simpara>
+          <simpara>SingleQuotedString1</simpara>
         </listitem>
         <listitem>
-          <simpara>EscChar4</simpara>
+          <simpara>SingleQuotedString2</simpara>
         </listitem>
         <listitem>
-          <simpara>EscChar5</simpara>
+          <simpara>Comment</simpara>
         </listitem>
         <listitem>
-          <simpara>EscChar6</simpara>
+          <simpara>SingleLineComment</simpara>
+        </listitem>
+        <listitem>
+          <simpara>MultiLineComment1</simpara>
+        </listitem>
+        <listitem>
+          <simpara>MultiLineComment2</simpara>
         </listitem>
       </orderedlist>
+    </para>
+    <para>
+      As you may notice, the lexer is designed to read more than just the
+      strict JSON grammar as defined in <link xl:href="&url.rfc4627;">RFC
+      4627</link>. It may also allow comments (the forms
+      <literal>//comment</literal> and <literal>/*comment*/</literal> are
+      supported) and single-quoted strings. The library allows the developer
+      to configure whether this extensions are accepted or not. They are
+      allowed by default.
     </para>
     <para>
       A simple table lists which state to go to next depending on the
@@ -138,7 +158,7 @@
         <term>C</term>
         <listitem>
           <para>
-            Only accept this state if the lexer is configured to accept
+            Only accept this state if the lexer is configured to allow
             comments.
           </para>
         </listitem>
@@ -175,7 +195,7 @@
         <term>SQ</term>
         <listitem>
           <para>
-            Only accept this state if the lexer is configured to accept
+            Only accept this state if the lexer is configured to allow
             string literals enclosed with single-quotes.
           </para>
         </listitem>
@@ -205,8 +225,8 @@
     </variablelist>
     <para>
       One last thing to notice: the <token>Char</token> token means that the
-      literal input character is returned as token, except when it's a
-      single quote (<literal>'</literal>), in which case a double quote
+      literal input character is returned as a token, except when it's a
+      single quote (<literal>'</literal>), in which case the double quote
       (<literal>"</literal>) is returned. This is just to simplify things a
       little bit for the grammar parser.
     </para>
@@ -215,7 +235,7 @@
       <title>State Machine Table</title>
 
       <table>
-        <title>Lexer State Machine</title>
+        <title>Lexer State Machine (part one)</title>
         <tgroup cols="16" align="right">
           <thead>
             <row>
@@ -372,6 +392,24 @@
               <entry></entry>
               <entry><literal>[A]</literal> 5</entry>
               <entry><literal>[A]</literal> 5</entry>
+              <entry></entry>
+              <entry></entry>
+              <entry></entry>
+              <entry></entry>
+              <entry></entry>
+              <entry></entry>
+              <entry></entry>
+              <entry></entry>
+              <entry></entry>
+              <entry></entry>
+              <entry></entry>
+            </row>
+            <row>
+              <entry><literal>/</literal></entry>
+              <entry><literal>[C]</literal> 25</entry>
+              <entry></entry>
+              <entry></entry>
+              <entry></entry>
               <entry></entry>
               <entry></entry>
               <entry></entry>
@@ -640,8 +678,8 @@
         </tgroup>
       </table>
       <table>
-        <title>Lexer State Machine</title>
-        <tgroup cols="10" align="right">
+        <title>Lexer State Machine (part two)</title>
+        <tgroup cols="14" align="right">
           <thead>
             <row>
               <entry>Input</entry>
@@ -654,6 +692,10 @@
               <entry>22</entry>
               <entry>23</entry>
               <entry>24</entry>
+              <entry>25</entry>
+              <entry>26</entry>
+              <entry>27</entry>
+              <entry>28</entry>
             </row>
           </thead>
           <tfoot>
@@ -668,9 +710,29 @@
               <entry></entry>
               <entry><token>CHARSEQ</token></entry>
               <entry><token>Char</token></entry>
+              <entry></entry>
+              <entry></entry>
+              <entry></entry>
+              <entry></entry>
             </row>
           </tfoot>
           <tbody>
+            <row>
+              <entry><literal>\n</literal></entry>
+              <entry></entry>
+              <entry></entry>
+              <entry></entry>
+              <entry></entry>
+              <entry></entry>
+              <entry></entry>
+              <entry></entry>
+              <entry></entry>
+              <entry></entry>
+              <entry></entry>
+              <entry>1</entry>
+              <entry>27</entry>
+              <entry>27</entry>
+            </row>
             <row>
               <entry><literal>"</literal></entry>
               <entry></entry>
@@ -682,6 +744,10 @@
               <entry></entry>
               <entry><literal>[A]</literal> 23</entry>
               <entry></entry>
+              <entry></entry>
+              <entry>26</entry>
+              <entry>27</entry>
+              <entry>27</entry>
             </row>
             <row>
               <entry><literal>'</literal></entry>
@@ -694,9 +760,29 @@
               <entry></entry>
               <entry><literal>[L][R]</literal> 24</entry>
               <entry><literal>[R]</literal> 1</entry>
+              <entry></entry>
+              <entry>26</entry>
+              <entry>27</entry>
+              <entry>27</entry>
             </row>
             <row>
-              <entry><literal>[/nrt]</literal></entry>
+              <entry><literal>*</literal></entry>
+              <entry></entry>
+              <entry></entry>
+              <entry></entry>
+              <entry></entry>
+              <entry></entry>
+              <entry></entry>
+              <entry></entry>
+              <entry></entry>
+              <entry></entry>
+              <entry>27</entry>
+              <entry>26</entry>
+              <entry>28</entry>
+              <entry>28</entry>
+            </row>
+            <row>
+              <entry><literal>/</literal></entry>
               <entry></entry>
               <entry></entry>
               <entry></entry>
@@ -706,6 +792,10 @@
               <entry></entry>
               <entry><literal>[A]</literal> 23</entry>
               <entry></entry>
+              <entry>26</entry>
+              <entry>26</entry>
+              <entry>27</entry>
+              <entry>1</entry>
             </row>
             <row>
               <entry><literal>[0-9A-Facde]</literal></entry>
@@ -718,6 +808,10 @@
               <entry><literal>[U]</literal> SS</entry>
               <entry><literal>[A]</literal> 23</entry>
               <entry></entry>
+              <entry></entry>
+              <entry>26</entry>
+              <entry>27</entry>
+              <entry>27</entry>
             </row>
             <row>
               <entry><literal>\</literal></entry>
@@ -730,6 +824,10 @@
               <entry></entry>
               <entry><literal>[SS]</literal> 21</entry>
               <entry></entry>
+              <entry></entry>
+              <entry>26</entry>
+              <entry>27</entry>
+              <entry>27</entry>
             </row>
             <row>
               <entry><literal>[bf]</literal></entry>
@@ -742,6 +840,10 @@
               <entry><literal>[U]</literal> SS</entry>
               <entry><literal>[A]</literal> 23</entry>
               <entry></entry>
+              <entry></entry>
+              <entry>26</entry>
+              <entry>27</entry>
+              <entry>27</entry>
             </row>
             <row>
               <entry><literal>l</literal></entry>
@@ -754,6 +856,26 @@
               <entry></entry>
               <entry><literal>[A]</literal> 23</entry>
               <entry></entry>
+              <entry></entry>
+              <entry>26</entry>
+              <entry>27</entry>
+              <entry>27</entry>
+            </row>
+            <row>
+              <entry><literal>[nrt]</literal></entry>
+              <entry></entry>
+              <entry></entry>
+              <entry></entry>
+              <entry><literal>[A]</literal> 19</entry>
+              <entry></entry>
+              <entry><literal>[E]</literal> SS</entry>
+              <entry></entry>
+              <entry><literal>[A]</literal> 23</entry>
+              <entry></entry>
+              <entry></entry>
+              <entry>26</entry>
+              <entry>27</entry>
+              <entry>27</entry>
             </row>
             <row>
               <entry><literal>u</literal></entry>
@@ -766,6 +888,10 @@
               <entry></entry>
               <entry><literal>[A]</literal> 23</entry>
               <entry></entry>
+              <entry></entry>
+              <entry>26</entry>
+              <entry>27</entry>
+              <entry>27</entry>
             </row>
             <row>
               <entry><literal>other</literal></entry>
@@ -778,6 +904,10 @@
               <entry></entry>
               <entry><literal>[A]</literal> 23</entry>
               <entry></entry>
+              <entry></entry>
+              <entry>26</entry>
+              <entry>27</entry>
+              <entry>27</entry>
             </row>
           </tbody>
         </tgroup>

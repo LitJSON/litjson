@@ -34,6 +34,7 @@ namespace LitJson
         private static int[]          fsm_return_table;
         private static StateHandler[] fsm_handler_table;
 
+        private bool          allow_comments;
         private bool          allow_single_quoted_strings;
         private bool          end_of_input;
         private FsmContext    fsm_context;
@@ -49,6 +50,11 @@ namespace LitJson
 
 
         #region Properties
+        public bool AllowComments {
+            get { return allow_comments; }
+            set { allow_comments = value; }
+        }
+
         public bool AllowSingleQuotedStrings {
             get { return allow_single_quoted_strings; }
             set { allow_single_quoted_strings = value; }
@@ -76,6 +82,9 @@ namespace LitJson
 
         public Lexer (TextReader reader)
         {
+            allow_comments = true;
+            allow_single_quoted_strings = true;
+
             input_buffer = 0;
             string_buffer = new StringBuilder (128);
             state = 1;
@@ -123,7 +132,7 @@ namespace LitJson
 
         private static void PopulateFsmTables ()
         {
-            fsm_handler_table = new StateHandler[24] {
+            fsm_handler_table = new StateHandler[28] {
                 State1,
                 State2,
                 State3,
@@ -147,10 +156,14 @@ namespace LitJson
                 State21,
                 State22,
                 State23,
-                State24
+                State24,
+                State25,
+                State26,
+                State27,
+                State28
             };
 
-            fsm_return_table = new int[24] {
+            fsm_return_table = new int[28] {
                 (int) ParserToken.Char,
                 0,
                 (int) ParserToken.Number,
@@ -174,7 +187,11 @@ namespace LitJson
                 0,
                 0,
                 (int) ParserToken.CharSeq,
-                (int) ParserToken.Char
+                (int) ParserToken.Char,
+                0,
+                0,
+                0,
+                0
             };
         }
 
@@ -227,15 +244,6 @@ namespace LitJson
                     ctx.Return = true;
                     return true;
 
-                case '\'':
-                    if (! ctx.L.allow_single_quoted_strings)
-                        return false;
-
-                    ctx.L.input_char = '"';
-                    ctx.NextState = 23;
-                    ctx.Return = true;
-                    return true;
-
                 case ',':
                 case ':':
                 case '[':
@@ -266,6 +274,22 @@ namespace LitJson
 
                 case 't':
                     ctx.NextState = 9;
+                    return true;
+
+                case '\'':
+                    if (! ctx.L.allow_single_quoted_strings)
+                        return false;
+
+                    ctx.L.input_char = '"';
+                    ctx.NextState = 23;
+                    ctx.Return = true;
+                    return true;
+
+                case '/':
+                    if (! ctx.L.allow_comments)
+                        return false;
+
+                    ctx.NextState = 25;
                     return true;
 
                 default:
@@ -762,6 +786,66 @@ namespace LitJson
             default:
                 return false;
             }
+        }
+
+        private static bool State25 (FsmContext ctx)
+        {
+            ctx.L.GetChar ();
+
+            switch (ctx.L.input_char) {
+            case '*':
+                ctx.NextState = 27;
+                return true;
+
+            case '/':
+                ctx.NextState = 26;
+                return true;
+
+            default:
+                return false;
+            }
+        }
+
+        private static bool State26 (FsmContext ctx)
+        {
+            while (ctx.L.GetChar ()) {
+                if (ctx.L.input_char == '\n') {
+                    ctx.NextState = 1;
+                    return true;
+                }
+            }
+
+            return true;
+        }
+
+        private static bool State27 (FsmContext ctx)
+        {
+            while (ctx.L.GetChar ()) {
+                if (ctx.L.input_char == '*') {
+                    ctx.NextState = 28;
+                    return true;
+                }
+            }
+
+            return true;
+        }
+
+        private static bool State28 (FsmContext ctx)
+        {
+            while (ctx.L.GetChar ()) {
+                if (ctx.L.input_char == '*')
+                    continue;
+
+                if (ctx.L.input_char == '/') {
+                    ctx.NextState = 1;
+                    return true;
+                }
+
+                ctx.NextState = 27;
+                return true;
+            }
+
+            return true;
         }
         #endregion
 

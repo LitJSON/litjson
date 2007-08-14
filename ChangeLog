@@ -1,6 +1,16 @@
 2007-08-13  Leonardo Boshell  <leonardoboshell@users.sourceforge.net>
 
 	* src/LitJson/JsonReader.cs:
+	* src/LitJson/Lexer.cs: Extended the lexer to allow comments as well.
+	* test/JsonReaderTest.cs: Added tests for reading JSON with comments on
+	them.
+	* doc/manual/sources/entities/urls.ent:
+	* doc/manual/sources/appendices/parser/parser.xml: Added details about
+	these recent extensions to the lexer in the manual.
+
+2007-08-13  Leonardo Boshell  <leonardoboshell@users.sourceforge.net>
+
+	* src/LitJson/JsonReader.cs:
 	* src/LitJson/Lexer.cs: Added property to indicate whether single-quoted
 	strings are allowed or not. This parameter is true by default.
 	* test/JsonReaderTest.cs: Added test for single-quoted strings.

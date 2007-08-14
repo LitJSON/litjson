@@ -38,6 +38,35 @@ namespace LitJson.Test
         }
 
         [Test]
+        public void CommentsTest()
+        {
+            string json = @"
+                {
+                    // This is the first property
+                    ""foo"" : ""bar"",
+
+                    /**
+                     * This is the second property
+                     **/
+                     ""baz"": ""blah""
+                }";
+
+            JsonReader reader = new JsonReader (json);
+
+            reader.Read ();
+            reader.Read ();
+            Assert.AreEqual ("foo", (string) reader.Value, "A1");
+
+            reader.Read ();
+            reader.Read ();
+            Assert.AreEqual ("baz", (string) reader.Value, "A2");
+
+            reader.Read ();
+            reader.Read ();
+            Assert.IsTrue (reader.EndOfJson, "A3");
+        }
+
+        [Test]
         public void DoubleTest ()
         {
             string json = @"[ 0.0, -0.0, 3.1416, 8e-3, 7E-5, -128.000009,
@@ -342,6 +371,36 @@ namespace LitJson.Test
             Assert.AreEqual (reader.Token, JsonToken.ObjectEnd, "A10");
             reader.Read ();
             Assert.IsTrue (reader.EndOfJson, "A11");
+        }
+
+        [Test]
+        [ExpectedException (typeof (JsonException))]
+        public void StrictCommentsTest ()
+        {
+            string json = @"
+                [
+                    // This is a comment
+                    1,
+                    2,
+                    3
+                ]";
+
+            JsonReader reader = new JsonReader (json);
+            reader.AllowComments = false;
+
+            while (reader.Read ());
+        }
+
+        [Test]
+        [ExpectedException (typeof (JsonException))]
+        public void StrictStringsTest ()
+        {
+            string json = "[ 'Look! Single quotes' ]";
+
+            JsonReader reader = new JsonReader (json);
+            reader.AllowSingleQuotedStrings = false;
+
+            while (reader.Read ());
         }
 
         [Test]

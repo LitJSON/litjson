@@ -4,3 +4,4 @@
 <!ENTITY url.litjson    "http://litjson.sourceforge.net/">
 <!ENTITY url.mono       "http://www.mono-project.com/">
 <!ENTITY url.newtonsoft "http://www.newtonsoft.com/products/json/">
+<!ENTITY url.rfc4627    "http://www.ietf.org/rfc/rfc4627.txt?number=4627">

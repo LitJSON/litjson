@@ -60,6 +60,11 @@ namespace LitJson
 
 
         #region Public Properties
+        public bool AllowComments {
+            get { return lexer.AllowComments; }
+            set { lexer.AllowComments = value; }
+        }
+
         public bool AllowSingleQuotedStrings {
             get { return lexer.AllowSingleQuotedStrings; }
             set { lexer.AllowSingleQuotedStrings = value; }
@@ -109,7 +114,6 @@ namespace LitJson
             automaton_stack.Push ((int) ParserToken.Text);
 
             lexer = new Lexer (reader);
-            lexer.AllowSingleQuotedStrings = true;
 
             end_of_json = false;
 
