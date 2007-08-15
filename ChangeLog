@@ -1,5 +1,11 @@
 2007-08-14  Leonardo Boshell  <leonardoboshell@users.sourceforge.net>
 
+	* src/LitJson/JsonMapper.cs: Added Importers functionality, similar to
+	the way exporters work.
+	* test/JsonMapperTest.cs: Added tests for the importers.
+
+2007-08-14  Leonardo Boshell  <leonardoboshell@users.sourceforge.net>
+
 	* src/LitJson/JsonWriter.cs: Added Write(ulong number) overload.
 
 	* src/LitJson/JsonMapper.cs: Added Exporters functionality. Base

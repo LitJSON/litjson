@@ -91,6 +91,9 @@ namespace LitJson
     internal delegate void ExporterFunc    (object obj, JsonWriter writer);
     public   delegate void ExporterFunc<T> (T obj, JsonWriter writer);
 
+    internal delegate object ImporterFunc                (object input);
+    public   delegate TValue ImporterFunc<TJson, TValue> (TJson input);
+
     public delegate IJsonWrapper WrapperFactory ();
 
 
@@ -99,8 +102,15 @@ namespace LitJson
         #region Fields
         private static int max_nesting_depth;
 
+        private static IFormatProvider datetime_format;
+
         private static IDictionary<Type, ExporterFunc> base_exporters_table;
         private static IDictionary<Type, ExporterFunc> custom_exporters_table;
+
+        private static IDictionary<Type,
+                IDictionary<Type, ImporterFunc>> base_importers_table;
+        private static IDictionary<Type,
+                IDictionary<Type, ImporterFunc>> custom_importers_table;
 
         private static IDictionary<Type, ArrayMetadata> array_metadata;
         private static readonly object array_metadata_lock = new Object ();
@@ -134,10 +144,18 @@ namespace LitJson
 
             static_writer = new JsonWriter ();
 
+            datetime_format = DateTimeFormatInfo.InvariantInfo;
+
             base_exporters_table   = new Dictionary<Type, ExporterFunc> ();
             custom_exporters_table = new Dictionary<Type, ExporterFunc> ();
 
+            base_importers_table = new Dictionary<Type,
+                                 IDictionary<Type, ImporterFunc>> ();
+            custom_importers_table = new Dictionary<Type,
+                                   IDictionary<Type, ImporterFunc>> ();
+
             RegisterBaseExporters ();
+            RegisterBaseImporters ();
         }
 
 
@@ -312,14 +330,40 @@ namespace LitJson
                 if (inst_type.IsAssignableFrom (json_type))
                     return reader.Value;
 
+                // If there's a custom importer that fits, use it
+                if (custom_importers_table.ContainsKey (json_type) &&
+                    custom_importers_table[json_type].ContainsKey (
+                        inst_type)) {
+
+                    ImporterFunc importer =
+                        custom_importers_table[json_type][inst_type];
+
+                    return importer (reader.Value);
+                }
+
+                // Maybe there's a base importer that works
+                if (base_importers_table.ContainsKey (json_type) &&
+                    base_importers_table[json_type].ContainsKey (
+                        inst_type)) {
+
+                    ImporterFunc importer =
+                        base_importers_table[json_type][inst_type];
+
+                    return importer (reader.Value);
+                }
+
+
+                // Try using an implicit conversion operator
                 MethodInfo conv_op = GetConvOp (inst_type, json_type);
 
-                if (conv_op == null)
-                    throw new JsonException (String.Format (
-                            "Can't assign value '{0}' (type {1}) to type {2}",
-                            reader.Value, json_type, inst_type));
+                if (conv_op != null)
+                    return conv_op.Invoke (null,
+                                           new object[] { reader.Value });
 
-                return conv_op.Invoke (null, new object[] { reader.Value });
+                // No luck
+                throw new JsonException (String.Format (
+                        "Can't assign value '{0}' (type {1}) to type {2}",
+                        reader.Value, json_type, inst_type));
             }
 
             object instance = null;
@@ -486,9 +530,6 @@ namespace LitJson
                     writer.Write (Convert.ToString ((char) obj));
                 };
 
-            IFormatProvider datetime_format =
-                DateTimeFormatInfo.InvariantInfo;
-
             base_exporters_table[typeof (DateTime)] =
                 delegate (object obj, JsonWriter writer) {
                     writer.Write (Convert.ToString ((DateTime) obj,
@@ -524,6 +565,81 @@ namespace LitJson
                 delegate (object obj, JsonWriter writer) {
                     writer.Write ((ulong) obj);
                 };
+        }
+
+        private static void RegisterBaseImporters ()
+        {
+            ImporterFunc importer;
+
+            importer = delegate (object input) {
+                return Convert.ToByte ((int) input);
+            };
+            RegisterImporter (base_importers_table, typeof (int),
+                              typeof (byte), importer);
+
+            importer = delegate (object input) {
+                return Convert.ToChar ((string) input);
+            };
+            RegisterImporter (base_importers_table, typeof (string),
+                              typeof (char), importer);
+
+            importer = delegate (object input) {
+                return Convert.ToDateTime ((string) input, datetime_format);
+            };
+            RegisterImporter (base_importers_table, typeof (string),
+                              typeof (DateTime), importer);
+
+            importer = delegate (object input) {
+                return Convert.ToDecimal ((double) input);
+            };
+            RegisterImporter (base_importers_table, typeof (double),
+                              typeof (decimal), importer);
+
+            importer = delegate (object input) {
+                return Convert.ToSByte ((int) input);
+            };
+            RegisterImporter (base_importers_table, typeof (int),
+                              typeof (sbyte), importer);
+
+            importer = delegate (object input) {
+                return Convert.ToInt16 ((int) input);
+            };
+            RegisterImporter (base_importers_table, typeof (int),
+                              typeof (short), importer);
+
+            importer = delegate (object input) {
+                return Convert.ToUInt16 ((int) input);
+            };
+            RegisterImporter (base_importers_table, typeof (int),
+                              typeof (ushort), importer);
+
+            importer = delegate (object input) {
+                return Convert.ToUInt32 ((int) input);
+            };
+            RegisterImporter (base_importers_table, typeof (int),
+                              typeof (uint), importer);
+
+            importer = delegate (object input) {
+                return Convert.ToUInt32 ((long) input);
+            };
+            RegisterImporter (base_importers_table, typeof (long),
+                              typeof (uint), importer);
+
+            importer = delegate (object input) {
+                return Convert.ToUInt64 ((int) input);
+            };
+            RegisterImporter (base_importers_table, typeof (int),
+                              typeof (ulong), importer);
+        }
+
+        private static void RegisterImporter (
+            IDictionary<Type, IDictionary<Type, ImporterFunc>> table,
+            Type json_type, Type value_type, ImporterFunc importer)
+        {
+            if (! table.ContainsKey (json_type))
+                table.Add (json_type, new Dictionary<Type, ImporterFunc> ());
+
+            table[json_type][value_type] = importer;
         }
 
         private static void WriteValue (object obj, JsonWriter writer,
@@ -725,9 +841,26 @@ namespace LitJson
             custom_exporters_table[typeof (T)] = exporter_wrapper;
         }
 
+        public static void RegisterImporter<TJson, TValue> (
+            ImporterFunc<TJson, TValue> importer)
+        {
+            ImporterFunc importer_wrapper =
+                delegate (object input) {
+                    return importer ((TJson) input);
+                };
+
+            RegisterImporter (custom_importers_table, typeof (TJson),
+                              typeof (TValue), importer_wrapper);
+        }
+
         public static void UnregisterExporters ()
         {
             custom_exporters_table.Clear ();
+        }
+
+        public static void UnregisterImporters ()
+        {
+            custom_importers_table.Clear ();
         }
     }
 }

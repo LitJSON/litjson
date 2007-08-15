@@ -137,6 +137,28 @@ namespace LitJson.Test
         }
 
         [Test]
+        public void CustomImporterTest ()
+        {
+            // Custom DateTime importer that only uses the Year value
+            // (assuming January 1st of that year)
+            ImporterFunc<int, DateTime> importer =
+                delegate (int obj) {
+                    return new DateTime (obj, 1, 1);
+                };
+
+            JsonMapper.RegisterImporter<int, DateTime> (importer);
+
+            string json = "{ \"TestDateTime\" : 1980 }";
+
+            ValueTypesTest sample =
+                JsonMapper.ToObject<ValueTypesTest> (json);
+
+            JsonMapper.UnregisterImporters ();
+
+            Assert.AreEqual (new DateTime (1980, 1, 1), sample.TestDateTime);
+        }
+
+        [Test]
         public void ExportArrayOfIntsTest ()
         {
             int[] numbers = new int[] { 1, 1, 2, 3, 5, 8, 13 };
@@ -418,6 +440,36 @@ namespace LitJson.Test
 
             if (data[0] == null)
                 data = JsonMapper.ToObject (reader);
+        }
+
+        [Test]
+        public void ImportValueTypesTest ()
+        {
+            string json = @"
+{
+  ""TestByte"":     200,
+  ""TestChar"":     'P',
+  ""TestDateTime"": ""12/22/2012 00:00:00"",
+  ""TestDecimal"":  10.333,
+  ""TestSByte"":    -5,
+  ""TestShort"":    1024,
+  ""TestUShort"":   30000,
+  ""TestUInt"":     90000000,
+  ""TestULong"":    1
+}";
+
+            ValueTypesTest test = JsonMapper.ToObject<ValueTypesTest> (json);
+
+            Assert.AreEqual (200, test.TestByte, "A1");
+            Assert.AreEqual ('P', test.TestChar, "A2");
+            Assert.AreEqual (new DateTime (2012, 12, 22),
+                             test.TestDateTime, "A3");
+            Assert.AreEqual (10.333m, test.TestDecimal, "A4");
+            Assert.AreEqual (-5, test.TestSByte, "A5");
+            Assert.AreEqual (1024, test.TestShort, "A6");
+            Assert.AreEqual (30000, test.TestUShort, "A7");
+            Assert.AreEqual (90000000, test.TestUInt, "A8");
+            Assert.AreEqual (1l, test.TestULong, "A9");
         }
     }
 }
