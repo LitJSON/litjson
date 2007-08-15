@@ -289,7 +289,7 @@ namespace LitJson
         {
             has_reached_end = false;
 
-            ctx_stack = new Stack<WriterContext> ();
+            ctx_stack.Clear ();
             context = new WriterContext ();
             ctx_stack.Push (context);
 
