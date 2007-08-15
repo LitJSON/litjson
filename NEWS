@@ -41,7 +41,7 @@ New features and improvements:
      * Multi-line comment
      */
 
-  This wayp, certain forms of input coming from JavaScript that don't
+  This way, certain forms of input coming from JavaScript that don't
   necessarily conform to the strict JSON grammar are allowed and succesfully
   parsed.
 
