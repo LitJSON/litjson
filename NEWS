@@ -1,4 +1,84 @@
 =============   ----------
+LitJSON 0.3.0 | 2007-08-15
+=============   ----------
+
+New features and improvements:
+
+* Exporters and importers.
+  Custom conversions using the JsonMapper class can be made through
+  importers and exporters. These are delegates that tell the library how to
+  perform conversions between non-basic types (i.e. not string, int, long,
+  double or boolean) and JSON. There are base and custom
+  exporters/importers. The base exporters and importers are built-in
+  delegates that currently handle simple conversions between JSON and the
+  following value types:
+
+    byte
+    char
+    DateTime
+    decimal
+    sbyte
+    short
+    ushort
+    uint
+    ulong
+  
+  Custom exporters and importers can be defined through
+  JsonMapper.RegisterExporter and JsonMapper.RegisterImporter, and they
+  override the built-in conversions.
+
+* Improved performance of JsonMapper.ToJson()
+  A static JsonWriter is re-used to reduce the activity in the heap,
+  improving performance for multiple conversions.
+
+* Allowing extended grammar
+  The lexer can now accept single-quoted strings, and comments in the
+  following forms:
+
+    // Single-line comment
+
+    /*
+     * Multi-line comment
+     */
+
+  This wayp, certain forms of input coming from JavaScript that don't
+  necessarily conform to the strict JSON grammar are allowed and succesfully
+  parsed.
+
+  A JsonReader can be configured to accept only the strict grammar or the
+  extended one. These extensions are allowed by default.
+
+* API cleanups and additions.
+  The following members are new:
+
+    JsonData.Count
+    JsonMapper.RegisterExporter()
+    JsonMapper.RegisterImporter()
+    JsonMapper.UnregisterExporters()
+    JsonMapper.UnregisterImporters()
+    JsonReader.AllowComments
+    JsonReader.AllowSingleQuotedStrings
+    JsonWriter.Reset()
+
+  The following overloads have been added:
+
+    JsonMapper.ToJson(object obj, JsonWriter writer)
+    JsonMapper.ToObject(JsonReader reader)
+
+  The following members have been renamed:
+
+    JsonReader.HasReachedEnd is now JsonReader.EndOfJson
+
+
+Bugs fixed:
+
+* JsonMapper.ToJson() avoids entering an infinite recursion by defining a
+  max nesting depth.
+* The JsonData int indexer now behaves correctly both when it acts as an
+  array and as an object.
+
+
+=============   ----------
 LitJSON 0.1.0 | 2007-08-09
 =============   ----------
 

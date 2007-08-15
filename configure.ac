@@ -1,4 +1,4 @@
-AC_INIT([LitJSON], [0.1.0],
+AC_INIT([LitJSON], [0.3.0],
         [http://sourceforge.net/tracker/?group_id=202631&atid=982358],
         [litjson])
 AC_PREREQ([2.59])

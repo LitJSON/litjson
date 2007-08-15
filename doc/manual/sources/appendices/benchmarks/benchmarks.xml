@@ -90,7 +90,7 @@
         </listitem>
         <listitem>
           <para>
-            <link xl:href="&url.litjson;">LitJSON</link> version 0.1.0.
+            <link xl:href="&url.litjson;">LitJSON</link> version 0.3.0.
           </para>
         </listitem>
         <listitem>
@@ -256,22 +256,22 @@ Benchmarking type <replaceable>TYPE</replaceable>
       <screen>
 <![CDATA[
 Benchmarking type BenchmarkJayrock
-  JayrockReaderNumbers 00:00:02.0536990
-  JayrockReaderStrings 00:00:01.7865170
-  JayrockReaderFirstProperty 00:00:00.5703040
-  JayrockReaderLastProperty 00:00:04.3971340
+  JayrockReaderNumbers 00:00:01.9310770
+  JayrockReaderStrings 00:00:01.7263010
+  JayrockReaderFirstProperty 00:00:00.5530070
+  JayrockReaderLastProperty 00:00:04.2311710
 
 Benchmarking type BenchmarkLitJson
-  LitJsonReaderNumbers 00:00:02.1392270
-  LitJsonReaderStrings 00:00:01.8588060
-  LitJsonReaderFirstProperty 00:00:00.3318240
-  LitJsonReaderLastProperty 00:00:03.6514090
+  LitJsonReaderNumbers 00:00:01.4522950
+  LitJsonReaderStrings 00:00:01.7806950
+  LitJsonReaderFirstProperty 00:00:00.3135730
+  LitJsonReaderLastProperty 00:00:03.4958360
 
 Benchmarking type BenchmarkNewtonsoft
-  NewtonsoftReaderNumbers 00:00:02.8536600
-  NewtonsoftReaderStrings 00:00:02.4541820
-  NewtonsoftReaderFirstProperty 00:00:01.2762880
-  NewtonsoftReaderLastProperty 00:00:03.7789130
+  NewtonsoftReaderNumbers 00:00:02.6169990
+  NewtonsoftReaderStrings 00:00:02.3476750
+  NewtonsoftReaderFirstProperty 00:00:01.1853270
+  NewtonsoftReaderLastProperty 00:00:03.5655060
 ]]>
       </screen>
       <para>
@@ -295,14 +295,14 @@ Allocated Objects: 2511436
            SUMMARY                         
                                            
          Filename: BmLitJsonReader-heap.out
-  Allocated Bytes: 65.2M                   
-Allocated Objects: 1251596                 
-              GCs: 480                     
+  Allocated Bytes: 65.4M                   
+Allocated Objects: 1251602                 
+              GCs: 479                     
           Resizes: 5                       
-  Final heap size: 468k                    
+  Final heap size: 472k                    
                                            
    Distinct Types: 92                      
-       Backtraces: 667                     
+       Backtraces: 671
 
 
            SUMMARY                            
@@ -427,16 +427,16 @@ Allocated Objects: 1361535
       <screen>
 <![CDATA[
 Benchmarking type BenchmarkJayrock
-  JayrockWriterNumbers 00:00:10.9054500
-  JayrockWriterObjects 00:00:09.1167770
+  JayrockWriterNumbers 00:00:10.7310150
+  JayrockWriterObjects 00:00:08.8977730
 
 Benchmarking type BenchmarkLitJson
-  LitJsonWriterNumbers 00:00:10.8502530
-  LitJsonWriterObjects 00:00:08.4659320
+  LitJsonWriterNumbers 00:00:10.6846000
+  LitJsonWriterObjects 00:00:08.4647110
 
 Benchmarking type BenchmarkNewtonsoft
-  NewtonsoftWriterNumbers 00:00:10.8526390
-  NewtonsoftWriterObjects 00:00:08.6239890
+  NewtonsoftWriterNumbers 00:00:10.6271730
+  NewtonsoftWriterObjects 00:00:08.4410420
 ]]>
       </screen>
       <para>
@@ -460,14 +460,14 @@ Allocated Objects: 1890928
            SUMMARY                         
                                            
          Filename: BmLitJsonWriter-heap.out
-  Allocated Bytes: 69.9M                   
+  Allocated Bytes: 70.0M                   
 Allocated Objects: 1320942                 
-              GCs: 537                     
+              GCs: 543                     
           Resizes: 5                       
   Final heap size: 468k                    
                                            
    Distinct Types: 66                      
-       Backtraces: 434                     
+       Backtraces: 434
 
 
            SUMMARY                            
@@ -555,18 +555,18 @@ Allocated Objects: 1470936
       <screen>
 <![CDATA[
 Benchmarking type BenchmarkJayrock
-  JayrockConversionToGenericObject 00:00:03.9930830
-  JayrockConversionToObject 00:00:12.9083840
+  JayrockConversionToGenericObject 00:00:03.8663690
+  JayrockConversionToObject 00:00:12.6593170
 
 Benchmarking type BenchmarkLitJson
-  LitJsonConversionToGenericObject 00:00:02.6499500
-  LitJsonConversionToHashtable 00:00:06.1666880
-  LitJsonConversionToObject 00:00:06.6222020
+  LitJsonConversionToGenericObject 00:00:02.5881870
+  LitJsonConversionToHashtable 00:00:06.2299200
+  LitJsonConversionToObject 00:00:06.4707210
 
 Benchmarking type BenchmarkNewtonsoft
-  NewtonsoftConversionToGenericObject 00:00:10.8741050
-  NewtonsoftConversionToHashtable 00:00:11.8969750
-  NewtonsoftConversionToObject 00:00:25.9335310
+  NewtonsoftConversionToGenericObject 00:00:10.3858570
+  NewtonsoftConversionToHashtable 00:00:11.3133830
+  NewtonsoftConversionToObject 00:00:24.4709470
 ]]>
       </screen>
       <para>
@@ -590,14 +590,14 @@ Allocated Objects: 2923200
            SUMMARY                         
                                            
          Filename: BmLitJsonImport-heap.out
-  Allocated Bytes: 87.5M                   
-Allocated Objects: 2132092                 
-              GCs: 591                     
+  Allocated Bytes: 87.7M                   
+Allocated Objects: 2132239                 
+              GCs: 582                     
           Resizes: 6                       
   Final heap size: 628k                    
                                            
-   Distinct Types: 124                     
-       Backtraces: 879                     
+   Distinct Types: 142                     
+       Backtraces: 988
 
 
            SUMMARY                            
@@ -660,19 +660,19 @@ Allocated Objects: 8801931
       <screen>
 <![CDATA[
 Benchmarking type BenchmarkJayrock
-  JayrockConversionFromGenericObject 00:00:02.0131600
-  JayrockConversionFromHashtable 00:00:04.0686330
-  JayrockConversionFromObject 00:00:08.0439940
+  JayrockConversionFromGenericObject 00:00:01.5508170
+  JayrockConversionFromHashtable 00:00:03.9338940
+  JayrockConversionFromObject 00:00:07.6953470
 
 Benchmarking type BenchmarkLitJson
-  LitJsonConversionFromGenericObject 00:00:00.2049410
-  LitJsonConversionFromHashtable 00:00:03.1260010
-  LitJsonConversionFromObject 00:00:04.1872060
+  LitJsonConversionFromGenericObject 00:00:00.2117890
+  LitJsonConversionFromHashtable 00:00:02.7785360
+  LitJsonConversionFromObject 00:00:03.7776010
 
 Benchmarking type BenchmarkNewtonsoft
-  NewtonsoftConversionFromGenericObject 00:00:03.1988890
-  NewtonsoftConversionFromHashtable 00:00:03.0914350
-  NewtonsoftConversionFromObject 00:00:09.1955350
+  NewtonsoftConversionFromGenericObject 00:00:03.1178680
+  NewtonsoftConversionFromHashtable 00:00:03.0265470
+  NewtonsoftConversionFromObject 00:00:08.6941390
 ]]>
       </screen>
       <para>
@@ -696,14 +696,14 @@ Allocated Objects: 2744490
            SUMMARY                         
                                            
          Filename: BmLitJsonExport-heap.out
-  Allocated Bytes: 43.9M                   
-Allocated Objects: 981842                  
-              GCs: 306                     
+  Allocated Bytes: 30.3M                   
+Allocated Objects: 651969                  
+              GCs: 211                     
           Resizes: 5                       
   Final heap size: 472k                    
                                            
-   Distinct Types: 131                     
-       Backtraces: 870                     
+   Distinct Types: 144                     
+       Backtraces: 945
 
 
            SUMMARY                            
