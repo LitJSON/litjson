@@ -1,5 +1,17 @@
 2007-08-14  Leonardo Boshell  <leonardoboshell@users.sourceforge.net>
 
+	* src/LitJson/JsonWriter.cs: Added Write(ulong number) overload.
+
+	* src/LitJson/JsonMapper.cs: Added Exporters functionality. Base
+	exporters are implemented to convert basic Value types such as byte,
+	char, DateTime, etc. to JSON. Custom exporters can be added through
+	JsonMapper.RegisterExporter(). Also, ToJson() now throws an exception if
+	a certain nesting limit is reached to avoid infinite loops.
+
+	* test/JsonMapperTest.cs: Added new tests for the exporters feature.
+
+2007-08-14  Leonardo Boshell  <leonardoboshell@users.sourceforge.net>
+
 	* src/LitJson/JsonWriter.cs: Added Reset() method to make it possible to
 	re-use a JsonWriter instance.
 	* src/LitJson/JsonMapper.cs: When performing the default ToJson()

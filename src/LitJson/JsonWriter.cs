@@ -365,6 +365,17 @@ namespace LitJson
             context.ExpectingValue = false;
         }
 
+        [CLSCompliant(false)]
+        public void Write (ulong number)
+        {
+            DoValidation (Condition.Value);
+            PutNewline ();
+
+            Put (Convert.ToString (number, number_format));
+
+            context.ExpectingValue = false;
+        }
+
         public void WriteArrayEnd ()
         {
             DoValidation (Condition.InArray);

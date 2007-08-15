@@ -21,6 +21,19 @@ using System.Reflection;
 namespace LitJson.Test
 {
     // Sample classes to test json->object and object->json conversions
+    public class ValueTypesTest
+    {
+        public byte     TestByte;
+        public char     TestChar;
+        public DateTime TestDateTime;
+        public decimal  TestDecimal;
+        public sbyte    TestSByte;
+        public short    TestShort;
+        public ushort   TestUShort;
+        public uint     TestUInt;
+        public ulong    TestULong;
+    }
+
     public class UiImage
     {
         public string src;
@@ -100,6 +113,29 @@ namespace LitJson.Test
     [TestFixture]
     public class JsonMapperTest
     {
+        [Test]
+        public void CustomExporterTest ()
+        {
+            // Custom DateTime exporter that only uses the Year value
+            ExporterFunc<DateTime> exporter =
+                delegate (DateTime obj, JsonWriter writer) {
+                    writer.Write (obj.Year);
+                };
+
+            JsonMapper.RegisterExporter<DateTime> (exporter);
+
+            OrderedDictionary sample = new OrderedDictionary ();
+
+            sample.Add ("date", new DateTime (1980, 12, 8));
+
+            string json = JsonMapper.ToJson (sample);
+            string expected = "{\"date\":1980}";
+
+            JsonMapper.UnregisterExporters ();
+
+            Assert.AreEqual (expected, json);
+        }
+
         [Test]
         public void ExportArrayOfIntsTest ()
         {
@@ -199,6 +235,31 @@ namespace LitJson.Test
             JsonMapper.ToJson (sample, writer);
 
             Assert.AreEqual (expected, writer.ToString (), "A2");
+        }
+
+        [Test]
+        public void ExportValueTypesTest ()
+        {
+            ValueTypesTest test = new ValueTypesTest ();
+
+            test.TestByte     = 200;
+            test.TestChar     = 'P';
+            test.TestDateTime = new DateTime (2012, 12, 22);
+            test.TestDecimal  = 10.333m;
+            test.TestSByte    = -5;
+            test.TestShort    = 1024;
+            test.TestUShort   = 30000;
+            test.TestUInt     = 90000000;
+            test.TestULong    = 1l;
+
+            string json = JsonMapper.ToJson (test);
+            string expected =
+                "{\"TestByte\":200,\"TestChar\":\"P\",\"TestDateTime\":" +
+                "\"12/22/2012 00:00:00\",\"TestDecimal\":10.333," +
+                "\"TestSByte\":-5,\"TestShort\":1024,\"TestUShort\":30000" +
+                ",\"TestUInt\":90000000,\"TestULong\":1}";
+
+            Assert.AreEqual (expected, json);
         }
 
         [Test]

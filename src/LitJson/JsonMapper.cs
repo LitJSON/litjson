@@ -12,6 +12,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Reflection;
 
@@ -87,12 +88,20 @@ namespace LitJson
     }
 
 
+    internal delegate void ExporterFunc    (object obj, JsonWriter writer);
+    public   delegate void ExporterFunc<T> (T obj, JsonWriter writer);
+
     public delegate IJsonWrapper WrapperFactory ();
 
 
     public class JsonMapper
     {
         #region Fields
+        private static int max_nesting_depth;
+
+        private static IDictionary<Type, ExporterFunc> base_exporters_table;
+        private static IDictionary<Type, ExporterFunc> custom_exporters_table;
+
         private static IDictionary<Type, ArrayMetadata> array_metadata;
         private static readonly object array_metadata_lock = new Object ();
 
@@ -112,8 +121,11 @@ namespace LitJson
         #endregion
 
 
+
         static JsonMapper ()
         {
+            max_nesting_depth = 100;
+
             array_metadata = new Dictionary<Type, ArrayMetadata> ();
             conv_ops = new Dictionary<Type, IDictionary<Type, MethodInfo>> ();
             object_metadata = new Dictionary<Type, ObjectMetadata> ();
@@ -121,6 +133,11 @@ namespace LitJson
                             IList<PropertyMetadata>> ();
 
             static_writer = new JsonWriter ();
+
+            base_exporters_table   = new Dictionary<Type, ExporterFunc> ();
+            custom_exporters_table = new Dictionary<Type, ExporterFunc> ();
+
+            RegisterBaseExporters ();
         }
 
 
@@ -457,9 +474,68 @@ namespace LitJson
             return instance;
         }
 
-        private static void WriteValue (object obj, JsonWriter writer,
-                                        bool writer_is_private)
+        private static void RegisterBaseExporters ()
         {
+            base_exporters_table[typeof (byte)] =
+                delegate (object obj, JsonWriter writer) {
+                    writer.Write (Convert.ToInt32 ((byte) obj));
+                };
+
+            base_exporters_table[typeof (char)] =
+                delegate (object obj, JsonWriter writer) {
+                    writer.Write (Convert.ToString ((char) obj));
+                };
+
+            IFormatProvider datetime_format =
+                DateTimeFormatInfo.InvariantInfo;
+
+            base_exporters_table[typeof (DateTime)] =
+                delegate (object obj, JsonWriter writer) {
+                    writer.Write (Convert.ToString ((DateTime) obj,
+                                                    datetime_format));
+                };
+
+            base_exporters_table[typeof (decimal)] =
+                delegate (object obj, JsonWriter writer) {
+                    writer.Write ((decimal) obj);
+                };
+
+            base_exporters_table[typeof (sbyte)] =
+                delegate (object obj, JsonWriter writer) {
+                    writer.Write (Convert.ToInt32 ((sbyte) obj));
+                };
+
+            base_exporters_table[typeof (short)] =
+                delegate (object obj, JsonWriter writer) {
+                    writer.Write (Convert.ToInt32 ((short) obj));
+                };
+
+            base_exporters_table[typeof (ushort)] =
+                delegate (object obj, JsonWriter writer) {
+                    writer.Write (Convert.ToInt32 ((ushort) obj));
+                };
+
+            base_exporters_table[typeof (uint)] =
+                delegate (object obj, JsonWriter writer) {
+                    writer.Write (Convert.ToUInt64 ((uint) obj));
+                };
+
+            base_exporters_table[typeof (ulong)] =
+                delegate (object obj, JsonWriter writer) {
+                    writer.Write ((ulong) obj);
+                };
+        }
+
+        private static void WriteValue (object obj, JsonWriter writer,
+                                        bool writer_is_private,
+                                        int depth)
+        {
+            if (depth > max_nesting_depth)
+                throw new JsonException (
+                    String.Format ("Max allowed object depth reached while " +
+                                   "trying to export from type {0}",
+                                   obj.GetType ()));
+
             if (obj == null) {
                 writer.Write (null);
                 return;
@@ -503,7 +579,7 @@ namespace LitJson
                 writer.WriteArrayStart ();
 
                 foreach (object elem in (Array) obj)
-                    WriteValue (elem, writer, writer_is_private);
+                    WriteValue (elem, writer, writer_is_private, depth + 1);
 
                 writer.WriteArrayEnd ();
 
@@ -513,7 +589,7 @@ namespace LitJson
             if (obj is IList) {
                 writer.WriteArrayStart ();
                 foreach (object elem in (IList) obj)
-                    WriteValue (elem, writer, writer_is_private);
+                    WriteValue (elem, writer, writer_is_private, depth + 1);
                 writer.WriteArrayEnd ();
 
                 return;
@@ -523,15 +599,33 @@ namespace LitJson
                 writer.WriteObjectStart ();
                 foreach (DictionaryEntry entry in (IDictionary) obj) {
                     writer.WritePropertyName ((string) entry.Key);
-                    WriteValue (entry.Value, writer, writer_is_private);
+                    WriteValue (entry.Value, writer, writer_is_private,
+                                depth + 1);
                 }
                 writer.WriteObjectEnd ();
 
                 return;
             }
 
-            // Default case; a regular .Net object
             Type obj_type = obj.GetType ();
+
+            // See if there's a custom exporter for the object
+            if (custom_exporters_table.ContainsKey (obj_type)) {
+                ExporterFunc exporter = custom_exporters_table[obj_type];
+                exporter (obj, writer);
+
+                return;
+            }
+
+            // If not, maybe there's a base exporter
+            if (base_exporters_table.ContainsKey (obj_type)) {
+                ExporterFunc exporter = base_exporters_table[obj_type];
+                exporter (obj, writer);
+
+                return;
+            }
+
+            // It looks like the input should be exported as an object
             AddTypeProperties (obj_type);
             IList<PropertyMetadata> props = type_properties[obj_type];
 
@@ -541,10 +635,11 @@ namespace LitJson
 
                 if (p_data.IsField)
                     WriteValue (((FieldInfo) p_data.Info).GetValue (obj),
-                                writer, writer_is_private);
+                                writer, writer_is_private, depth + 1);
                 else
                     WriteValue (((PropertyInfo) p_data.Info).GetValue (
-                            obj, null), writer, writer_is_private);
+                            obj, null),
+                        writer, writer_is_private, depth + 1);
             }
             writer.WriteObjectEnd ();
         }
@@ -556,7 +651,7 @@ namespace LitJson
             lock (static_writer_lock) {
                 static_writer.Reset ();
 
-                WriteValue (obj, static_writer, true);
+                WriteValue (obj, static_writer, true, 0);
 
                 return static_writer.ToString ();
             }
@@ -564,7 +659,7 @@ namespace LitJson
 
         public static void ToJson (object obj, JsonWriter writer)
         {
-            WriteValue (obj, writer, false);
+            WriteValue (obj, writer, false, 0);
         }
 
         public static JsonData ToObject (JsonReader reader)
@@ -618,6 +713,21 @@ namespace LitJson
             JsonReader reader = new JsonReader (json);
 
             return ReadValue (factory, reader);
+        }
+
+        public static void RegisterExporter<T> (ExporterFunc<T> exporter)
+        {
+            ExporterFunc exporter_wrapper =
+                delegate (object obj, JsonWriter writer) {
+                    exporter ((T) obj, writer);
+                };
+
+            custom_exporters_table[typeof (T)] = exporter_wrapper;
+        }
+
+        public static void UnregisterExporters ()
+        {
+            custom_exporters_table.Clear ();
         }
     }
 }
