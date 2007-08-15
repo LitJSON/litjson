@@ -108,8 +108,8 @@ public class JsonSample
 
         // Scalar elements stored in a JsonData instance can be cast to
         // their natural types
-        string artist = (string) data["album"]["name"];
-        int year = (int) data["album"]["year"];
+        string artist = (string) data["album"]["artist"];
+        int    year   = (int) data["album"]["year"];
 
         // Arrays are accessed like regular lists as well
         Console.WriteLine ("First track: {0}", data["album"]["tracks"][0]);
@@ -167,7 +167,7 @@ public class DataReader
         // The Read() method returns false when there's nothing else to read
         while (reader.Read ()) {
             string type = reader.Value != null ?
-                reader.Value.GetType ().ToString (): "";
+                reader.Value.GetType ().ToString () : "";
 
             Console.WriteLine ("{0,14} {1,10} {2,16}",
                                reader.Token, reader.Value, type);
