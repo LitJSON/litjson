@@ -27,33 +27,55 @@
     <example xml:id="quickstart.mapping.examples.jsonmapper">
       <title>Simple JsonMapper examples</title>
       <para>
-        In this example it is assumed that there's a class
-        <classname>MyObject</classname> which conforms to the structure of
-        the JSON data that is being loaded.
-      </para>
-      <para>
-        As the example shows, the method <methodname>ToObject</methodname>
-        has a generic variant that is used to specify the type of the object
-        to be returned.
+        As the example shows, the method
+        <methodname>JsonMapper.ToObject</methodname> has a generic variant
+        that is used to specify the type of the object to be returned.
       </para>
       <programlisting language="c#">
 <![CDATA[
 using LitJson;
+using System;
+
+public class Person
+{
+    // Person members are defined here ...
+}
 
 public class JsonSample
 {
-    public MyObject LoadJson (string json_text)
+    public static void Main ()
     {
-        MyObject obj = JsonMapper.ToObject<MyObject> (json_text);
-
-        return obj;
+        PersonToJson ();
+        JsonToPerson ();
     }
 
-    public string SaveJson (MyObject obj)
+    public static void PersonToJson ()
     {
-        string json = JsonMapper.ToJson (obj);
+        Person bill = new Person ();
 
-        return json;
+        bill.Name = "William Shakespeare";
+        bill.Age  = 51;
+        bill.Birthday = new DateTime (1564, 4, 26);
+
+        string json_bill = JsonMapper.ToJson (bill);
+
+        Console.WriteLine (json_bill);
+        // {"Name":"William Shakespeare","Age":51,"Birthday":"04/26/1564 00:00:00"}
+    }
+
+    public static void JsonToPerson ()
+    {
+        string json = @"
+            {
+                ""Name""     : ""Thomas More"",
+                ""Age""      : 57,
+                ""Birthday"" : ""02/07/1478 00:00:00""
+            }";
+
+        Person thomas = JsonMapper.ToObject<Person> (json);
+
+        Console.WriteLine ("Thomas' age: {0}", thomas.Age);
+        // Thomas' age: 57
     }
 }
 ]]>
@@ -122,7 +144,7 @@ using System;
 
 public class DataReader
 {
-    public static void Main (string[] args)
+    public static void Main ()
     {
         string sample = @"{
             ""name""  : ""Bill"",
