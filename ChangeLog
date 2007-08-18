@@ -39,6 +39,12 @@
 	* AUTHORS:
 	* HACKING: Added short note about credits of contributions.
 
+2007-08-18  Leonardo Boshell  <leonardoboshell@users.sourceforge.net>
+
+	* doc/manual/Makefile.am:
+	* doc/manual/inc-litdoc.make: Refactor the manual generation logic to
+	make it more flexible.
+
 2007-08-15  Leonardo Boshell  <leonardoboshell@users.sourceforge.net>
 
 	* src/LitJson/JsonWriter.cs: Clear the stack instead of creating a new
