@@ -5,13 +5,6 @@
       xml:id="reference">
   <title>API Reference</title>
 
-  <chapter>
-    <para>
-      To be added.
-    </para>
-  </chapter>
-  <!--
   <xi:include href="LitJson/LitJson.xml" />
-  -->
 
 </part>

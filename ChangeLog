@@ -41,6 +41,14 @@
 
 2007-08-18  Leonardo Boshell  <leonardoboshell@users.sourceforge.net>
 
+	* doc/manual/.gitignore:
+	* doc/manual/inc-litdoc.make: Build two HTML versions: single file and
+	many files.
+	* doc/manual/sources/reference/reference.xml: Brig back the first pieces
+	of API reference.
+
+2007-08-18  Leonardo Boshell  <leonardoboshell@users.sourceforge.net>
+
 	* doc/manual/inc-litdoc.make: Only try to install the html files if they
 	are present (a development checkout of the sources might not have the
 	support files).
