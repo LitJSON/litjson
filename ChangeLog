@@ -41,6 +41,12 @@
 
 2007-08-18  Leonardo Boshell  <leonardoboshell@users.sourceforge.net>
 
+	* doc/manual/inc-litdoc.make: Only try to install the html files if they
+	are present (a development checkout of the sources might not have the
+	support files).
+
+2007-08-18  Leonardo Boshell  <leonardoboshell@users.sourceforge.net>
+
 	* doc/manual/Makefile.am:
 	* doc/manual/inc-litdoc.make: Refactor the manual generation logic to
 	make it more flexible.
