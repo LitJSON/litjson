@@ -8,6 +8,11 @@ HTML_SINGLE_DIR = $(srcdir)/html-single
 
 MANUAL_HTML_SINGLE = $(HTML_SINGLE_DIR)/manual.html
 
+XSLTPROC_FLAGS =                                           \
+	--stringparam label.from.part 1                        \
+	--stringparam section.autolabel 1                      \
+	--stringparam section.label.includes.component.label 1
+
 
 install-data-local:
 	if test -d $(srcdir)/html; then                      \
@@ -31,15 +36,16 @@ html: html-many html-single
 html-many:
 	@echo "Building HTML manual (many files)"
 	test -d $(HTML_MANY_DIR) || $(MKDIR_P) $(HTML_MANY_DIR)
-	xsltproc --xinclude \
-		--param chunk.fast 1 \
+	xsltproc --xinclude $(XSLTPROC_FLAGS) \
+		--stringparam chunk.fast 1 \
 		--stringparam base.dir "$(HTML_MANY_DIR)/" \
 		$(DOCBOOK_XSL_CHUNK) $(MANUAL)
 
 html-single:
 	@echo "Building HTML manual (single file)"
 	test -d $(HTML_SINGLE_DIR) || $(MKDIR_P) $(HTML_SINGLE_DIR)
-	xsltproc --xinclude -o $(MANUAL_HTML_SINGLE) $(DOCBOOK_XSL) $(MANUAL)
+	xsltproc --xinclude $(XSLTPROC_FLAGS) \
+		-o $(MANUAL_HTML_SINGLE) $(DOCBOOK_XSL) $(MANUAL)
 
 test:
 	@echo "Testing XML sources validity"
