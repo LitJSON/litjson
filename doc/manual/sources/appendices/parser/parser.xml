@@ -929,7 +929,7 @@
 
       <literallayout class="monospaced">
 Text<subscript>S</subscript> -> Object
-         | Array
+       | Array
 
 Object  -> { Object'
 Object' -> }
