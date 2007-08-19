@@ -132,6 +132,8 @@ namespace LitJson
 
         private static void PopulateFsmTables ()
         {
+            // See section A.1. of the manual for details of the finite
+            // state machine.
             fsm_handler_table = new StateHandler[28] {
                 State1,
                 State2,

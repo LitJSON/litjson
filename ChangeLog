@@ -41,6 +41,14 @@
 
 2007-08-19  Leonardo Boshell  <leonardoboshell@users.sourceforge.net>
 
+	* src/LitJson/JsonReader.cs:
+	* src/LitJson/Lexer.cs:
+	* src/LitJson/ParserToken.cs: Added references to the relevant sections
+	of the manual that explain how the lexer and parser components are
+	implemented.
+
+2007-08-19  Leonardo Boshell  <leonardoboshell@users.sourceforge.net>
+
 	* doc/manual/inc-litdoc.make: Add numbering to all sub-sections.
 	Renumber at the start of each part of the manual.
 
