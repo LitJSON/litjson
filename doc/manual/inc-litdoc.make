@@ -1,17 +1,14 @@
-DOCBOOK_DIR = $(srcdir)/litdoc/docbook
-DOCBOOK_XSD = $(DOCBOOK_DIR)/xsd/docbook.xsd
-DOCBOOK_XSL = $(DOCBOOK_DIR)/xsl/xhtml/docbook.xsl
-DOCBOOK_XSL_CHUNK = $(DOCBOOK_DIR)/xsl/xhtml/chunk.xsl
+LITDOC_DIR = $(srcdir)/litdoc
+
+DOCBOOK_XSD = $(LITDOC_DIR)/docbook/xsd/docbook.xsd
 
 HTML_MANY_DIR   = $(srcdir)/html
 HTML_SINGLE_DIR = $(srcdir)/html-single
 
 MANUAL_HTML_SINGLE = $(HTML_SINGLE_DIR)/manual.html
+MANUAL_XSL_SINGLE  = $(LITDOC_DIR)/xsl/ld-docbook.xsl
+MANUAL_XSL_CHUNK   = $(LITDOC_DIR)/xsl/ld-chunk.xsl
 
-XSLTPROC_FLAGS =                                           \
-	--stringparam label.from.part 1                        \
-	--stringparam section.autolabel 1                      \
-	--stringparam section.label.includes.component.label 1
 
 
 install-data-local:
@@ -25,7 +22,7 @@ uninstall-local:
 	rm -rf $(DESTDIR)$(htmldir)
 
 dist-hook:
-	if test -d $(srcdir)/litdoc; then            \
+	if test -d $(LITDOC_DIR) ; then            \
 		cd $(srcdir) && $(MAKE) html ;           \
 		cp -udpR $(HTML_MANY_DIR) $(distdir) ;   \
 		cp -udpR $(HTML_SINGLE_DIR) $(distdir) ; \
@@ -37,15 +34,14 @@ html-many:
 	@echo "Building HTML manual (many files)"
 	test -d $(HTML_MANY_DIR) || $(MKDIR_P) $(HTML_MANY_DIR)
 	xsltproc --xinclude $(XSLTPROC_FLAGS) \
-		--stringparam chunk.fast 1 \
 		--stringparam base.dir "$(HTML_MANY_DIR)/" \
-		$(DOCBOOK_XSL_CHUNK) $(MANUAL)
+		$(MANUAL_XSL_CHUNK) $(MANUAL)
 
 html-single:
 	@echo "Building HTML manual (single file)"
 	test -d $(HTML_SINGLE_DIR) || $(MKDIR_P) $(HTML_SINGLE_DIR)
 	xsltproc --xinclude $(XSLTPROC_FLAGS) \
-		-o $(MANUAL_HTML_SINGLE) $(DOCBOOK_XSL) $(MANUAL)
+		-o $(MANUAL_HTML_SINGLE) $(MANUAL_XSL_SINGLE) $(MANUAL)
 
 test:
 	@echo "Testing XML sources validity"
