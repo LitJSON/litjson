@@ -1,0 +1,11 @@
+MANUAL_DEPS = \
+	$(MANUAL_SRC_DIR)/manual.xml \
+	$(MANUAL_SRC_DIR)/appendices/appendices.xml \
+	$(MANUAL_SRC_DIR)/appendices/parser/parser.xml \
+	$(MANUAL_SRC_DIR)/appendices/benchmarks/benchmarks.xml \
+	$(MANUAL_SRC_DIR)/entities/urls.ent \
+	$(MANUAL_SRC_DIR)/quickstart/quickstart.xml \
+	$(MANUAL_SRC_DIR)/reference/reference.xml \
+	$(MANUAL_SRC_DIR)/reference/LitJson/LitJson.xml \
+	$(MANUAL_SRC_DIR)/reference/LitJson/JsonReader/JsonReader.xml \
+	$(MANUAL_SRC_DIR)/reference/LitJson/JsonReader/properties/HasReachedEnd.xml 

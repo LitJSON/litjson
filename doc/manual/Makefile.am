@@ -1,11 +1,10 @@
 include $(srcdir)/inc-litdoc.make
 
 
-MANUAL = $(srcdir)/sources/manual.xml
+MANUAL_SRC_DIR = $(srcdir)/sources
+MANUAL         = $(MANUAL_SRC_DIR)/manual.xml
 
-EXTRA_DIST =          \
-	$(srcdir)/README  \
-	$(srcdir)/sources
+EXTRA_DIST += $(srcdir)/README
 
 
 generated:
