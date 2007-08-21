@@ -31,7 +31,7 @@
         <methodname>JsonMapper.ToObject</methodname> has a generic variant
         that is used to specify the type of the object to be returned.
       </para>
-      <programlisting language="c#">
+      <programlisting language="csharp" role="highlight">
 <![CDATA[
 using LitJson;
 using System;
@@ -92,7 +92,7 @@ public class JsonSample
     </para>
     <example xml:id="quickstart.mapping.examples.jsondata">
       <title>Using the non-generic variant of JsonMapper.ToObject</title>
-      <programlisting language="c#">
+      <programlisting language="csharp" role="highlight">
 <![CDATA[
 using LitJson;
 using System;
@@ -137,7 +137,7 @@ public class JsonSample
     </para>
     <example xml:id="quickstart.readerwriter.examples.jsonreader">
       <title>Using JsonReader</title>
-      <programlisting language="c#">
+      <programlisting language="csharp" role="highlight">
 <![CDATA[
 using LitJson;
 using System;
@@ -206,7 +206,7 @@ public class DataReader
     </example>
     <example xml:id="quickstart.readerwriter.examples.jsonwriter">
       <title>Using JsonWriter</title>
-      <programlisting language="c#">
+      <programlisting language="csharp" role="highlight">
 <![CDATA[
 using LitJson;
 using System;

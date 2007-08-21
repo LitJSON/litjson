@@ -41,6 +41,12 @@
 
 2007-08-20  Leonardo Boshell  <leonardoboshell@users.sourceforge.net>
 
+	* doc/manual/inc-litdoc.make:
+	* doc/manual/sources/quickstart/quickstart.xml: The code in
+	programlisting elements is now highlighted using GNU source-highlight.
+
+2007-08-20  Leonardo Boshell  <leonardoboshell@users.sourceforge.net>
+
 	* doc/manual/Makefile.am:
 	* doc/manual/inc-litdoc.make: Added CSS styles. Split the manual
 	generation from the XML sources into two phases in order to perform

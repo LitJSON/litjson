@@ -10,10 +10,16 @@
 #     is run.
 
 
+CSS_DIR       = $(LITDOC_DIR)/css
+CSS_MAIN      = ld-default.css
+CSS_HIGHLIGHT = ld-highlight.css
+
+SOURCE_HL = source-highlight
+
+
 include $(srcdir)/manual.dep
 
 EXTRA_DIST = $(MANUAL_DEPS)
-
 
 LITDOC_DIR = $(srcdir)/litdoc
 
@@ -30,8 +36,7 @@ LITDOC_XSL_PHASE1 = $(LITDOC_DIR)/xsl/ld-phase1.xsl
 MANUAL_XSL_SINGLE  = $(LITDOC_DIR)/xsl/ld-docbook.xsl
 MANUAL_XSL_CHUNK   = $(LITDOC_DIR)/xsl/ld-chunk.xsl
 
-CSS_DIR  = $(LITDOC_DIR)/css
-CSS_FILE = ld-default.css
+XMLLINT_FLAGS = --xinclude --noent --noout
 
 
 
@@ -61,31 +66,46 @@ dep:
 	sed -e '$$s/\\//' manual.dep.tmp > manual.dep
 	rm -f manual.dep.tmp
 
-$(MANUAL_PHASE1): $(MANUAL_DEPS)
+$(MANUAL_PHASE1): $(LITDOC_XSL_PHASE1) $(MANUAL_DEPS)
+	rm -f $(LITDOC_DIR)/genfiles/highlight/source/*
+	rm -f $(LITDOC_DIR)/genfiles/highlight/result/*
 	xsltproc --xinclude -o $@ $(LITDOC_XSL_PHASE1) $(MANUAL)
+	for src in $(LITDOC_DIR)/genfiles/highlight/source/*; do      \
+		result=`echo $$src | sed -e 's~source/~result/~'` ;       \
+		lang=`echo $$src | sed -e 's/.*\.//'` ;                   \
+		echo "<highlighted>" > $$result ;                         \
+		$(SOURCE_HL) -i $$src -s $$lang -f xhtml-css >> $$result; \
+		echo "</highlighted>" >> $$result ;                       \
+	done
 
 html: html-many html-single
 
 html-many: $(MANUAL_PHASE1)
 	@echo "Building HTML manual (many files)"
 	test -d $(HTML_MANY_DIR) || $(MKDIR_P) $(HTML_MANY_DIR)
-	xsltproc --xinclude $(XSLTPROC_FLAGS) \
-		--stringparam base.dir "$(HTML_MANY_DIR)/" \
-		--stringparam html.stylesheet "$(CSS_FILE)" \
+	xsltproc --xinclude --xincludestyle $(XSLTPROC_FLAGS)     \
+		--stringparam base.dir "$(HTML_MANY_DIR)/"            \
+		--stringparam html.stylesheet "$(CSS_MAIN)"           \
+		--stringparam litdoc.css.highlight "$(CSS_HIGHLIGHT)" \
 		$(MANUAL_XSL_CHUNK) $(MANUAL_PHASE1)
-	cp -f $(CSS_DIR)/$(CSS_FILE) $(HTML_MANY_DIR)
+	cp -f $(CSS_DIR)/$(CSS_MAIN) $(HTML_MANY_DIR)
+	cp -f $(CSS_DIR)/$(CSS_HIGHLIGHT) $(HTML_MANY_DIR)
 
 html-single: $(MANUAL_PHASE1)
 	@echo "Building HTML manual (single file)"
 	test -d $(HTML_SINGLE_DIR) || $(MKDIR_P) $(HTML_SINGLE_DIR)
-	xsltproc --xinclude $(XSLTPROC_FLAGS) \
-		--stringparam html.stylesheet "$(CSS_FILE)" \
-		-o $(MANUAL_HTML_SINGLE) $(MANUAL_XSL_SINGLE) $(MANUAL_PHASE1)
-	cp -f $(CSS_DIR)/$(CSS_FILE) $(HTML_SINGLE_DIR)
+	xsltproc --xinclude --xincludestyle $(XSLTPROC_FLAGS)     \
+		--stringparam html.stylesheet "$(CSS_MAIN)"           \
+		--stringparam litdoc.css.highlight "$(CSS_HIGHLIGHT)" \
+		-o $(MANUAL_HTML_SINGLE)                              \
+		$(MANUAL_XSL_SINGLE) $(MANUAL_PHASE1)
+	cp -f $(CSS_DIR)/$(CSS_MAIN) $(HTML_SINGLE_DIR)
+	cp -f $(CSS_DIR)/$(CSS_HIGHLIGHT) $(HTML_SINGLE_DIR)
 
-test:
+test: $(MANUAL_PHASE1)
 	@echo "Testing XML sources validity"
-	xmllint --xinclude --noent --noout --schema $(DOCBOOK_XSD) $(MANUAL)
+	xmllint $(XMLLINT_FLAGS) --schema $(DOCBOOK_XSD) $(MANUAL_PHASE1)
+	xmllint $(XMLLINT_FLAGS) --schema $(DOCBOOK_XSD) $(MANUAL)
 
 
 .PHONY: dep html html-many html-single test
