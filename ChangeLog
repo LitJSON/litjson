@@ -39,6 +39,35 @@
 	* AUTHORS:
 	* HACKING: Added short note about credits of contributions.
 
+2007-08-26  Leonardo Boshell  <leonardoboshell@users.sourceforge.net>
+
+	* configure.ac:
+	* doc/manual/.gitignore:
+	* doc/manual/generated.xml.in:
+	* doc/manual/inc-litdoc.make:
+	* doc/manual/sources/manual.xml:
+	* doc/manual/sources/macros/urls.xml:
+	* doc/manual/sources/appendices/benchmarks/benchmarks.xml:
+	* doc/manual/sources/appendices/parser/parser.xml:
+	* doc/manual/sources/quickstart/quickstart.xml:
+	* doc/manual/sources/reference/LitJson/LitJson.xml: Minor updates.
+
+	* doc/manual/manual.dep:
+	* doc/manual/sources/reference/LitJson/JsonReader/JsonReader.xml:
+	* doc/manual/sources/reference/LitJson/JsonReader/properties/AllowComments.xml:
+	* doc/manual/sources/reference/LitJson/JsonReader/properties/AllowSingleQuotedStrings.xml:
+	* doc/manual/sources/reference/LitJson/JsonReader/properties/EndOfJson.xml:
+	* doc/manual/sources/reference/LitJson/JsonReader/properties/Token.xml:
+	* doc/manual/sources/reference/LitJson/JsonReader/properties/Value.xml:
+	Document properties of JsonReader.
+
+	* doc/manual/sources/reference/LitJson/JsonReader/properties/HasReachedEnd.xml:
+	Removed.
+
+	* doc/manual/generated.ent.in:
+	* doc/manual/sources/entities/urls.ent: Removed. Replaced now with macro
+	files.
+
 2007-08-20  Leonardo Boshell  <leonardoboshell@users.sourceforge.net>
 
 	* doc/manual/inc-litdoc.make:

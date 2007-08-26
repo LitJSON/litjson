@@ -2,12 +2,12 @@
 
 <chapter xmlns="http://docbook.org/ns/docbook"
          xmlns:xi="http://www.w3.org/2001/XInclude"
-         xml:id="ref.LitJson">
+         xml:id="N.LitJson">
   <title>LitJson</title>
   <para>
-    <filename class="libraryfile">LitJson.dll</filename> is the main
-    assembly provided by LitJSON. It contains all the necessary types to
-    process JSON data in .Net programs.
+    <literal>LitJson</literal> is the main namespace of the LitJSON library.
+    It contains all the necessary types to process JSON data in .Net
+    programs.
   </para>
 
   <xi:include href="JsonReader/JsonReader.xml" />

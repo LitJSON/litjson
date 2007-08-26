@@ -1,8 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE appendix [
-  <!ENTITY % urls SYSTEM "../../entities/urls.ent">
-  %urls;
-]>
 
 <appendix xmlns="http://docbook.org/ns/docbook"
           xmlns:xl="http://www.w3.org/1999/xlink"
@@ -64,7 +60,7 @@
       </itemizedlist>
       <para>
         Aditionally, information about heap memory used is gathered using
-        <link xl:href="&url.heap-buddy;">heap-buddy</link>.
+        <link xl:href="[[url.heap-buddy]]">heap-buddy</link>.
       </para>
       <para>
         The complete source code of the benchmarks can be found under the
@@ -85,17 +81,17 @@
       <itemizedlist>
         <listitem>
           <para>
-            <link xl:href="&url.jayrock;">Jayrock</link> version 0.9.8316.
+            <link xl:href="[[url.jayrock]]">Jayrock</link> version 0.9.8316.
           </para>
         </listitem>
         <listitem>
           <para>
-            <link xl:href="&url.litjson;">LitJSON</link> version 0.3.0.
+            <link xl:href="[[url.litjson]]">LitJSON</link> version 0.3.0.
           </para>
         </listitem>
         <listitem>
           <para>
-            <link xl:href="&url.newtonsoft;">Newtonsoft Json.NET</link>
+            <link xl:href="[[url.newtonsoft]]">Newtonsoft Json.NET</link>
             version 1.1.
           </para>
         </listitem>
@@ -165,7 +161,7 @@ Benchmarking type <replaceable>TYPE</replaceable>
               Using a reader class (<classname>JsonTextReader</classname> in
               Jayrock, <classname>JsonReader</classname> in LitJSON and
               Json.NET), read the following input:
-              <literallayout class="monospaced">
+              <programlisting language="javascript">
 <![CDATA[
 [
     42,
@@ -183,7 +179,7 @@ Benchmarking type <replaceable>TYPE</replaceable>
     8.0e-3
 ]
 ]]>
-              </literallayout>
+              </programlisting>
             </para>
           </listitem>
         </varlistentry>
@@ -192,7 +188,7 @@ Benchmarking type <replaceable>TYPE</replaceable>
           <listitem>
             <para>
               Using a reader class, the following input is read:
-              <literallayout class="monospaced">
+              <programlisting language="javascript">
 <![CDATA[
 [
     "Hello World!",
@@ -201,7 +197,7 @@ Benchmarking type <replaceable>TYPE</replaceable>
     "$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^"
 ]
 ]]>
-              </literallayout>
+              </programlisting>
             </para>
           </listitem>
         </varlistentry>
@@ -210,7 +206,7 @@ Benchmarking type <replaceable>TYPE</replaceable>
           <listitem>
             <para>
               Given the following input:
-              <literallayout class="monospaced">
+              <programlisting language="javascript">
 {
     "Image": {
         "FirstProperty": true,
@@ -233,7 +229,7 @@ Benchmarking type <replaceable>TYPE</replaceable>
         "LastProperty": true
     }
 }
-              </literallayout>
+              </programlisting>
               A reader is created and tokens are read until the
               <literal>"FirstProperty"</literal> element is found.
             </para>
@@ -416,7 +412,7 @@ Allocated Objects: 1361535
               <literal>P</literal> for properties, <literal>S</literal> for
               strings, <literal>B</literal> for booleans,
               <literal>D</literal> for double numbers and
-              <literal>N</literal> for null.
+              <literal>N</literal> for [[null]].
             </para>
           </listitem>
         </varlistentry>
@@ -489,7 +485,7 @@ Allocated Objects: 1470936
 
       <para>
         These benchmarks receive the following as input:
-        <literallayout class="monospaced">
+        <programlisting language="javascript">
 {
     "Name"    : "Art Vandelay",
     "Age"     : 30,
@@ -504,7 +500,7 @@ Allocated Objects: 1470936
         "Description" : "import matches... long matches"
     }
 }
-        </literallayout>
+        </programlisting>
       </para>
       <para>
         The benchmarks implemented are:

@@ -1,10 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE book [
-  <!ENTITY % gen-entities SYSTEM "../generated.ent">
-  %gen-entities;
-  <!ENTITY % urls         SYSTEM "entities/urls.ent">
-  %urls;
-]>
+
+<?macro-file macros/urls.xml?>
+<?macro-file ../generated.xml?>
 
 <book xmlns="http://docbook.org/ns/docbook"
       xmlns:xl="http://www.w3.org/1999/xlink"
@@ -12,6 +9,7 @@
       xml:id="manual" xml:lang="en" version="5.0">
   <info>
     <title>LitJSON Manual</title>
+    <edition>[[manual.version]]</edition>
     <authorgroup>
       <author>
         <personname>
@@ -21,7 +19,7 @@
         <email>leonardoboshell@users.sourceforge.net</email>
       </author>
     </authorgroup>
-    <pubdate>&manual.pubdate;</pubdate>
+    <pubdate>[[manual.pubdate]]</pubdate>
     <legalnotice>
       <title>Terms Of Use</title>
       <para>
@@ -41,7 +39,7 @@
           which purpose is to handle data in the JSON format.
         </para>
         <para>
-          It covers version &manual.version; of the library and at the
+          It covers version [[manual.version]] of the library and at the
           moment it includes a quick start section and some appendices
           containing specific information about features of LitJSON, such as
           the specific approach used in the parser component, and some notes
@@ -62,12 +60,12 @@
       simple scalar types such as boolean, number (integers and reals) and
       string, and a couple of data structures: arrays (lists) and objects
       (dictionaries). For more information on the JSON format, visit <link
-      xl:href="&url.json;">JSON.org</link>.
+      xl:href="[[url.json]]">JSON.org</link>.
     </para>
     <para>
       LitJSON is written in C#, and it's intended to be small, fast and easy
       to use. It was developed on a GNU/Linux environment, using the <link
-      xl:href="&url.mono;">Mono</link> framework.
+      xl:href="[[url.mono]]">Mono</link> framework.
     </para>
   </preface>
 

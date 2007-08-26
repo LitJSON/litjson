@@ -10,16 +10,16 @@
 #     is run.
 
 
+ENABLE_HIGHLIGHT  = 1
+HIGHLIGHT_PROGRAM = source-highlight
+
 CSS_DIR       = $(LITDOC_DIR)/css
 CSS_MAIN      = ld-default.css
 CSS_HIGHLIGHT = ld-highlight.css
 
-SOURCE_HL = source-highlight
-
 
 include $(srcdir)/manual.dep
 
-EXTRA_DIST = $(MANUAL_DEPS)
 
 LITDOC_DIR = $(srcdir)/litdoc
 
@@ -30,14 +30,19 @@ HTML_SINGLE_DIR = $(srcdir)/html-single
 
 MANUAL_HTML_SINGLE = $(HTML_SINGLE_DIR)/manual.html
 
-MANUAL_PHASE1 = $(LITDOC_DIR)/genfiles/manual-p1.xml
-LITDOC_XSL_PHASE1 = $(LITDOC_DIR)/xsl/ld-phase1.xsl
+MANUAL_PHASE1 = $(LITDOC_DIR)/genfiles/manual-phase1.xml
+MANUAL_PHASE2 = $(LITDOC_DIR)/genfiles/manual-phase2.xml
+LITDOC_XSL_PHASE1 = $(LITDOC_DIR)/xsl/phase1/docbook.xsl
+LITDOC_XSL_PHASE2 = $(LITDOC_DIR)/xsl/phase2/docbook.xsl
 
-MANUAL_XSL_SINGLE  = $(LITDOC_DIR)/xsl/ld-docbook.xsl
-MANUAL_XSL_CHUNK   = $(LITDOC_DIR)/xsl/ld-chunk.xsl
+MANUAL_XSL_SINGLE  = $(LITDOC_DIR)/xsl/phase3/docbook.xsl
+MANUAL_XSL_CHUNK   = $(LITDOC_DIR)/xsl/phase3/chunk.xsl
 
 XMLLINT_FLAGS = --xinclude --noent --noout
 
+
+CLEANFILES = $(MANUAL_PHASE1)
+EXTRA_DIST = $(MANUAL_DEPS)
 
 
 install-data-local:
@@ -66,46 +71,59 @@ dep:
 	sed -e '$$s/\\//' manual.dep.tmp > manual.dep
 	rm -f manual.dep.tmp
 
-$(MANUAL_PHASE1): $(LITDOC_XSL_PHASE1) $(MANUAL_DEPS)
+$(MANUAL_PHASE1): $(MANUAL_DEPS)
+	xsltproc --xinclude \
+		-o $@ $(LITDOC_XSL_PHASE1) $(MANUAL)
+
+$(MANUAL_PHASE2): $(MANUAL_PHASE1)
 	rm -f $(LITDOC_DIR)/genfiles/highlight/source/*
 	rm -f $(LITDOC_DIR)/genfiles/highlight/result/*
-	xsltproc --xinclude -o $@ $(LITDOC_XSL_PHASE1) $(MANUAL)
-	for src in $(LITDOC_DIR)/genfiles/highlight/source/*; do      \
-		result=`echo $$src | sed -e 's~source/~result/~'` ;       \
-		lang=`echo $$src | sed -e 's/.*\.//'` ;                   \
-		echo "<highlighted>" > $$result ;                         \
-		$(SOURCE_HL) -i $$src -s $$lang -f xhtml-css >> $$result; \
-		echo "</highlighted>" >> $$result ;                       \
+	xsltproc --xinclude \
+		--stringparam litdoc.highlight $(ENABLE_HIGHLIGHT) \
+		-o $@ $(LITDOC_XSL_PHASE2) $(MANUAL_PHASE1)
+	for src in `find $(LITDOC_DIR)/genfiles/highlight/source -type f`; do \
+		result=`echo $$src | sed -e 's~source/~result/~'` ;               \
+		lang=`echo $$src | sed -e 's/.*\.//'` ;                           \
+		echo "<highlighted>" > $$result ;                                 \
+		$(HIGHLIGHT_PROGRAM) -i $$src -s $$lang -f xhtml-css >> $$result; \
+		echo "</highlighted>" >> $$result ;                               \
 	done
 
 html: html-many html-single
 
-html-many: $(MANUAL_PHASE1)
+html-many: $(MANUAL_PHASE2)
 	@echo "Building HTML manual (many files)"
 	test -d $(HTML_MANY_DIR) || $(MKDIR_P) $(HTML_MANY_DIR)
-	xsltproc --xinclude --xincludestyle $(XSLTPROC_FLAGS)     \
+	xsltproc --xinclude $(XSLTPROC_FLAGS)                     \
 		--stringparam base.dir "$(HTML_MANY_DIR)/"            \
 		--stringparam html.stylesheet "$(CSS_MAIN)"           \
+		--stringparam litdoc.highlight $(ENABLE_HIGHLIGHT)    \
 		--stringparam litdoc.css.highlight "$(CSS_HIGHLIGHT)" \
-		$(MANUAL_XSL_CHUNK) $(MANUAL_PHASE1)
+		$(MANUAL_XSL_CHUNK) $(MANUAL_PHASE2)
 	cp -f $(CSS_DIR)/$(CSS_MAIN) $(HTML_MANY_DIR)
 	cp -f $(CSS_DIR)/$(CSS_HIGHLIGHT) $(HTML_MANY_DIR)
 
-html-single: $(MANUAL_PHASE1)
+html-single: $(MANUAL_PHASE2)
 	@echo "Building HTML manual (single file)"
 	test -d $(HTML_SINGLE_DIR) || $(MKDIR_P) $(HTML_SINGLE_DIR)
-	xsltproc --xinclude --xincludestyle $(XSLTPROC_FLAGS)     \
+	xsltproc --xinclude $(XSLTPROC_FLAGS)                     \
 		--stringparam html.stylesheet "$(CSS_MAIN)"           \
+		--stringparam litdoc.highlight $(ENABLE_HIGHLIGHT)    \
 		--stringparam litdoc.css.highlight "$(CSS_HIGHLIGHT)" \
 		-o $(MANUAL_HTML_SINGLE)                              \
-		$(MANUAL_XSL_SINGLE) $(MANUAL_PHASE1)
+		$(MANUAL_XSL_SINGLE) $(MANUAL_PHASE2)
 	cp -f $(CSS_DIR)/$(CSS_MAIN) $(HTML_SINGLE_DIR)
 	cp -f $(CSS_DIR)/$(CSS_HIGHLIGHT) $(HTML_SINGLE_DIR)
 
-test: $(MANUAL_PHASE1)
-	@echo "Testing XML sources validity"
-	xmllint $(XMLLINT_FLAGS) --schema $(DOCBOOK_XSD) $(MANUAL_PHASE1)
+test:
+	@echo "Testing validity of XML sources"
 	xmllint $(XMLLINT_FLAGS) --schema $(DOCBOOK_XSD) $(MANUAL)
 
+test-all: $(MANUAL_PHASE2)
+	@echo "Testing validity of XML sources and generated phases files"
+	xmllint $(XMLLINT_FLAGS) --schema $(DOCBOOK_XSD) $(MANUAL)
+	xmllint $(XMLLINT_FLAGS) --schema $(DOCBOOK_XSD) $(MANUAL_PHASE1)
+	xmllint $(XMLLINT_FLAGS) --schema $(DOCBOOK_XSD) $(MANUAL_PHASE2)
 
-.PHONY: dep html html-many html-single test
+
+.PHONY: dep html html-many html-single test test-all

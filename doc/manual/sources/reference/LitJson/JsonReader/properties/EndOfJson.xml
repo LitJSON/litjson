@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<refentry xmlns="http://docbook.org/ns/docbook"
+          xml:id="P.LitJson.JsonReader.EndOfJson">
+  <refnamediv>
+    <refname>EndOfJson</refname>
+    <refpurpose>
+      Indicates whether the reader has reached the end of the input stream
+    </refpurpose>
+  </refnamediv>
+
+  <refsection role="description">
+    <fieldsynopsis language="csharp" role="get">
+      <modifier>public</modifier>
+      <type>bool</type>
+      <varname>EndOfJson</varname>
+    </fieldsynopsis>
+
+    <para>
+      This property tells the user if the reader has reached the end of the
+      input.
+    </para>
+    <para>
+      Note that reading data from a <classname>JsonReader</classname> can be
+      done in a loop checking the return value of the
+      <methodname>Read</methodname> method, in which case it's not necessary
+      to use this property.
+    </para>
+  </refsection>
+
+  <refsection role="examples">
+    <example>
+      <title>Checking the <varname>EndOfJson</varname> property</title>
+      <programlisting language="csharp">
+<![CDATA[
+using LitJson;
+
+class JsonSample
+{
+    void ReadJson (string json_data)
+    {
+        JsonReader reader = new JsonReader (json_data);
+
+        while (! reader.EndOfJson) {
+            reader.Read ();
+
+            // Do something here
+        }
+    }
+}
+]]>
+      </programlisting>
+    </example>
+  </refsection>
+
+  <refsection role="seealso">
+    <simplelist>
+      <member><methodname>Read</methodname></member>
+    </simplelist>
+  </refsection>
+
+</refentry>

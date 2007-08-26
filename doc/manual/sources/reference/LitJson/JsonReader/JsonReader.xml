@@ -2,7 +2,7 @@
 
 <section xmlns="http://docbook.org/ns/docbook"
          xmlns:xi="http://www.w3.org/2001/XInclude"
-         xml:id="ref.LitJson.JsonReader">
+         xml:id="T.LitJson.JsonReader">
   <info>
     <title>JsonReader</title>
     <abstract>
@@ -10,10 +10,10 @@
     </abstract>
   </info>
 
-  <classsynopsis language="c#">
+  <classsynopsis language="csharp">
     <ooclass>
       <modifier>public</modifier>
-      <classname role="class">JsonReader</classname>
+      <classname>JsonReader</classname>
     </ooclass>
   </classsynopsis>
 
@@ -23,6 +23,10 @@
     <classname>TextReader</classname>.
   </para>
 
-  <xi:include href="properties/HasReachedEnd.xml" />
+  <xi:include href="properties/AllowComments.xml" />
+  <xi:include href="properties/AllowSingleQuotedStrings.xml" />
+  <xi:include href="properties/EndOfJson.xml" />
+  <xi:include href="properties/Token.xml" />
+  <xi:include href="properties/Value.xml" />
 
 </section>

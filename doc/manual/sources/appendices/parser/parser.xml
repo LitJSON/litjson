@@ -1,8 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE appendix [
-  <!ENTITY % urls SYSTEM "../../entities/urls.ent">
-  %urls;
-]>
 
 <appendix xmlns="http://docbook.org/ns/docbook"
           xmlns:xl="http://www.w3.org/1999/xlink"
@@ -125,7 +121,7 @@
     </para>
     <para>
       As you may notice, the lexer is designed to read more than just the
-      strict JSON grammar as defined in <link xl:href="&url.rfc4627;">RFC
+      strict JSON grammar as defined in <link xl:href="[[url.rfc4627]]">RFC
       4627</link>. It may also allow comments (the forms
       <literal>//comment</literal> and <literal>/*comment*/</literal> are
       supported) and single-quoted strings. The library allows the developer
@@ -237,10 +233,30 @@
       <table>
         <title>Lexer State Machine (part one)</title>
         <tgroup cols="16" align="right">
+          <colspec colname="input" />
+          <colspec colname="state1" />
+          <colspec colname="state2" />
+          <colspec colname="state3" />
+          <colspec colname="state4" />
+          <colspec colname="state5" />
+          <colspec colname="state6" />
+          <colspec colname="state7" />
+          <colspec colname="state8" />
+          <colspec colname="state9" />
+          <colspec colname="state10" />
+          <colspec colname="state11" />
+          <colspec colname="state12" />
+          <colspec colname="state13" />
+          <colspec colname="state14" />
+          <colspec colname="state15" />
           <thead>
             <row>
-              <entry>Input</entry>
-              <entry>State 1</entry>
+              <entry morerows="1">Input</entry>
+              <entry align="center" namest="state1"
+                     nameend="state15">State</entry>
+            </row>
+            <row>
+              <entry>1</entry>
               <entry>2</entry>
               <entry>3</entry>
               <entry>4</entry>
@@ -680,10 +696,28 @@
       <table>
         <title>Lexer State Machine (part two)</title>
         <tgroup cols="14" align="right">
+          <colspec colname="input" />
+          <colspec colname="state16" />
+          <colspec colname="state17" />
+          <colspec colname="state18" />
+          <colspec colname="state19" />
+          <colspec colname="state20" />
+          <colspec colname="state21" />
+          <colspec colname="state22" />
+          <colspec colname="state23" />
+          <colspec colname="state24" />
+          <colspec colname="state25" />
+          <colspec colname="state26" />
+          <colspec colname="state27" />
+          <colspec colname="state28" />
           <thead>
             <row>
-              <entry>Input</entry>
-              <entry>State 16</entry>
+              <entry morerows="1">Input</entry>
+              <entry align="center" namest="state16"
+                     nameend="state28">State</entry>
+            </row>
+            <row>
+              <entry>16</entry>
               <entry>17</entry>
               <entry>18</entry>
               <entry>19</entry>

@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<refentry xmlns="http://docbook.org/ns/docbook"
+          xml:id="P.LitJson.JsonReader.Value">
+  <refnamediv>
+    <refname>Value</refname>
+    <refpurpose>
+      Holds the value of the last token read from this reader
+    </refpurpose>
+  </refnamediv>
+
+  <refsection role="description">
+    <fieldsynopsis language="csharp" role="get">
+      <modifier>public</modifier>
+      <type>object</type>
+      <varname>Value</varname>
+    </fieldsynopsis>
+
+    <para>
+      This property holds the last value read, as a
+      <classname>System.Object</classname>. The specific type of this
+      <type>object</type> depends on the token type, as specified by the
+      <varname>Token</varname> property.
+    </para>
+
+    <table>
+      <title>Real type of <varname>Value</varname></title>
+      <tgroup cols="2">
+        <thead>
+          <row>
+            <entry><varname>Token</varname></entry>
+            <entry><varname>Value</varname> type</entry>
+          </row>
+        </thead>
+        <tbody>
+          <row>
+            <entry><literal>None</literal></entry>
+            <entry></entry>
+          </row>
+          <row>
+            <entry><literal>ObjectStart</literal></entry>
+            <entry></entry>
+          </row>
+          <row>
+            <entry><literal>PropertyName</literal></entry>
+            <entry><classname>System.String</classname></entry>
+          </row>
+          <row>
+            <entry><literal>ObjectEnd</literal></entry>
+            <entry></entry>
+          </row>
+          <row>
+            <entry><literal>ArrayStart</literal></entry>
+            <entry></entry>
+          </row>
+          <row>
+            <entry><literal>ArrayEnd</literal></entry>
+            <entry></entry>
+          </row>
+          <row>
+            <entry><literal>Int</literal></entry>
+            <entry><classname>System.Int32</classname></entry>
+          </row>
+          <row>
+            <entry><literal>Long</literal></entry>
+            <entry><classname>System.Int64</classname></entry>
+          </row>
+          <row>
+            <entry><literal>Double</literal></entry>
+            <entry><classname>System.Double</classname></entry>
+          </row>
+          <row>
+            <entry><literal>String</literal></entry>
+            <entry><classname>System.String</classname></entry>
+          </row>
+          <row>
+            <entry><literal>Boolean</literal></entry>
+            <entry><classname>System.Boolean</classname></entry>
+          </row>
+          <row>
+            <entry><literal>Null</literal></entry>
+            <entry></entry>
+          </row>
+        </tbody>
+      </tgroup>
+    </table>
+    <para>
+      Note that, on those cells where the <varname>Value</varname> type is
+      not specified, it means that there is no value. In that case, this
+      property is set to [[null]].
+    </para>
+  </refsection>
+
+  <refsection role="examples">
+    <example>
+      <title>Using the <varname>Value</varname> property</title>
+      <programlisting language="csharp">
+<![CDATA[
+using LitJson;
+using System;
+
+class SampleJson
+{
+    static int SumInts (string json)
+    {
+        JsonReader reader = new JsonReader (json);
+
+        int sum = 0;
+
+        while (reader.Read ()) {
+            if (reader.Value is Int32)
+                sum += (int) reader.Value;
+        }
+
+        return sum;
+    }
+
+    static void Main ()
+    {
+        string sample_json = " [ 1, 3, 5, 7, 11 ] ";
+
+        int sum = SumInts (sample_json);
+        Console.WriteLine ("The sum of the values is {0}", sum);
+    }
+}
+]]>
+      </programlisting>
+      <para>
+        This example would output: <literal>The sum of the values is
+        27</literal>.
+      </para>
+    </example>
+  </refsection>
+
+  <refsection role="seealso">
+    <simplelist>
+      <member><varname>Token</varname></member>
+    </simplelist>
+  </refsection>
+
+</refentry>
