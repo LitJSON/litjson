@@ -23,10 +23,7 @@
     <classname>TextReader</classname>.
   </para>
 
-  <xi:include href="properties/AllowComments.xml" />
-  <xi:include href="properties/AllowSingleQuotedStrings.xml" />
-  <xi:include href="properties/EndOfJson.xml" />
-  <xi:include href="properties/Token.xml" />
-  <xi:include href="properties/Value.xml" />
+  <xi:include href="constructors/constructors.xml" />
+  <xi:include href="properties/properties.xml" />
 
 </section>

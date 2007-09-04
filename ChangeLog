@@ -39,6 +39,20 @@
 	* AUTHORS:
 	* HACKING: Added short note about credits of contributions.
 
+2007-09-03  Leonardo Boshell  <leonardoboshell@users.sourceforge.net>
+
+	* doc/manual/inc-litdoc.make:
+	  Re-factored manual generation to a private Makefile.
+	* doc/manual/sources/reference/LitJson/JsonReader/properties/properties.xml:
+	* doc/manual/sources/appendices/benchmarks/benchmarks.xml:
+	* doc/manual/sources/reference/LitJson/JsonReader/JsonReader.xml:
+	  Minor editions.
+	* doc/manual/manual.dep:
+	* doc/manual/sources/reference/LitJson/JsonReader/constructors/constructors.xml:
+	* doc/manual/sources/reference/LitJson/JsonReader/constructors/ctor-System.IO.TextReader.xml:
+	* doc/manual/sources/reference/LitJson/JsonReader/constructors/ctor-System.String.xml:
+	  Documented constructors of JsonReader
+
 2007-08-26  Leonardo Boshell  <leonardoboshell@users.sourceforge.net>
 
 	* configure.ac:

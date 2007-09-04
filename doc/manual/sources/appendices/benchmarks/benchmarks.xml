@@ -527,11 +527,11 @@ Allocated Objects: 1470936
           <listitem>
             <para>
               Import the input JSON into an object of type
-              <type>System.Collections.Hashtable</type>. Unfortunately,
-              Jayrock doesn't seem to be able to perform this conversion, so
-              it's not included in the results. Notice that this also
-              affects the heap memory usage results (Jayrock's summary
-              corresponds to running 2 of the 3 benchmarks).
+              <classname>System.Collections.Hashtable</classname>.
+              Unfortunately, Jayrock doesn't seem to be able to perform this
+              conversion, so it's not included in the results. Notice that
+              this also affects the heap memory usage results (Jayrock's
+              summary corresponds to running 2 of the 3 benchmarks).
             </para>
           </listitem>
         </varlistentry>
@@ -636,7 +636,8 @@ Allocated Objects: 8801931
           <listitem>
             <para>
               Convert an object with the same structure and data, but of
-              type <type>System.Collections.Hashtable</type> into JSON.
+              type <classname>System.Collections.Hashtable</classname> into
+              JSON.
             </para>
           </listitem>
         </varlistentry>

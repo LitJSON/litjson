@@ -12,4 +12,8 @@ MANUAL_DEPS = \
 	$(MANUAL_SRC_DIR)/reference/LitJson/JsonReader/properties/AllowSingleQuotedStrings.xml \
 	$(MANUAL_SRC_DIR)/reference/LitJson/JsonReader/properties/EndOfJson.xml \
 	$(MANUAL_SRC_DIR)/reference/LitJson/JsonReader/properties/Value.xml \
+	$(MANUAL_SRC_DIR)/reference/LitJson/JsonReader/properties/properties.xml \
+	$(MANUAL_SRC_DIR)/reference/LitJson/JsonReader/constructors/constructors.xml \
+	$(MANUAL_SRC_DIR)/reference/LitJson/JsonReader/constructors/ctor-System.String.xml \
+	$(MANUAL_SRC_DIR)/reference/LitJson/JsonReader/constructors/ctor-System.IO.TextReader.xml \
 	$(MANUAL_SRC_DIR)/macros/urls.xml 
