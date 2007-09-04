@@ -1,3 +1,8 @@
+2007-09-04  Leonardo Boshell  <leonardoboshell@users.sourceforge.net>
+
+	* AUTHORS:
+	* HACKING: Added short note about credits of contributions.
+
 2007-08-15  Leonardo Boshell  <leonardoboshell@users.sourceforge.net>
 
 	* src/LitJson/JsonWriter.cs: Clear the stack instead of creating a new
