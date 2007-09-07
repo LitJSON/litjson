@@ -1,6 +1,13 @@
 2007-09-07  Leonardo Boshell  <leonardoboshell@users.sourceforge.net>
 
 	* src/LitJson/JsonMapper.cs:
+	  Added logic to read/write Enum's.
+	* test/JsonMapperTest.cs:
+	  Added test for enum fields.
+
+2007-09-07  Leonardo Boshell  <leonardoboshell@users.sourceforge.net>
+
+	* src/LitJson/JsonMapper.cs:
 	  Added base importers for loading int values into double and float
 	  variables.
 	* test/JsonMapperTest.cs:

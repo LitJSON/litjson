@@ -21,6 +21,31 @@ using System.Reflection;
 namespace LitJson.Test
 {
     // Sample classes to test json->object and object->json conversions
+    public enum Planets
+    {
+        Jupiter,
+        Saturn,
+        Uranus,
+        Neptune,
+        Pluto
+    }
+
+    [Flags]
+    public enum Instruments
+    {
+        Bass   = 1,
+        Guitar = 2,
+        Drums  = 4,
+        Harp   = 8
+    }
+
+    public class EnumsTest
+    {
+        public Planets FavouritePlanet;
+
+        public Instruments Band;
+    }
+
     public class ValueTypesTest
     {
         public byte     TestByte;
@@ -186,6 +211,19 @@ namespace LitJson.Test
         }
 
         [Test]
+        public void ExportEnumsTest ()
+        {
+            EnumsTest e_test = new EnumsTest ();
+
+            e_test.FavouritePlanet = Planets.Saturn;
+            e_test.Band = Instruments.Bass | Instruments.Harp;
+
+            string json = JsonMapper.ToJson (e_test);
+
+            Assert.AreEqual ("{\"FavouritePlanet\":1,\"Band\":9}", json);
+        }
+
+        [Test]
         public void ExportObjectTest ()
         {
             UiSample sample = new UiSample ();
@@ -298,6 +336,22 @@ namespace LitJson.Test
 
             Assert.IsTrue (names.Length == 4, "A1");
             Assert.AreEqual (names[1], "Danny", "A2");
+        }
+
+        [Test]
+        public void ImportEnumsTest ()
+        {
+            string json = @"
+                {
+                    ""FavouritePlanet"" : 4,
+                    ""Band"" : 6
+                }";
+
+            EnumsTest e_test = JsonMapper.ToObject<EnumsTest> (json);
+
+            Assert.AreEqual (Planets.Pluto, e_test.FavouritePlanet, "A1");
+            Assert.AreEqual (Instruments.Guitar
+                             | Instruments.Drums, e_test.Band, "A2");
         }
 
         [Test]

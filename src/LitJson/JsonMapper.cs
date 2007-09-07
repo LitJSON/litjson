@@ -352,6 +352,9 @@ namespace LitJson
                     return importer (reader.Value);
                 }
 
+                // Maybe it's an enum
+                if (inst_type.IsEnum)
+                    return Enum.ToObject (inst_type, reader.Value);
 
                 // Try using an implicit conversion operator
                 MethodInfo conv_op = GetConvOp (inst_type, json_type);
@@ -754,7 +757,22 @@ namespace LitJson
                 return;
             }
 
-            // It looks like the input should be exported as an object
+            // Last option, let's see if it's an enum
+            if (obj is Enum) {
+                Type e_type = Enum.GetUnderlyingType (obj_type);
+
+                if (e_type == typeof (long)
+                    || e_type == typeof (uint)
+                    || e_type == typeof (ulong))
+                    writer.Write ((ulong) obj);
+                else
+                    writer.Write ((int) obj);
+
+                return;
+            }
+
+            // Okay, so it looks like the input should be exported as an
+            // object
             AddTypeProperties (obj_type);
             IList<PropertyMetadata> props = type_properties[obj_type];
 
