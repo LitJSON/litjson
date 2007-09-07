@@ -1,3 +1,12 @@
+2007-09-06  Leonardo Boshell  <leonardoboshell@users.sourceforge.net>
+
+	* src/LitJson/JsonReader.cs:
+	  Added EndOfInput property to JsonReader, with different semantics than
+	  EndOFJson. This way, JsonReader can parse several pieces of JSON text
+	  from the same input.
+	* test/JsonReaderTest.cs:
+	  Added test for the new behaviour of EndOfJson, and EndOfInput.
+
 2007-09-04  Leonardo Boshell  <leonardoboshell@users.sourceforge.net>
 
 	* AUTHORS:

@@ -48,6 +48,7 @@ namespace LitJson
         private int           current_input;
         private int           current_symbol;
         private bool          end_of_json;
+        private bool          end_of_input;
         private Lexer         lexer;
         private bool          parser_in_string;
         private bool          parser_return;
@@ -68,6 +69,10 @@ namespace LitJson
         public bool AllowSingleQuotedStrings {
             get { return lexer.AllowSingleQuotedStrings; }
             set { lexer.AllowSingleQuotedStrings = value; }
+        }
+
+        public bool EndOfInput {
+            get { return end_of_input; }
         }
 
         public bool EndOfJson {
@@ -115,7 +120,8 @@ namespace LitJson
 
             lexer = new Lexer (reader);
 
-            end_of_json = false;
+            end_of_input = false;
+            end_of_json  = false;
 
             this.reader = reader;
             reader_is_owned = owned;
@@ -341,7 +347,7 @@ namespace LitJson
 
         private bool ReadToken ()
         {
-            if (end_of_json)
+            if (end_of_input)
                 return false;
 
             lexer.NextToken ();
@@ -361,10 +367,12 @@ namespace LitJson
 
         public void Close ()
         {
-            if (end_of_json)
+            if (end_of_input)
                 return;
 
-            end_of_json = true;
+            end_of_input = true;
+            end_of_json  = true;
+
             if (reader_is_owned)
                 reader.Close ();
 
@@ -373,12 +381,20 @@ namespace LitJson
 
         public bool Read ()
         {
-            if (end_of_json)
+            if (end_of_input)
                 return false;
 
+            if (end_of_json) {
+                end_of_json = false;
+                automaton_stack.Clear ();
+                automaton_stack.Push ((int) ParserToken.End);
+                automaton_stack.Push ((int) ParserToken.Text);
+            }
+
             parser_in_string = false;
-            parser_return = false;
-            token = JsonToken.None;
+            parser_return    = false;
+
+            token       = JsonToken.None;
             token_value = null;
 
             if (! read_started) {
@@ -386,15 +402,18 @@ namespace LitJson
 
                 if (! ReadToken ())
                     return false;
-
             }
 
 
             int[] entry_symbols;
 
             while (true) {
-                if (parser_return)
+                if (parser_return) {
+                    if (automaton_stack.Peek () == (int) ParserToken.End)
+                        end_of_json = true;
+
                     return true;
+                }
 
                 current_symbol = automaton_stack.Pop ();
 
@@ -415,12 +434,14 @@ namespace LitJson
                     continue;
                 }
 
+                /*
                 if (current_symbol == (int) ParserToken.End) {
                     Console.WriteLine ("Input is {0}", current_input);
                     throw new JsonException (
                         "Input text has extra data after parsing " +
                         "JSON text");
                 }
+                */
 
 
                 try {

@@ -118,6 +118,45 @@ namespace LitJson.Test
         }
 
         [Test]
+        public void EndOfJsonTest ()
+        {
+            string json = " [ 1 ] [ 2, 3 ] [ 4, 5, 6 ] ";
+
+            JsonReader reader = new JsonReader (json);
+
+            int i;
+            for (i = 0; i < 3; i++) {
+                Assert.IsFalse (reader.EndOfJson, "A1");
+                reader.Read ();
+            }
+
+            Assert.IsTrue (reader.EndOfJson, "A2");
+            Assert.IsFalse (reader.EndOfInput, "A3");
+
+            reader.Read ();
+
+            for (i = 0; i < 3; i++) {
+                Assert.IsFalse (reader.EndOfJson, "A4");
+                reader.Read ();
+            }
+
+            Assert.IsTrue (reader.EndOfJson, "A5");
+            Assert.IsFalse (reader.EndOfInput, "A6");
+
+            reader.Read ();
+
+            for (i = 0; i < 4; i++) {
+                Assert.IsFalse (reader.EndOfJson, "A7");
+                reader.Read ();
+            }
+
+            Assert.IsTrue (reader.EndOfJson, "A8");
+
+            reader.Read ();
+            Assert.IsTrue (reader.EndOfInput, "A9");
+        }
+
+        [Test]
         public void FromFileTest ()
         {
             Assembly asmb = typeof (JsonReaderTest).Assembly;
