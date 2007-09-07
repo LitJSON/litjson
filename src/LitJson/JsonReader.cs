@@ -434,16 +434,6 @@ namespace LitJson
                     continue;
                 }
 
-                /*
-                if (current_symbol == (int) ParserToken.End) {
-                    Console.WriteLine ("Input is {0}", current_input);
-                    throw new JsonException (
-                        "Input text has extra data after parsing " +
-                        "JSON text");
-                }
-                */
-
-
                 try {
 
                     entry_symbols =
