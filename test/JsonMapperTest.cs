@@ -361,6 +361,31 @@ namespace LitJson.Test
         }
 
         [Test]
+        public void ImportNumbersTest ()
+        {
+            double[]  d_array;
+            float[]   f_array;
+            decimal[] m_array;
+
+            string json = " [ 0, 5, 10 ] ";
+
+            d_array = JsonMapper.ToObject<double[]> (json);
+
+            Assert.AreEqual (3, d_array.Length, "A1");
+            Assert.AreEqual (10.0, d_array[2], "A2");
+
+            f_array = JsonMapper.ToObject<float[]> (json);
+
+            Assert.AreEqual (3, f_array.Length, "A3");
+            Assert.AreEqual (10.0, f_array[2], "A4");
+
+            m_array = JsonMapper.ToObject<decimal[]> (json);
+
+            Assert.AreEqual (3, m_array.Length, "A5");
+            Assert.AreEqual (10m, m_array[2], "A6");
+        }
+
+        [Test]
         public void ImportObjectTest ()
         {
             string json = @"

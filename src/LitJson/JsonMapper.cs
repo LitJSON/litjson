@@ -578,22 +578,10 @@ namespace LitJson
                               typeof (byte), importer);
 
             importer = delegate (object input) {
-                return Convert.ToChar ((string) input);
+                return Convert.ToUInt64 ((int) input);
             };
-            RegisterImporter (base_importers_table, typeof (string),
-                              typeof (char), importer);
-
-            importer = delegate (object input) {
-                return Convert.ToDateTime ((string) input, datetime_format);
-            };
-            RegisterImporter (base_importers_table, typeof (string),
-                              typeof (DateTime), importer);
-
-            importer = delegate (object input) {
-                return Convert.ToDecimal ((double) input);
-            };
-            RegisterImporter (base_importers_table, typeof (double),
-                              typeof (decimal), importer);
+            RegisterImporter (base_importers_table, typeof (int),
+                              typeof (ulong), importer);
 
             importer = delegate (object input) {
                 return Convert.ToSByte ((int) input);
@@ -620,16 +608,41 @@ namespace LitJson
                               typeof (uint), importer);
 
             importer = delegate (object input) {
+                return Convert.ToSingle ((int) input);
+            };
+            RegisterImporter (base_importers_table, typeof (int),
+                              typeof (float), importer);
+
+            importer = delegate (object input) {
+                return Convert.ToDouble ((int) input);
+            };
+            RegisterImporter (base_importers_table, typeof (int),
+                              typeof (double), importer);
+
+            importer = delegate (object input) {
+                return Convert.ToDecimal ((double) input);
+            };
+            RegisterImporter (base_importers_table, typeof (double),
+                              typeof (decimal), importer);
+
+
+            importer = delegate (object input) {
                 return Convert.ToUInt32 ((long) input);
             };
             RegisterImporter (base_importers_table, typeof (long),
                               typeof (uint), importer);
 
             importer = delegate (object input) {
-                return Convert.ToUInt64 ((int) input);
+                return Convert.ToChar ((string) input);
             };
-            RegisterImporter (base_importers_table, typeof (int),
-                              typeof (ulong), importer);
+            RegisterImporter (base_importers_table, typeof (string),
+                              typeof (char), importer);
+
+            importer = delegate (object input) {
+                return Convert.ToDateTime ((string) input, datetime_format);
+            };
+            RegisterImporter (base_importers_table, typeof (string),
+                              typeof (DateTime), importer);
         }
 
         private static void RegisterImporter (
