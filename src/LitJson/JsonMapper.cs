@@ -131,7 +131,7 @@ namespace LitJson
         #endregion
 
 
-
+        #region Constructors
         static JsonMapper ()
         {
             max_nesting_depth = 100;
@@ -157,6 +157,7 @@ namespace LitJson
             RegisterBaseExporters ();
             RegisterBaseImporters ();
         }
+        #endregion
 
 
         #region Private Methods
