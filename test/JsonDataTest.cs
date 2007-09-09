@@ -126,6 +126,57 @@ namespace LitJson.Test
         }
 
         [Test]
+        public void EqualsTest ()
+        {
+            JsonData a;
+            JsonData b;
+
+            // Compare ints
+            a = 7;
+            b = 7;
+            Assert.IsTrue (a.Equals (b), "A1");
+
+            Assert.IsFalse (a.Equals (null), "A2");
+
+            b = 8;
+            Assert.IsFalse (a.Equals (b), "A3");
+
+            // Compare longs
+            a = 10l;
+            b = 10l;
+            Assert.IsTrue (a.Equals (b), "A4");
+
+            b = 10;
+            Assert.IsFalse (a.Equals (b), "A5");
+            b = 11l;
+            Assert.IsFalse (a.Equals (b), "A6");
+
+            // Compare doubles
+            a = 78.9;
+            b = 78.9;
+            Assert.IsTrue (a.Equals (b), "A7");
+
+            b = 78.899999;
+            Assert.IsFalse (a.Equals (b), "A8");
+
+            // Compare booleans
+            a = true;
+            b = true;
+            Assert.IsTrue (a.Equals (b), "A9");
+
+            b = false;
+            Assert.IsFalse (a.Equals (b), "A10");
+
+            // Compare strings
+            a = "walrus";
+            b = "walrus";
+            Assert.IsTrue (a.Equals (b), "A11");
+
+            b = "Walrus";
+            Assert.IsFalse (a.Equals (b), "A12");
+        }
+
+        [Test]
         [ExpectedException (typeof (InvalidCastException))]
         public void InvalidCastTest ()
         {

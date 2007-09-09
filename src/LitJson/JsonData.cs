@@ -33,7 +33,7 @@ namespace LitJson
     }
 
 
-    public class JsonData : IJsonWrapper
+    public class JsonData : IJsonWrapper, IEquatable<JsonData>
     {
         #region Fields
         private IList<JsonData>               inst_array;
@@ -817,6 +817,43 @@ namespace LitJson
                 ((IList) this).Clear ();
                 return;
             }
+        }
+
+        public bool Equals (JsonData x)
+        {
+            if (x == null)
+                return false;
+
+            if (x.type != this.type)
+                return false;
+
+            switch (this.type) {
+            case JsonDataType.None:
+                return true;
+
+            case JsonDataType.Object:
+                return this.inst_object.Equals (x.inst_object);
+
+            case JsonDataType.Array:
+                return this.inst_array.Equals (x.inst_array);
+
+            case JsonDataType.String:
+                return this.inst_string.Equals (x.inst_string);
+
+            case JsonDataType.Int:
+                return this.inst_int.Equals (x.inst_int);
+
+            case JsonDataType.Long:
+                return this.inst_long.Equals (x.inst_long);
+
+            case JsonDataType.Double:
+                return this.inst_double.Equals (x.inst_double);
+
+            case JsonDataType.Boolean:
+                return this.inst_boolean.Equals (x.inst_boolean);
+            }
+
+            return false;
         }
 
         public string ToJson ()

@@ -1,3 +1,10 @@
+2007-09-08  Leonardo Boshell  <leonardoboshell@users.sourceforge.net>
+
+	* src/LitJson/JsonData.cs:
+	  Implement the IEquatable<T> interface in JsonData.
+	* test/JsonDataTest.cs:
+	  Added tests for JsonData.Equals().
+
 2007-09-07  Leonardo Boshell  <leonardoboshell@users.sourceforge.net>
 
 	* src/LitJson/JsonMapper.cs:
