@@ -1,5 +1,10 @@
 2007-09-08  Leonardo Boshell  <leonardoboshell@users.sourceforge.net>
 
+	* test/JsonMapperTest.cs:
+	  Added tests for reading multiple JSON texts from the same input.
+
+2007-09-08  Leonardo Boshell  <leonardoboshell@users.sourceforge.net>
+
 	* src/LitJson/JsonData.cs:
 	  Implement the IEquatable<T> interface in JsonData.
 	* test/JsonDataTest.cs:

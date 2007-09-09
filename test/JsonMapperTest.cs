@@ -415,6 +415,90 @@ namespace LitJson.Test
         }
 
         [Test]
+        public void ImportManyJsonTextPiecesTest ()
+        {
+            string json_arrays = @"
+                [ true, true, false, false ]
+                [ 10, 0, -10 ]
+                [ ""war is over"", ""if you want it"" ]
+                ";
+
+            JsonReader reader;
+            JsonData   arrays;
+
+            reader = new JsonReader (json_arrays);
+            arrays = JsonMapper.ToObject (reader);
+
+            Assert.IsFalse (reader.EndOfInput, "A1");
+
+            Assert.IsTrue (arrays.IsArray, "A2");
+            Assert.AreEqual (4, arrays.Count, "A3");
+            Assert.AreEqual (true, (bool) arrays[0], "A4");
+
+            arrays = JsonMapper.ToObject (reader);
+
+            Assert.IsFalse (reader.EndOfInput, "A5");
+
+            Assert.IsTrue (arrays.IsArray, "A6");
+            Assert.AreEqual (3, arrays.Count, "A7");
+            Assert.AreEqual (10, (int) arrays[0], "A8");
+
+            arrays = JsonMapper.ToObject (reader);
+
+            Assert.IsTrue (arrays.IsArray, "A9");
+            Assert.AreEqual (2, arrays.Count, "A10");
+            Assert.AreEqual ("war is over", (string) arrays[0], "A11");
+
+            reader.Close ();
+
+            string json_objects = @"
+                {
+                  ""title""  : ""First"",
+                  ""name""   : ""First Window"",
+                  ""width""  : 640,
+                  ""height"" : 480
+                }
+
+                {
+                  ""title""  : ""Second"",
+                  ""name""   : ""Second Window"",
+                  ""width""  : 800,
+                  ""height"" : 600
+                }
+                ";
+
+            reader = new JsonReader (json_objects);
+            UiWindow window;
+
+            window = JsonMapper.ToObject<UiWindow> (reader);
+
+            Assert.IsFalse (reader.EndOfInput, "A12");
+
+            Assert.AreEqual ("First", window.title, "A13");
+            Assert.AreEqual (640, window.width, "A14");
+
+            window = JsonMapper.ToObject<UiWindow> (reader);
+
+            Assert.AreEqual ("Second", window.title, "A15");
+            Assert.AreEqual (800, window.width, "A16");
+
+            reader.Close ();
+
+            // Read them in a loop to make sure we get the correct number of
+            // iterations
+            reader = new JsonReader (json_objects);
+
+            int i = 0;
+
+            while (! reader.EndOfInput) {
+                window = JsonMapper.ToObject<UiWindow> (reader);
+                i++;
+            }
+
+            Assert.AreEqual (2, i, "A17");
+        }
+
+        [Test]
         public void ImportNumbersTest ()
         {
             double[]  d_array;
