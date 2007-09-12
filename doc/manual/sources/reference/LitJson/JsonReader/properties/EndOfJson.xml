@@ -1,36 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <refentry xmlns="http://docbook.org/ns/docbook"
-          xml:id="P.LitJson.JsonReader.EndOfJson">
+          role="id,P:LitJson.JsonReader.EndOfJson">
   <refnamediv>
-    <refname>EndOfJson</refname>
+    <refname><code>P:EndOfJson</code></refname>
     <refpurpose>
       Indicates whether the reader has reached the end of the input stream
     </refpurpose>
   </refnamediv>
 
   <refsection role="description">
-    <fieldsynopsis language="csharp" role="get">
+    <synopsis language="csharp" role="get">
       <modifier>public</modifier>
       <type>bool</type>
-      <varname>EndOfJson</varname>
-    </fieldsynopsis>
+      <property>EndOfJson</property>
+    </synopsis>
 
     <para>
       This property tells the user if the reader has reached the end of the
       input.
     </para>
     <para>
-      Note that reading data from a <classname>JsonReader</classname> can be
-      done in a loop checking the return value of the
-      <methodname>Read</methodname> method, in which case it's not necessary
-      to use this property.
+      Note that reading data from a <code>T:JsonReader</code> can be done in
+      a loop checking the return value of the <code>M:Read</code> method, in
+      which case it's not necessary to use this property.
     </para>
   </refsection>
 
   <refsection role="examples">
     <example>
-      <title>Checking the <varname>EndOfJson</varname> property</title>
+      <title>Checking the <property>EndOfJson</property> property</title>
       <programlisting language="csharp">
 <![CDATA[
 using LitJson;
@@ -55,7 +53,7 @@ class JsonSample
 
   <refsection role="seealso">
     <simplelist>
-      <member><methodname>Read</methodname></member>
+      <member><code>M:Read</code></member>
     </simplelist>
   </refsection>
 

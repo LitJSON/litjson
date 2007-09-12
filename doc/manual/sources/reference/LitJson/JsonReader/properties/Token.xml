@@ -1,32 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <refentry xmlns="http://docbook.org/ns/docbook"
-          xml:id="P.LitJson.JsonReader.Token">
+          role="id,P:LitJson.JsonReader.Token">
   <refnamediv>
-    <refname>Token</refname>
+    <refname><code>P:Token</code></refname>
     <refpurpose>
       Holds the last token read from this reader
     </refpurpose>
   </refnamediv>
 
   <refsection role="description">
-    <fieldsynopsis language="csharp" role="get">
+    <synopsis language="csharp" role="get">
       <modifier>public</modifier>
       <type>JsonToken</type>
-      <varname>Token</varname>
-    </fieldsynopsis>
+      <property>Token</property>
+    </synopsis>
 
     <para>
       This property indicates the type of token that was last read from this
       reader. For more information on the types of token that
-      <classname>JsonReader</classname> emits, see
-      <classname>JsonToken</classname>.
+      <code>T:JsonReader</code> emits, see <code>T:JsonToken</code>.
     </para>
   </refsection>
 
   <refsection role="examples">
     <example>
-      <title>Using the <varname>Token</varname> property</title>
+      <title>Using the <property>Token</property> property</title>
       <programlisting language="csharp">
 <![CDATA[
 using LitJson;
@@ -67,7 +65,7 @@ class SampleJson
 
   <refsection role="seealso">
     <simplelist>
-      <member><classname>JsonToken</classname></member>
+      <member><code>T:JsonToken</code></member>
     </simplelist>
   </refsection>
 

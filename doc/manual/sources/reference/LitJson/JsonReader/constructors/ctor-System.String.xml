@@ -1,12 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <refentry xmlns="http://docbook.org/ns/docbook"
-          xml:id="M.LitJson.JsonReader.__ctor-System.String">
+          role="id,M:LitJson.JsonReader.JsonReader(System.String)">
   <refnamediv>
-    <refname>JsonReader</refname>
+    <refname><code>M:JsonReader(System.String)</code></refname>
     <refpurpose>
-      Constructs a <classname>JsonReader</classname> using the given string
-      as input
+      Constructs a <code>T:JsonReader</code> using the given string as input
     </refpurpose>
   </refnamediv>
 

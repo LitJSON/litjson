@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <refentry xmlns="http://docbook.org/ns/docbook"
-          xml:id="P.LitJson.JsonReader.AllowComments">
+          role="id,P:LitJson.JsonReader.AllowComments">
   <refnamediv>
-    <refname>AllowComments</refname>
+    <refname><code>P:AllowComments</code></refname>
     <refpurpose>
       Specifies whether the reader accepts javascript-like comments in the
       input or not
@@ -11,36 +10,37 @@
   </refnamediv>
 
   <refsection role="description">
-    <fieldsynopsis language="csharp" role="get,set">
+    <synopsis language="csharp" role="get,set">
       <modifier>public</modifier>
       <type>bool</type>
-      <varname>AllowComments</varname>
-    </fieldsynopsis>
+      <property>AllowComments</property>
+    </synopsis>
 
     <para>
-      An instance of <classname>JsonReader</classname> can be configured to
-      accept javascript comments, which are not part of the strict JSON
-      grammar.
+      An instance of <code>T:JsonReader</code> can be configured to accept
+      javascript comments, which are not part of the strict JSON grammar.
     </para>
     <para>
-      When this property is <literal>true</literal>, the reader allows
-      comments in the following forms:
-      <literallayout class="monospaced">
+      When this property is [[true]], the reader allows comments in the
+      following forms:
+      <programlisting language="javascript">
+<![CDATA[
 // Single-line comment
 
 /*
  * Multi-line comment
  */
-      </literallayout>
+]]>
+      </programlisting>
     </para>
     <para>
-      The value of this property is <literal>true</literal> by default.
+      The value of this property is [[true]] by default.
     </para>
   </refsection>
 
   <refsection role="examples">
     <example>
-      <title><varname>AllowComments</varname> examples</title>
+      <title><property>AllowComments</property> examples</title>
       <programlisting language="csharp">
 <![CDATA[
 using LitJson;

@@ -1,35 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <refentry xmlns="http://docbook.org/ns/docbook"
-          xml:id="P.LitJson.JsonReader.Value">
+          role="id,P:LitJson.JsonReader.Value">
   <refnamediv>
-    <refname>Value</refname>
+    <refname><code>P:Value</code></refname>
     <refpurpose>
       Holds the value of the last token read from this reader
     </refpurpose>
   </refnamediv>
 
   <refsection role="description">
-    <fieldsynopsis language="csharp" role="get">
+    <synopsis language="csharp" role="get">
       <modifier>public</modifier>
       <type>object</type>
-      <varname>Value</varname>
-    </fieldsynopsis>
+      <property>Value</property>
+    </synopsis>
 
     <para>
       This property holds the last value read, as a
       <classname>System.Object</classname>. The specific type of this
       <type>object</type> depends on the token type, as specified by the
-      <varname>Token</varname> property.
+      <code>P:Token</code> property.
     </para>
 
     <table>
-      <title>Real type of <varname>Value</varname></title>
+      <title>Real type of <property>Value</property></title>
       <tgroup cols="2">
         <thead>
           <row>
-            <entry><varname>Token</varname></entry>
-            <entry><varname>Value</varname> type</entry>
+            <entry><property>Token</property></entry>
+            <entry><property>Value</property> type</entry>
           </row>
         </thead>
         <tbody>
@@ -85,7 +84,7 @@
       </tgroup>
     </table>
     <para>
-      Note that, on those cells where the <varname>Value</varname> type is
+      Note that, on those cells where the <property>Value</property> type is
       not specified, it means that there is no value. In that case, this
       property is set to [[null]].
     </para>
@@ -93,7 +92,7 @@
 
   <refsection role="examples">
     <example>
-      <title>Using the <varname>Value</varname> property</title>
+      <title>Using the <property>Value</property> property</title>
       <programlisting language="csharp">
 <![CDATA[
 using LitJson;
@@ -134,7 +133,7 @@ class SampleJson
 
   <refsection role="seealso">
     <simplelist>
-      <member><varname>Token</varname></member>
+      <member><code>P:Token</code></member>
     </simplelist>
   </refsection>
 

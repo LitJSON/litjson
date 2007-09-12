@@ -1,3 +1,25 @@
+2007-09-11  Leonardo Boshell  <leonardoboshell@users.sourceforge.net>
+
+	* doc/manual/sources/manual.xml:
+	* doc/manual/sources/quickstart/quickstart.xml:
+	* doc/manual/sources/reference/LitJson/JsonReader/JsonReader.xml:
+	* doc/manual/sources/reference/LitJson/JsonReader/constructors/constructors.xml:
+	* doc/manual/sources/reference/LitJson/JsonReader/constructors/ctor-System.IO.TextReader.xml:
+	* doc/manual/sources/reference/LitJson/JsonReader/constructors/ctor-System.String.xml:
+	* doc/manual/sources/reference/LitJson/JsonReader/properties/AllowComments.xml:
+	* doc/manual/sources/reference/LitJson/JsonReader/properties/AllowSingleQuotedStrings.xml:
+	* doc/manual/sources/reference/LitJson/JsonReader/properties/EndOfJson.xml:
+	* doc/manual/sources/reference/LitJson/JsonReader/properties/Token.xml:
+	* doc/manual/sources/reference/LitJson/JsonReader/properties/Value.xml:
+	* doc/manual/sources/reference/LitJson/JsonReader/properties/properties.xml:
+	* doc/manual/sources/reference/LitJson/LitJson.xml:
+	* doc/manual/sources/reference/reference.xml:
+	  Documentation updates:
+	  - Space clean-ups
+	  - Use new model to represent links between code elements
+	  - Use different docbook elements to represent properties and property
+	    synopsis
+
 2007-09-08  Leonardo Boshell  <leonardoboshell@users.sourceforge.net>
 
 	* test/JsonMapperTest.cs:

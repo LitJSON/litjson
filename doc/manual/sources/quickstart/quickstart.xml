@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <part xmlns="http://docbook.org/ns/docbook"
       xml:id="quickstart"
       role="N:LitJson">
@@ -20,18 +19,18 @@
       like a good idea.
     </para>
     <para>
-      For this purpose, LitJSON includes the
-      <classname>JsonMapper</classname> class, which provides two main
-      methods used to do JSON-to-object and object-to-JSON conversions.
-      These methods are <methodname>JsonMapper.ToObject</methodname> and
-      <methodname>JsonMapper.ToJson</methodname>.
+      For this purpose, LitJSON includes the <code>T:JsonMapper</code>
+      class, which provides two main methods used to do JSON-to-object and
+      object-to-JSON conversions.  These methods are
+      <code>M:JsonMapper.ToObject</code> and
+      <code>M:JsonMapper.ToJson</code>.
     </para>
     <example xml:id="quickstart.mapping.examples.jsonmapper">
       <title>Simple JsonMapper examples</title>
       <para>
-        As the example shows, the method
-        <methodname>JsonMapper.ToObject</methodname> has a generic variant
-        that is used to specify the type of the object to be returned.
+        As the example shows, the method <methodname>ToObject</methodname>
+        has a generic variant, <code>M:JsonMapper.ToObject{T}</code>, that
+        is used to specify the type of the object to be returned.
       </para>
       <programlisting language="csharp">
 <![CDATA[
@@ -87,13 +86,14 @@ public class JsonSample
       When JSON data is to be read and a custom class that matches a
       particular data structure is not available or desired, users can use
       the non-generic variant of <methodname>ToObject</methodname>, which
-      returns a <classname>JsonData</classname> instance.
+      returns a <code>T:JsonData</code> instance.
       <classname>JsonData</classname> is a general purpose type that can
       hold any of the data types supported by JSON, including lists and
       dictionaries.
     </para>
     <example xml:id="quickstart.mapping.examples.jsondata">
-      <title>Using the non-generic variant of JsonMapper.ToObject</title>
+      <title>Using the non-generic variant of
+      <methodname>JsonMapper.ToObject</methodname></title>
       <programlisting language="csharp">
 <![CDATA[
 using LitJson;
@@ -128,17 +128,16 @@ public class JsonSample
       An alternative interface to handling JSON data that might be familiar
       to some developers is through classes that make it possible to read
       and write data in a stream-like fashion. These classes are
-      <classname>JsonReader</classname> and
-      <classname>JsonWriter</classname>.
+      <code>T:JsonReader</code> and <code>T:JsonWriter</code>.
     </para>
     <para>
       These two types are in fact the foundation of this library, and the
-      <classname>JsonMapper</classname> type is built on top of them, so in
-      a way, the developer can think of the reader and writer classes as the
+      <code>T:JsonMapper</code> type is built on top of them, so in a way,
+      the developer can think of the reader and writer classes as the
       low-level programming interface for LitJSON.
     </para>
     <example xml:id="quickstart.readerwriter.examples.jsonreader">
-      <title>Using JsonReader</title>
+      <title>Using <classname>JsonReader</classname></title>
       <programlisting language="csharp">
 <![CDATA[
 using LitJson;
@@ -207,7 +206,7 @@ public class DataReader
       </screen>
     </example>
     <example xml:id="quickstart.readerwriter.examples.jsonwriter">
-      <title>Using JsonWriter</title>
+      <title>Using <classname>JsonWriter</classname></title>
       <programlisting language="csharp">
 <![CDATA[
 using LitJson;
