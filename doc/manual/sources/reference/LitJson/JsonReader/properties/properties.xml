@@ -5,6 +5,7 @@
 
   <xi:include href="AllowComments.xml" />
   <xi:include href="AllowSingleQuotedStrings.xml" />
+  <xi:include href="EndOfInput.xml" />
   <xi:include href="EndOfJson.xml" />
   <xi:include href="Token.xml" />
   <xi:include href="Value.xml" />

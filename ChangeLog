@@ -1,3 +1,11 @@
+2007-09-12  Leonardo Boshell  <leonardoboshell@users.sourceforge.net>
+
+	* doc/manual/manual.dep:
+	* doc/manual/sources/reference/LitJson/JsonReader/properties/EndOfInput.xml:
+	* doc/manual/sources/reference/LitJson/JsonReader/properties/EndOfJson.xml:
+	* doc/manual/sources/reference/LitJson/JsonReader/properties/properties.xml:
+	  Document EndOfInput, and adjust the documentation for EndOfJson.
+
 2007-09-11  Leonardo Boshell  <leonardoboshell@users.sourceforge.net>
 
 	* doc/manual/sources/manual.xml:
