@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <appendix xmlns="http://docbook.org/ns/docbook"
           xmlns:xl="http://www.w3.org/1999/xlink"
           xml:id="appendix.benchmarks">
@@ -161,7 +160,8 @@ Benchmarking type <replaceable>TYPE</replaceable>
               Using a reader class (<classname>JsonTextReader</classname> in
               Jayrock, <classname>JsonReader</classname> in LitJSON and
               Json.NET), read the following input:
-              <programlisting language="javascript">
+            </para>
+            <programlisting language="javascript">
 <![CDATA[
 [
     42,
@@ -179,8 +179,7 @@ Benchmarking type <replaceable>TYPE</replaceable>
     8.0e-3
 ]
 ]]>
-              </programlisting>
-            </para>
+            </programlisting>
           </listitem>
         </varlistentry>
         <varlistentry>
@@ -188,7 +187,8 @@ Benchmarking type <replaceable>TYPE</replaceable>
           <listitem>
             <para>
               Using a reader class, the following input is read:
-              <programlisting language="javascript">
+            </para>
+            <programlisting language="javascript">
 <![CDATA[
 [
     "Hello World!",
@@ -197,8 +197,7 @@ Benchmarking type <replaceable>TYPE</replaceable>
     "$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^"
 ]
 ]]>
-              </programlisting>
-            </para>
+            </programlisting>
           </listitem>
         </varlistentry>
         <varlistentry>
@@ -329,7 +328,8 @@ Allocated Objects: 1361535
               Using a writer object (<classname>JsonTextWriter</classname> in
               Jayrock, <classname>JsonWriter</classname> in LitJSON and
               Json.NET), write the following numbers in an array:
-              <literallayout class="monospaced">
+            </para>
+            <literallayout class="monospaced">
 0.0,
 10.0,
 3.1416,
@@ -344,8 +344,7 @@ Allocated Objects: 1361535
 -123,
 7777,
 25
-              </literallayout>
-            </para>
+            </literallayout>
           </listitem>
         </varlistentry>
         <varlistentry>
@@ -485,7 +484,9 @@ Allocated Objects: 1470936
 
       <para>
         These benchmarks receive the following as input:
-        <programlisting language="javascript">
+      </para>
+      <programlisting language="javascript">
+<![CDATA[
 {
     "Name"    : "Art Vandelay",
     "Age"     : 30,
@@ -500,8 +501,8 @@ Allocated Objects: 1470936
         "Description" : "import matches... long matches"
     }
 }
-        </programlisting>
-      </para>
+]]>
+      </programlisting>
       <para>
         The benchmarks implemented are:
       </para>

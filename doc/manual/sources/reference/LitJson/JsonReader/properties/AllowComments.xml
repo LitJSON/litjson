@@ -23,7 +23,8 @@
     <para>
       When this property is [[true]], the reader allows comments in the
       following forms:
-      <programlisting language="javascript">
+    </para>
+    <programlisting language="javascript">
 <![CDATA[
 // Single-line comment
 
@@ -31,8 +32,7 @@
  * Multi-line comment
  */
 ]]>
-      </programlisting>
-    </para>
+    </programlisting>
     <para>
       The value of this property is [[true]] by default.
     </para>
