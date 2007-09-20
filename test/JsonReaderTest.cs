@@ -225,6 +225,57 @@ namespace LitJson.Test
         }
 
         [Test]
+        [Category ("RuntimeBug")]  // Int32.TryParse in mono 1.2.5
+        public void LongTest ()
+        {
+            string json = "[ 2147483648, -10000000000 ]";
+
+            JsonReader reader = new JsonReader (json);
+            reader.Read ();
+
+            reader.Read ();
+            Assert.AreEqual (typeof (Int64), reader.Value.GetType (), "A1");
+            Assert.AreEqual (2147483648l, (long) reader.Value, "A2");
+            reader.Read ();
+            Assert.AreEqual (-10000000000l, (long) reader.Value, "A3");
+
+            reader.Close ();
+        }
+
+        [Test]
+        public void NestedArrays ()
+        {
+            string json = "[ [ [ [ [ 1, 2, 3 ] ] ] ] ]";
+
+            int array_count = 0;
+
+            JsonReader reader = new JsonReader (json);
+
+            while (reader.Read ()) {
+                if (reader.Token == JsonToken.ArrayStart)
+                    array_count++;
+            }
+
+            Assert.AreEqual (array_count, 5);
+        }
+
+        [Test]
+        public void NestedObjects ()
+        {
+            string json = "{ \"obj1\": { \"obj2\": { \"obj3\": true } } }";
+
+            int object_count = 0;
+            JsonReader reader = new JsonReader (json);
+
+            while (reader.Read ()) {
+                if (reader.Token == JsonToken.ObjectStart)
+                    object_count++;
+            }
+
+            Assert.AreEqual (object_count, 3);
+        }
+
+        [Test]
         [ExpectedException (typeof (ArgumentNullException))]
         public void NullReaderTest ()
         {
@@ -303,57 +354,6 @@ namespace LitJson.Test
             JsonReader reader = new JsonReader (json);
 
             while (reader.Read ());
-        }
-
-        [Test]
-        [Category ("RuntimeBug")]  // Int32.TryParse in mono 1.2.5
-        public void LongTest ()
-        {
-            string json = "[ 2147483648, -10000000000 ]";
-
-            JsonReader reader = new JsonReader (json);
-            reader.Read ();
-
-            reader.Read ();
-            Assert.AreEqual (typeof (Int64), reader.Value.GetType (), "A1");
-            Assert.AreEqual (2147483648l, (long) reader.Value, "A2");
-            reader.Read ();
-            Assert.AreEqual (-10000000000l, (long) reader.Value, "A3");
-
-            reader.Close ();
-        }
-
-        [Test]
-        public void NestedArrays ()
-        {
-            string json = "[ [ [ [ [ 1, 2, 3 ] ] ] ] ]";
-
-            int array_count = 0;
-
-            JsonReader reader = new JsonReader (json);
-
-            while (reader.Read ()) {
-                if (reader.Token == JsonToken.ArrayStart)
-                    array_count++;
-            }
-
-            Assert.AreEqual (array_count, 5);
-        }
-
-        [Test]
-        public void NestedObjects ()
-        {
-            string json = "{ \"obj1\": { \"obj2\": { \"obj3\": true } } }";
-
-            int object_count = 0;
-            JsonReader reader = new JsonReader (json);
-
-            while (reader.Read ()) {
-                if (reader.Token == JsonToken.ObjectStart)
-                    object_count++;
-            }
-
-            Assert.AreEqual (object_count, 3);
         }
 
         [Test]
