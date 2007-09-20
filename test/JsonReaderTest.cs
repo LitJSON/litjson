@@ -306,6 +306,7 @@ namespace LitJson.Test
         }
 
         [Test]
+        [Category ("RuntimeBug")]  // Int32.TryParse in mono 1.2.5
         public void LongTest ()
         {
             string json = "[ 2147483648, -10000000000 ]";
@@ -314,10 +315,10 @@ namespace LitJson.Test
             reader.Read ();
 
             reader.Read ();
-            Assert.AreEqual (reader.Value.GetType (), typeof (Int64), "A1");
-            Assert.AreEqual ((long) reader.Value, 2147483648l, "A2");
+            Assert.AreEqual (typeof (Int64), reader.Value.GetType (), "A1");
+            Assert.AreEqual (2147483648l, (long) reader.Value, "A2");
             reader.Read ();
-            Assert.AreEqual ((long) reader.Value, -10000000000l, "A3");
+            Assert.AreEqual (-10000000000l, (long) reader.Value, "A3");
 
             reader.Close ();
         }

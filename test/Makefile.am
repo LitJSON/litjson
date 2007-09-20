@@ -28,4 +28,4 @@ CLEANFILES += $(top_builddir)/bin/TestResult.xml
 $(ASSEMBLY): $(top_builddir)/bin/LitJson.dll
 
 check-local: $(ASSEMBLY)
-	$(NUNIT) /nologo /labels $(ASSEMBLY)
+	$(NUNIT) /nologo /exclude=RuntimeBug $(ASSEMBLY)

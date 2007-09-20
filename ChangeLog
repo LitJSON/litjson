@@ -1,3 +1,10 @@
+2007-09-20  Leonardo Boshell  <leonardoboshell@users.sourceforge.net>
+
+	* test/JsonReaderTest.cs:
+	* test/Makefile.am:
+	  Skip long test for now since mono 1.2.5 has a problem in
+	  Int32.TryParse which affects this library.
+
 2007-09-08  Leonardo Boshell  <leonardoboshell@users.sourceforge.net>
 
 	* test/JsonMapperTest.cs:
