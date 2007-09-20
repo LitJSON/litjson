@@ -46,6 +46,37 @@ namespace LitJson.Test
         public Instruments Band;
     }
 
+    public class PropertyReadOnly
+    {
+        private int x;
+
+
+        public int X {
+            get { return x; }
+            set { x = value; }
+        }
+
+        public int Y {
+            get { return x * 2; }
+        }
+    }
+
+    public class PropertyWriteOnly
+    {
+        private int x;
+
+
+        public int X {
+            set { x = value; }
+        }
+
+
+        public int GetX ()
+        {
+            return x;
+        }
+    }
+
     public class UiImage
     {
         public string src;
@@ -633,6 +664,39 @@ namespace LitJson.Test
             Assert.AreEqual (30000, test.TestUShort, "A7");
             Assert.AreEqual (90000000, test.TestUInt, "A8");
             Assert.AreEqual (1l, test.TestULong, "A9");
+        }
+
+        [Test]
+        public void PropertiesReadOnlyTest ()
+        {
+            PropertyReadOnly p_obj = new PropertyReadOnly ();
+
+            p_obj.X = 10;
+
+            string json = JsonMapper.ToJson (p_obj);
+
+            Assert.AreEqual ("{\"X\":10,\"Y\":20}", json, "A1");
+
+            PropertyReadOnly p_obj2 =
+                JsonMapper.ToObject<PropertyReadOnly> (json);
+
+            Assert.AreEqual (10, p_obj2.X, "A2");
+            Assert.AreEqual (20, p_obj2.Y, "A3");
+        }
+
+        [Test]
+        public void PropertiesWriteOnlyTest ()
+        {
+            string json = " { \"X\" : 3 } ";
+
+            PropertyWriteOnly p_obj =
+                JsonMapper.ToObject<PropertyWriteOnly> (json);
+
+            Assert.AreEqual (3, p_obj.GetX (), "A1");
+
+            json = JsonMapper.ToJson (p_obj);
+
+            Assert.AreEqual ("{}", json, "A2");
         }
     }
 }

@@ -433,9 +433,16 @@ namespace LitJson
                             ((FieldInfo) prop_data.Info).SetValue (
                                 instance, ReadValue (prop_data.Type, reader));
                         } else {
-                            ((PropertyInfo) prop_data.Info).SetValue (
-                                instance, ReadValue (prop_data.Type, reader),
-                                null);
+                            PropertyInfo p_info =
+                                (PropertyInfo) prop_data.Info;
+
+                            if (p_info.CanWrite)
+                                p_info.SetValue (
+                                    instance,
+                                    ReadValue (prop_data.Type, reader),
+                                    null);
+                            else
+                                ReadValue (prop_data.Type, reader);
                         }
 
                     } else {
@@ -779,15 +786,20 @@ namespace LitJson
 
             writer.WriteObjectStart ();
             foreach (PropertyMetadata p_data in props) {
-                writer.WritePropertyName (p_data.Info.Name);
-
-                if (p_data.IsField)
+                if (p_data.IsField) {
+                    writer.WritePropertyName (p_data.Info.Name);
                     WriteValue (((FieldInfo) p_data.Info).GetValue (obj),
                                 writer, writer_is_private, depth + 1);
-                else
-                    WriteValue (((PropertyInfo) p_data.Info).GetValue (
-                            obj, null),
-                        writer, writer_is_private, depth + 1);
+                }
+                else {
+                    PropertyInfo p_info = (PropertyInfo) p_data.Info;
+
+                    if (p_info.CanRead) {
+                        writer.WritePropertyName (p_data.Info.Name);
+                        WriteValue (p_info.GetValue (obj, null),
+                                    writer, writer_is_private, depth + 1);
+                    }
+                }
             }
             writer.WriteObjectEnd ();
         }
