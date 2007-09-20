@@ -46,19 +46,6 @@ namespace LitJson.Test
         public Instruments Band;
     }
 
-    public class ValueTypesTest
-    {
-        public byte     TestByte;
-        public char     TestChar;
-        public DateTime TestDateTime;
-        public decimal  TestDecimal;
-        public sbyte    TestSByte;
-        public short    TestShort;
-        public ushort   TestUShort;
-        public uint     TestUInt;
-        public ulong    TestULong;
-    }
-
     public class UiImage
     {
         public string src;
@@ -132,6 +119,19 @@ namespace LitJson.Test
         public string name;
         public int width;
         public int height;
+    }
+
+    public class ValueTypesTest
+    {
+        public byte     TestByte;
+        public char     TestChar;
+        public DateTime TestDateTime;
+        public decimal  TestDecimal;
+        public sbyte    TestSByte;
+        public short    TestShort;
+        public ushort   TestUShort;
+        public uint     TestUInt;
+        public ulong    TestULong;
     }
 
 
