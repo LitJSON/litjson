@@ -1,5 +1,14 @@
 2007-10-04  Leonardo Boshell  <leonardoboshell@users.sourceforge.net>
 
+	* Makefile.am:
+	  Distribute HACKING file. Simplified a little the logic behind -bin
+	  releases.
+
+	* README.bin:
+	  Keep a separate README for the -bin releases.
+
+2007-10-04  Leonardo Boshell  <leonardoboshell@users.sourceforge.net>
+
 	* configure.ac:
 	* NEWS:
 	  Updated version to 0.5.0.
