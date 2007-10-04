@@ -667,6 +667,23 @@ namespace LitJson.Test
         }
 
         [Test]
+        public void NullConversionsTest ()
+        {
+            object[] MyObjects = new object[] {"Hi!", 123, true, null};
+            string json = JsonMapper.ToJson (MyObjects);
+
+            Assert.AreEqual ("[\"Hi!\",123,true,null]", json, "A1");
+
+            JsonData data = JsonMapper.ToObject (json);
+
+            Assert.AreEqual ("Hi!", (string) data[0], "A2");
+            Assert.AreEqual (123, (int) data[1], "A3");
+
+            Assert.IsTrue ((bool) data[2], "A4");
+            Assert.IsNull (data[3], "A5");
+        }
+
+        [Test]
         public void PropertiesReadOnlyTest ()
         {
             PropertyReadOnly p_obj = new PropertyReadOnly ();

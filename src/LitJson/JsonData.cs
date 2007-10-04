@@ -740,6 +740,9 @@ namespace LitJson
 
         private JsonData ToJsonData (object obj)
         {
+            if (obj == null)
+                return null;
+
             if (obj is JsonData)
                 return (JsonData) obj;
 

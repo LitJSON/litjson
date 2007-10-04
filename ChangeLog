@@ -1,3 +1,12 @@
+2007-10-04  Leonardo Boshell  <leonardoboshell@users.sourceforge.net>
+
+	* src/LitJson/JsonData.cs:
+	  Fix conversion of null values in JSON format back to objects. Bug
+	  #1807477.
+	* test/JsonMapperTest.cs:
+	  Added test coverage to the conversion of null values from/to objects,
+	  based on the bug report made by andi.
+
 2007-09-20  Leonardo Boshell  <leonardoboshell@users.sourceforge.net>
 
 	* src/LitJson/JsonMapper.cs:
