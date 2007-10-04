@@ -1,4 +1,55 @@
 =============   ----------
+LitJSON 0.5.0 | 2007-10-04
+=============   ----------
+
+New features and improvements:
+
+* The JsonRader class now has two properties to control the reading of data
+  from an input stream: EndOfInput and EndOfJson. The latter becomes
+  true whenever a complete piece of JSON text has been read, while the
+  former is a flag that becomes true when the stream itself reaches the end.
+  This way, reading multiple JSON texts from the same input stream is
+  straightforward.
+
+* Added new base importers in JsonMapper for reading numeric values
+  correctly into float and double members.
+
+* Now Enum's can be imported/exported as numeric values.
+
+* JsonData implements the IEquatable<T> interface now.
+
+
+API changes:
+
+  The following types are new:
+    enum JsonType
+
+  The following methods are new:
+    IJsonWrapper.GetJsonType()
+    IJsonWrapper.SetJsonType()
+
+  The following properties are new:
+    JsonReader.EndOfInput
+
+
+Bug fixes:
+
+* Correctly import/export properties that are read-only or write-only.
+
+* Correctly convert null values when adding them as array elements or
+  properties to a JsonData instance.
+
+* Fixed conversion of empty JSON objects and arrays.
+
+
+Thanks to all the contributors that reported problems and suggested fixes
+for this release:
+  Colin Alworth
+  Ralf Callenberg
+  andi
+
+
+=============   ----------
 LitJSON 0.3.0 | 2007-08-15
 =============   ----------
 
