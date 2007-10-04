@@ -1,5 +1,22 @@
 2007-10-04  Leonardo Boshell  <leonardoboshell@users.sourceforge.net>
 
+	* src/LitJson/IJsonWrapper.cs:
+	  Made the JsonType enum public. Added GetJsonType() and SetJsonType()
+	  methods.
+
+	* src/LitJson/JsonData.cs:
+	  Adjusted the class to the IJsonWrapper changes.
+
+	* src/LitJson/JsonMapper.cs:
+	  Fix conversion of empty objects and arrays to in ToObject(). As
+	  reported and discussed with Colin Alworth.
+
+	* test/JsonMapperTest.cs:
+	  Added new coverage for conversions back and forth from empty JSON
+	  objects.
+
+2007-10-04  Leonardo Boshell  <leonardoboshell@users.sourceforge.net>
+
 	* src/LitJson/JsonData.cs:
 	  Fix conversion of null values in JSON format back to objects. Bug
 	  #1807477.

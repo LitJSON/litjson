@@ -17,6 +17,19 @@ using System.Collections.Specialized;
 
 namespace LitJson
 {
+    public enum JsonType
+    {
+        None,
+
+        Object,
+        Array,
+        String,
+        Int,
+        Long,
+        Double,
+        Boolean
+    }
+
     public interface IJsonWrapper : IList, IOrderedDictionary
     {
         bool IsArray   { get; }
@@ -27,17 +40,19 @@ namespace LitJson
         bool IsObject  { get; }
         bool IsString  { get; }
 
-        bool   GetBoolean ();
-        double GetDouble ();
-        int    GetInt ();
-        long   GetLong ();
-        string GetString ();
+        bool     GetBoolean ();
+        double   GetDouble ();
+        int      GetInt ();
+        JsonType GetJsonType ();
+        long     GetLong ();
+        string   GetString ();
 
-        void SetBoolean (bool val);
-        void SetDouble  (double val);
-        void SetInt     (int val);
-        void SetLong    (long val);
-        void SetString  (string val);
+        void SetBoolean  (bool val);
+        void SetDouble   (double val);
+        void SetInt      (int val);
+        void SetJsonType (JsonType type);
+        void SetLong     (long val);
+        void SetString   (string val);
 
         string ToJson ();
         void   ToJson (JsonWriter writer);

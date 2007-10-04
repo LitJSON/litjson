@@ -19,20 +19,6 @@ using System.IO;
 
 namespace LitJson
 {
-    internal enum JsonDataType
-    {
-        None,
-
-        Object,
-        Array,
-        String,
-        Int,
-        Long,
-        Double,
-        Boolean
-    }
-
-
     public class JsonData : IJsonWrapper, IEquatable<JsonData>
     {
         #region Fields
@@ -44,7 +30,7 @@ namespace LitJson
         private IDictionary<string, JsonData> inst_object;
         private string                        inst_string;
         private string                        json;
-        private JsonDataType                  type;
+        private JsonType                      type;
 
         // Used to implement the IOrderedDictionary interface
         private IList<KeyValuePair<string, JsonData>> object_list;
@@ -57,31 +43,31 @@ namespace LitJson
         }
 
         public bool IsArray {
-            get { return type == JsonDataType.Array; }
+            get { return type == JsonType.Array; }
         }
 
         public bool IsBoolean {
-            get { return type == JsonDataType.Boolean; }
+            get { return type == JsonType.Boolean; }
         }
 
         public bool IsDouble {
-            get { return type == JsonDataType.Double; }
+            get { return type == JsonType.Double; }
         }
 
         public bool IsInt {
-            get { return type == JsonDataType.Int; }
+            get { return type == JsonType.Int; }
         }
 
         public bool IsLong {
-            get { return type == JsonDataType.Long; }
+            get { return type == JsonType.Long; }
         }
 
         public bool IsObject {
-            get { return type == JsonDataType.Object; }
+            get { return type == JsonType.Object; }
         }
 
         public bool IsString {
-            get { return type == JsonDataType.String; }
+            get { return type == JsonType.String; }
         }
         #endregion
 
@@ -289,7 +275,7 @@ namespace LitJson
             get {
                 EnsureCollection ();
 
-                if (type == JsonDataType.Array)
+                if (type == JsonType.Array)
                     return inst_array[index];
 
                 return object_list[index].Value;
@@ -298,7 +284,7 @@ namespace LitJson
             set {
                 EnsureCollection ();
 
-                if (type == JsonDataType.Array)
+                if (type == JsonType.Array)
                     inst_array[index] = value;
                 else {
                     KeyValuePair<string, JsonData> entry = object_list[index];
@@ -322,56 +308,56 @@ namespace LitJson
 
         public JsonData (bool boolean)
         {
-            type = JsonDataType.Boolean;
+            type = JsonType.Boolean;
             inst_boolean = boolean;
         }
 
         public JsonData (double number)
         {
-            type = JsonDataType.Double;
+            type = JsonType.Double;
             inst_double = number;
         }
 
         public JsonData (int number)
         {
-            type = JsonDataType.Int;
+            type = JsonType.Int;
             inst_int = number;
         }
 
         public JsonData (long number)
         {
-            type = JsonDataType.Long;
+            type = JsonType.Long;
             inst_long = number;
         }
 
         public JsonData (object obj)
         {
             if (obj is Boolean) {
-                type = JsonDataType.Boolean;
+                type = JsonType.Boolean;
                 inst_boolean = (bool) obj;
                 return;
             }
 
             if (obj is Double) {
-                type = JsonDataType.Double;
+                type = JsonType.Double;
                 inst_double = (double) obj;
                 return;
             }
 
             if (obj is Int32) {
-                type = JsonDataType.Int;
+                type = JsonType.Int;
                 inst_int = (int) obj;
                 return;
             }
 
             if (obj is Int64) {
-                type = JsonDataType.Long;
+                type = JsonType.Long;
                 inst_long = (long) obj;
                 return;
             }
 
             if (obj is String) {
-                type = JsonDataType.String;
+                type = JsonType.String;
                 inst_string = (string) obj;
                 return;
             }
@@ -382,7 +368,7 @@ namespace LitJson
 
         public JsonData (string str)
         {
-            type = JsonDataType.String;
+            type = JsonType.String;
             inst_string = str;
         }
         #endregion
@@ -419,7 +405,7 @@ namespace LitJson
         #region Explicit Conversions
         public static explicit operator Boolean (JsonData data)
         {
-            if (data.type != JsonDataType.Boolean)
+            if (data.type != JsonType.Boolean)
                 throw new InvalidCastException (
                     "Instance of JsonData doesn't hold a double");
 
@@ -428,7 +414,7 @@ namespace LitJson
 
         public static explicit operator Double (JsonData data)
         {
-            if (data.type != JsonDataType.Double)
+            if (data.type != JsonType.Double)
                 throw new InvalidCastException (
                     "Instance of JsonData doesn't hold a double");
 
@@ -437,7 +423,7 @@ namespace LitJson
 
         public static explicit operator Int32 (JsonData data)
         {
-            if (data.type != JsonDataType.Int)
+            if (data.type != JsonType.Int)
                 throw new InvalidCastException (
                     "Instance of JsonData doesn't hold an int");
 
@@ -446,7 +432,7 @@ namespace LitJson
 
         public static explicit operator Int64 (JsonData data)
         {
-            if (data.type != JsonDataType.Long)
+            if (data.type != JsonType.Long)
                 throw new InvalidCastException (
                     "Instance of JsonData doesn't hold an int");
 
@@ -455,7 +441,7 @@ namespace LitJson
 
         public static explicit operator String (JsonData data)
         {
-            if (data.type != JsonDataType.String)
+            if (data.type != JsonType.String)
                 throw new InvalidCastException (
                     "Instance of JsonData doesn't hold a string");
 
@@ -530,7 +516,7 @@ namespace LitJson
         #region IJsonWrapper Methods
         bool IJsonWrapper.GetBoolean ()
         {
-            if (type != JsonDataType.Boolean)
+            if (type != JsonType.Boolean)
                 throw new InvalidOperationException (
                     "JsonData instance doesn't hold a boolean");
 
@@ -539,7 +525,7 @@ namespace LitJson
 
         double IJsonWrapper.GetDouble ()
         {
-            if (type != JsonDataType.Double)
+            if (type != JsonType.Double)
                 throw new InvalidOperationException (
                     "JsonData instance doesn't hold a double");
 
@@ -548,7 +534,7 @@ namespace LitJson
 
         int IJsonWrapper.GetInt ()
         {
-            if (type != JsonDataType.Int)
+            if (type != JsonType.Int)
                 throw new InvalidOperationException (
                     "JsonData instance doesn't hold an int");
 
@@ -557,7 +543,7 @@ namespace LitJson
 
         long IJsonWrapper.GetLong ()
         {
-            if (type != JsonDataType.Long)
+            if (type != JsonType.Long)
                 throw new InvalidOperationException (
                     "JsonData instance doesn't hold a long");
 
@@ -566,7 +552,7 @@ namespace LitJson
 
         string IJsonWrapper.GetString ()
         {
-            if (type != JsonDataType.String)
+            if (type != JsonType.String)
                 throw new InvalidOperationException (
                     "JsonData instance doesn't hold a string");
 
@@ -575,35 +561,35 @@ namespace LitJson
 
         void IJsonWrapper.SetBoolean (bool val)
         {
-            type = JsonDataType.Boolean;
+            type = JsonType.Boolean;
             inst_boolean = val;
             json = null;
         }
 
         void IJsonWrapper.SetDouble (double val)
         {
-            type = JsonDataType.Double;
+            type = JsonType.Double;
             inst_double = val;
             json = null;
         }
 
         void IJsonWrapper.SetInt (int val)
         {
-            type = JsonDataType.Int;
+            type = JsonType.Int;
             inst_int = val;
             json = null;
         }
 
         void IJsonWrapper.SetLong (long val)
         {
-            type = JsonDataType.Long;
+            type = JsonType.Long;
             inst_long = val;
             json = null;
         }
 
         void IJsonWrapper.SetString (string val)
         {
-            type = JsonDataType.String;
+            type = JsonType.String;
             inst_string = val;
             json = null;
         }
@@ -697,10 +683,10 @@ namespace LitJson
         #region Private Methods
         private ICollection EnsureCollection ()
         {
-            if (type == JsonDataType.Array)
+            if (type == JsonType.Array)
                 return (ICollection) inst_array;
 
-            if (type == JsonDataType.Object)
+            if (type == JsonType.Object)
                 return (ICollection) inst_object;
 
             throw new InvalidOperationException (
@@ -709,14 +695,14 @@ namespace LitJson
 
         private IDictionary EnsureDictionary ()
         {
-            if (type == JsonDataType.Object)
+            if (type == JsonType.Object)
                 return (IDictionary) inst_object;
 
-            if (type != JsonDataType.None)
+            if (type != JsonType.None)
                 throw new InvalidOperationException (
                     "Instance of JsonData is not a dictionary");
 
-            type = JsonDataType.Object;
+            type = JsonType.Object;
             inst_object = new Dictionary<string, JsonData> ();
             object_list = new List<KeyValuePair<string, JsonData>> ();
 
@@ -725,14 +711,14 @@ namespace LitJson
 
         private IList EnsureList ()
         {
-            if (type == JsonDataType.Array)
+            if (type == JsonType.Array)
                 return (IList) inst_array;
 
-            if (type != JsonDataType.None)
+            if (type != JsonType.None)
                 throw new InvalidOperationException (
                     "Instance of JsonData is not a list");
 
-            type = JsonDataType.Array;
+            type = JsonType.Array;
             inst_array = new List<JsonData> ();
 
             return (IList) inst_array;
@@ -831,32 +817,79 @@ namespace LitJson
                 return false;
 
             switch (this.type) {
-            case JsonDataType.None:
+            case JsonType.None:
                 return true;
 
-            case JsonDataType.Object:
+            case JsonType.Object:
                 return this.inst_object.Equals (x.inst_object);
 
-            case JsonDataType.Array:
+            case JsonType.Array:
                 return this.inst_array.Equals (x.inst_array);
 
-            case JsonDataType.String:
+            case JsonType.String:
                 return this.inst_string.Equals (x.inst_string);
 
-            case JsonDataType.Int:
+            case JsonType.Int:
                 return this.inst_int.Equals (x.inst_int);
 
-            case JsonDataType.Long:
+            case JsonType.Long:
                 return this.inst_long.Equals (x.inst_long);
 
-            case JsonDataType.Double:
+            case JsonType.Double:
                 return this.inst_double.Equals (x.inst_double);
 
-            case JsonDataType.Boolean:
+            case JsonType.Boolean:
                 return this.inst_boolean.Equals (x.inst_boolean);
             }
 
             return false;
+        }
+
+        public JsonType GetJsonType ()
+        {
+            return type;
+        }
+
+        public void SetJsonType (JsonType type)
+        {
+            if (this.type == type)
+                return;
+
+            switch (type) {
+            case JsonType.None:
+                break;
+
+            case JsonType.Object:
+                inst_object = new Dictionary<string, JsonData> ();
+                object_list = new List<KeyValuePair<string, JsonData>> ();
+                break;
+
+            case JsonType.Array:
+                inst_array = new List<JsonData> ();
+                break;
+
+            case JsonType.String:
+                inst_string = default (String);
+                break;
+
+            case JsonType.Int:
+                inst_int = default (Int32);
+                break;
+
+            case JsonType.Long:
+                inst_long = default (Int64);
+                break;
+
+            case JsonType.Double:
+                inst_double = default (Double);
+                break;
+
+            case JsonType.Boolean:
+                inst_boolean = default (Boolean);
+                break;
+            }
+
+            this.type = type;
         }
 
         public string ToJson ()
@@ -888,25 +921,25 @@ namespace LitJson
         public override string ToString ()
         {
             switch (type) {
-            case JsonDataType.Array:
+            case JsonType.Array:
                 return "JsonData array";
 
-            case JsonDataType.Boolean:
+            case JsonType.Boolean:
                 return inst_boolean.ToString ();
 
-            case JsonDataType.Double:
+            case JsonType.Double:
                 return inst_double.ToString ();
 
-            case JsonDataType.Int:
+            case JsonType.Int:
                 return inst_int.ToString ();
 
-            case JsonDataType.Long:
+            case JsonType.Long:
                 return inst_long.ToString ();
 
-            case JsonDataType.Object:
+            case JsonType.Object:
                 return "JsonData object";
 
-            case JsonDataType.String:
+            case JsonType.String:
                 return inst_string;
             }
 

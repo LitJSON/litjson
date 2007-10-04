@@ -500,6 +500,7 @@ namespace LitJson
             }
 
             if (reader.Token == JsonToken.ArrayStart) {
+                instance.SetJsonType (JsonType.Array);
 
                 while (true) {
                     IJsonWrapper item = ReadValue (factory, reader);
@@ -508,9 +509,9 @@ namespace LitJson
 
                     ((IList) instance).Add (item);
                 }
-
-
-            } else if (reader.Token == JsonToken.ObjectStart) {
+            }
+            else if (reader.Token == JsonToken.ObjectStart) {
+                instance.SetJsonType (JsonType.Object);
 
                 while (true) {
                     reader.Read ();

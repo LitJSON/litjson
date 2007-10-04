@@ -215,6 +215,22 @@ namespace LitJson.Test
         }
 
         [Test]
+        public void EmptyObjectsTest ()
+        {
+            JsonData empty_obj = JsonMapper.ToObject ("{}");
+            Assert.IsTrue (empty_obj.IsObject, "A1");
+
+            string empty_json = JsonMapper.ToJson (empty_obj);
+            Assert.AreEqual ("{}", empty_json, "A2");
+
+            JsonData empty_array = JsonMapper.ToObject ("[]");
+            Assert.IsTrue (empty_array.IsArray, "B1");
+
+            empty_json = JsonMapper.ToJson (empty_array);
+            Assert.AreEqual ("[]", empty_json, "B2");
+        }
+
+        [Test]
         public void ExportArrayOfIntsTest ()
         {
             int[] numbers = new int[] { 1, 1, 2, 3, 5, 8, 13 };
