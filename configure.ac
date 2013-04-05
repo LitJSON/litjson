@@ -88,7 +88,7 @@ data/Makefile
 data/litjson.pc
 doc/Makefile
 doc/manual/Makefile
-doc/manual/generated.ent
+doc/manual/generated.xml
 src/Makefile
 src/LitJson/AssemblyInfo.cs
 src/LitJson/Makefile

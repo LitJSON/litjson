@@ -132,6 +132,7 @@ namespace LitJson
         #region Static Methods
         private static void PopulateParseTable ()
         {
+            // See section A.2. of the manual for details
             parse_table = new Dictionary<int, IDictionary<int, int[]>> ();
 
             TableAddRow (ParserToken.Array);

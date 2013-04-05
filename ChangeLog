@@ -54,6 +54,44 @@
 	  Skip long test for now since mono 1.2.5 has a problem in
 	  Int32.TryParse which affects this library.
 
+2007-09-12  Leonardo Boshell  <leonardoboshell@users.sourceforge.net>
+
+	* doc/manual/inc-litdoc.make:
+	* doc/manual/sources/appendices/benchmarks/benchmarks.xml:
+	* doc/manual/sources/appendices/parser/parser.xml:
+	* doc/manual/sources/reference/LitJson/JsonReader/properties/AllowComments.xml:
+	  Fixed minor XML structure issues brought up by htmltidy.
+
+2007-09-12  Leonardo Boshell  <leonardoboshell@users.sourceforge.net>
+
+	* doc/manual/manual.dep:
+	* doc/manual/sources/reference/LitJson/JsonReader/properties/EndOfInput.xml:
+	* doc/manual/sources/reference/LitJson/JsonReader/properties/EndOfJson.xml:
+	* doc/manual/sources/reference/LitJson/JsonReader/properties/properties.xml:
+	  Document EndOfInput, and adjust the documentation for EndOfJson.
+
+2007-09-11  Leonardo Boshell  <leonardoboshell@users.sourceforge.net>
+
+	* doc/manual/sources/manual.xml:
+	* doc/manual/sources/quickstart/quickstart.xml:
+	* doc/manual/sources/reference/LitJson/JsonReader/JsonReader.xml:
+	* doc/manual/sources/reference/LitJson/JsonReader/constructors/constructors.xml:
+	* doc/manual/sources/reference/LitJson/JsonReader/constructors/ctor-System.IO.TextReader.xml:
+	* doc/manual/sources/reference/LitJson/JsonReader/constructors/ctor-System.String.xml:
+	* doc/manual/sources/reference/LitJson/JsonReader/properties/AllowComments.xml:
+	* doc/manual/sources/reference/LitJson/JsonReader/properties/AllowSingleQuotedStrings.xml:
+	* doc/manual/sources/reference/LitJson/JsonReader/properties/EndOfJson.xml:
+	* doc/manual/sources/reference/LitJson/JsonReader/properties/Token.xml:
+	* doc/manual/sources/reference/LitJson/JsonReader/properties/Value.xml:
+	* doc/manual/sources/reference/LitJson/JsonReader/properties/properties.xml:
+	* doc/manual/sources/reference/LitJson/LitJson.xml:
+	* doc/manual/sources/reference/reference.xml:
+	  Documentation updates:
+	  - Space clean-ups
+	  - Use new model to represent links between code elements
+	  - Use different docbook elements to represent properties and property
+	    synopsis
+
 2007-09-08  Leonardo Boshell  <leonardoboshell@users.sourceforge.net>
 
 	* test/JsonMapperTest.cs:
@@ -94,6 +132,98 @@
 
 	* AUTHORS:
 	* HACKING: Added short note about credits of contributions.
+
+2007-09-03  Leonardo Boshell  <leonardoboshell@users.sourceforge.net>
+
+	* doc/manual/inc-litdoc.make:
+	  Re-factored manual generation to a private Makefile.
+	* doc/manual/sources/reference/LitJson/JsonReader/properties/properties.xml:
+	* doc/manual/sources/appendices/benchmarks/benchmarks.xml:
+	* doc/manual/sources/reference/LitJson/JsonReader/JsonReader.xml:
+	  Minor editions.
+	* doc/manual/manual.dep:
+	* doc/manual/sources/reference/LitJson/JsonReader/constructors/constructors.xml:
+	* doc/manual/sources/reference/LitJson/JsonReader/constructors/ctor-System.IO.TextReader.xml:
+	* doc/manual/sources/reference/LitJson/JsonReader/constructors/ctor-System.String.xml:
+	  Documented constructors of JsonReader
+
+2007-08-26  Leonardo Boshell  <leonardoboshell@users.sourceforge.net>
+
+	* configure.ac:
+	* doc/manual/.gitignore:
+	* doc/manual/generated.xml.in:
+	* doc/manual/inc-litdoc.make:
+	* doc/manual/sources/manual.xml:
+	* doc/manual/sources/macros/urls.xml:
+	* doc/manual/sources/appendices/benchmarks/benchmarks.xml:
+	* doc/manual/sources/appendices/parser/parser.xml:
+	* doc/manual/sources/quickstart/quickstart.xml:
+	* doc/manual/sources/reference/LitJson/LitJson.xml: Minor updates.
+
+	* doc/manual/manual.dep:
+	* doc/manual/sources/reference/LitJson/JsonReader/JsonReader.xml:
+	* doc/manual/sources/reference/LitJson/JsonReader/properties/AllowComments.xml:
+	* doc/manual/sources/reference/LitJson/JsonReader/properties/AllowSingleQuotedStrings.xml:
+	* doc/manual/sources/reference/LitJson/JsonReader/properties/EndOfJson.xml:
+	* doc/manual/sources/reference/LitJson/JsonReader/properties/Token.xml:
+	* doc/manual/sources/reference/LitJson/JsonReader/properties/Value.xml:
+	Document properties of JsonReader.
+
+	* doc/manual/sources/reference/LitJson/JsonReader/properties/HasReachedEnd.xml:
+	Removed.
+
+	* doc/manual/generated.ent.in:
+	* doc/manual/sources/entities/urls.ent: Removed. Replaced now with macro
+	files.
+
+2007-08-20  Leonardo Boshell  <leonardoboshell@users.sourceforge.net>
+
+	* doc/manual/inc-litdoc.make:
+	* doc/manual/sources/quickstart/quickstart.xml: The code in
+	programlisting elements is now highlighted using GNU source-highlight.
+
+2007-08-20  Leonardo Boshell  <leonardoboshell@users.sourceforge.net>
+
+	* doc/manual/Makefile.am:
+	* doc/manual/inc-litdoc.make: Added CSS styles. Split the manual
+	generation from the XML sources into two phases in order to perform
+	special modifications from docbook to docbook before doing docbook to
+	xhtml.
+	* doc/manual/manual.dep: Specify the manual sources explicitely in a
+	separate file, which is generated by 'make dep'.
+
+2007-08-19  Leonardo Boshell  <leonardoboshell@users.sourceforge.net>
+
+	* src/LitJson/JsonReader.cs:
+	* src/LitJson/Lexer.cs:
+	* src/LitJson/ParserToken.cs: Added references to the relevant sections
+	of the manual that explain how the lexer and parser components are
+	implemented.
+
+2007-08-19  Leonardo Boshell  <leonardoboshell@users.sourceforge.net>
+
+	* doc/manual/inc-litdoc.make: Add numbering to all sub-sections.
+	Renumber at the start of each part of the manual.
+
+2007-08-18  Leonardo Boshell  <leonardoboshell@users.sourceforge.net>
+
+	* doc/manual/.gitignore:
+	* doc/manual/inc-litdoc.make: Build two HTML versions: single file and
+	many files.
+	* doc/manual/sources/reference/reference.xml: Brig back the first pieces
+	of API reference.
+
+2007-08-18  Leonardo Boshell  <leonardoboshell@users.sourceforge.net>
+
+	* doc/manual/inc-litdoc.make: Only try to install the html files if they
+	are present (a development checkout of the sources might not have the
+	support files).
+
+2007-08-18  Leonardo Boshell  <leonardoboshell@users.sourceforge.net>
+
+	* doc/manual/Makefile.am:
+	* doc/manual/inc-litdoc.make: Refactor the manual generation logic to
+	make it more flexible.
 
 2007-08-15  Leonardo Boshell  <leonardoboshell@users.sourceforge.net>
 

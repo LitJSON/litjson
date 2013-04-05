@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<refentry xmlns="http://docbook.org/ns/docbook"
+          role="id,P:LitJson.JsonReader.EndOfJson">
+  <refnamediv>
+    <refname><code>P:EndOfJson</code></refname>
+    <refpurpose>
+      Indicates whether the reader has reached the end of a JSON text
+    </refpurpose>
+  </refnamediv>
+
+  <refsection role="description">
+    <synopsis language="csharp" role="get">
+      <modifier>public</modifier>
+      <type>bool</type>
+      <property>EndOfJson</property>
+    </synopsis>
+
+    <para>
+      This property tells the user if the reader has reached the end of a
+      JSON text.
+    </para>
+    <para>
+      It can be useful when the input is expected to contain two or more
+      pieces of JSON text (i.e. arrays or objects) in sequence.
+    </para>
+  </refsection>
+
+  <refsection role="examples">
+    <example>
+      <title>Using <property>EndOfJson</property></title>
+      <para>
+        The following example counts the number of JSON texts read from the
+        same input. It also keeps track of the number of extenal (not
+        nested) arrays and objects.
+      </para>
+      <programlisting language="csharp">
+<![CDATA[
+using LitJson;
+using System;
+
+class JsonSample
+{
+    static void CountJsonTexts (string json_data)
+    {
+        JsonReader reader = new JsonReader (json_data);
+
+        int n_arrays, n_objects, n_total;
+
+        n_arrays = n_objects = n_total = 0;
+
+        while (! reader.EndOfInput) {
+            reader.Read ();
+
+            if (reader.EndOfJson) {
+                n_total++;
+
+                if (reader.Token == JsonToken.ArrayEnd)
+                    n_arrays++;
+                else if (reader.Token == JsonToken.ObjectEnd)
+                    n_objects++;
+            }
+        }
+
+        Console.WriteLine ("Total of JSON texts read: {0}", n_total);
+        Console.WriteLine ("  Arrays:  {0}", n_arrays);
+        Console.WriteLine ("  Objects: {0}", n_objects);
+    }
+
+    static void Main ()
+    {
+        string json_input = @"
+
+            [ 0, [ 10, 20, 10 ], 0, [ -10, -20, -10 ], 0 ]
+            [ ""Roots"", ""Rock"", ""Reggae"" ]
+
+            {
+                ""Party"": {
+                    ""Type"" : ""Tea"",
+                    ""Guests"" : [ ""Mad Hatter"", ""March Hare"" ]
+                }
+            }
+
+        ";
+
+        CountJsonTexts (json_input);
+    }
+}
+]]>
+      </programlisting>
+      <para>
+        This example would produce the following output:
+      </para>
+      <screen>
+<![CDATA[
+Total of JSON texts read: 3
+  Arrays:  2
+  Objects: 1
+]]>
+      </screen>
+    </example>
+  </refsection>
+
+  <refsection role="seealso">
+    <simplelist>
+      <member><code>P:EndOfInput</code></member>
+      <member><code>M:Read</code></member>
+    </simplelist>
+  </refsection>
+
+</refentry>

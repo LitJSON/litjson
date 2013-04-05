@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<macro-set xmlns="http://lb.diptongonante.com/ns/litdoc/macros">
+  <macro name="url.heap-buddy">http://www.mono-project.com/HeapBuddy</macro>
+  <macro name="url.jayrock">http://jayrock.berlios.de/</macro>
+  <macro name="url.json">http://www.json.org/</macro>
+  <macro name="url.litjson">http://litjson.sourceforge.net/</macro>
+  <macro name="url.mono">http://www.mono-project.com/</macro>
+  <macro
+   name="url.newtonsoft">http://www.newtonsoft.com/products/json/</macro>
+  <macro
+   name="url.rfc4627">http://www.ietf.org/rfc/rfc4627.txt?number=4627</macro>
+</macro-set>

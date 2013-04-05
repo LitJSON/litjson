@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<macro-set xmlns="http://lb.diptongonante.com/ns/litdoc/macros">
+  <macro name="manual.pubdate">@MANUAL_PUBDATE@</macro>
+  <macro name="manual.version">@VERSION@</macro>
+</macro-set>

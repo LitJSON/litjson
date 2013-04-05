@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<refentry xmlns="http://docbook.org/ns/docbook"
+          role="id,P:LitJson.JsonReader.Token">
+  <refnamediv>
+    <refname><code>P:Token</code></refname>
+    <refpurpose>
+      Holds the last token read from this reader
+    </refpurpose>
+  </refnamediv>
+
+  <refsection role="description">
+    <synopsis language="csharp" role="get">
+      <modifier>public</modifier>
+      <type>JsonToken</type>
+      <property>Token</property>
+    </synopsis>
+
+    <para>
+      This property indicates the type of token that was last read from this
+      reader. For more information on the types of token that
+      <code>T:JsonReader</code> emits, see <code>T:JsonToken</code>.
+    </para>
+  </refsection>
+
+  <refsection role="examples">
+    <example>
+      <title>Using the <property>Token</property> property</title>
+      <programlisting language="csharp">
+<![CDATA[
+using LitJson;
+using System;
+
+class SampleJson
+{
+    static int CountStrings (string json)
+    {
+        JsonReader reader = new JsonReader (json);
+
+        int n_strings = 0;
+
+        while (reader.Read ()) {
+            if (reader.Token == JsonToken.String)
+                n_strings++;
+        }
+
+        return n_strings;
+    }
+
+    static void Main ()
+    {
+        string sample_json = " [ \"one\", 2, \"three\", 4, \"five\" ] ";
+
+        int n = CountStrings (sample_json);
+        Console.WriteLine ("There are {0} strings in the JSON text", n);
+    }
+}
+]]>
+      </programlisting>
+      <para>
+        This example would output: <literal>There are 3 strings in the JSON
+        text</literal>.
+      </para>
+    </example>
+  </refsection>
+
+  <refsection role="seealso">
+    <simplelist>
+      <member><code>T:JsonToken</code></member>
+    </simplelist>
+  </refsection>
+
+</refentry>

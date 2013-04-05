@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<refentry xmlns="http://docbook.org/ns/docbook"
+          role="id,P:LitJson.JsonReader.EndOfInput">
+  <refnamediv>
+    <refname><code>P:EndOfInput</code></refname>
+    <refpurpose>
+      Indicates whether the reader has reached the end of the input stream
+    </refpurpose>
+  </refnamediv>
+
+  <refsection role="description">
+    <synopsis language="csharp" role="get">
+      <modifier>public</modifier>
+      <type>bool</type>
+      <property>EndOfInput</property>
+    </synopsis>
+
+    <para>
+      This property tells the user if the reader has reached the end of the
+      input stream.
+    </para>
+    <para>
+      Notice that reading from a <code>T:JsonReader</code> until the end of
+      the input can be done by checking the return value from
+      <code>M:Read</code>, in which case using this property is not
+      necessary.
+    </para>
+  </refsection>
+
+  <refsection role="examples">
+    <example>
+      <title>Using <property>EndOfInput</property></title>
+      <programlisting language="csharp">
+<![CDATA[
+using LitJson;
+using System;
+
+class JsonSample
+{
+    void CountNumbers ()
+    {
+        string json_sample = " [ 1.234, 2.345, [ 3.456, 4.567 ], 5.678 ] ";
+
+        JsonReader reader = new JsonReader (json_sample);
+
+        int n_numbers = 0;
+
+        while (! reader.EndOfInput) {
+            reader.Read ();
+
+            if (reader.Token == JsonToken.Int
+                || reader.Token == JsonToken.Long
+                || reader.Token == JsonToken.Double)
+                n_numbers++;
+        }
+
+        Console.WriteLine ("Total of numbers read: {0}", n_numbers);
+    }
+}
+]]>
+      </programlisting>
+      <para>
+        Calling the <methodname>CountNumbers</methodname> method would
+        print: <literal>Total of numbers read: 5</literal>
+      </para>
+    </example>
+  </refsection>
+
+  <refsection role="seealso">
+    <simplelist>
+      <member><code>M:Read</code></member>
+    </simplelist>
+  </refsection>
+
+</refentry>

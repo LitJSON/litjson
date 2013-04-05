@@ -13,7 +13,7 @@ namespace LitJson
 {
     internal enum ParserToken
     {
-        // Lexer tokens
+        // Lexer tokens (see section A.1.1. of the manual)
         None = System.Char.MaxValue + 1,
         Number,
         True,
@@ -23,7 +23,7 @@ namespace LitJson
         // Single char
         Char,
 
-        // Parser Rules
+        // Parser Rules (see section A.2.1 of the manual)
         Text,
         Object,
         ObjectPrime,

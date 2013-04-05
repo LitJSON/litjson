@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<refentry xmlns="http://docbook.org/ns/docbook"
+          role="id,P:LitJson.JsonReader.AllowComments">
+  <refnamediv>
+    <refname><code>P:AllowComments</code></refname>
+    <refpurpose>
+      Specifies whether the reader accepts javascript-like comments in the
+      input or not
+    </refpurpose>
+  </refnamediv>
+
+  <refsection role="description">
+    <synopsis language="csharp" role="get,set">
+      <modifier>public</modifier>
+      <type>bool</type>
+      <property>AllowComments</property>
+    </synopsis>
+
+    <para>
+      An instance of <code>T:JsonReader</code> can be configured to accept
+      javascript comments, which are not part of the strict JSON grammar.
+    </para>
+    <para>
+      When this property is [[true]], the reader allows comments in the
+      following forms:
+    </para>
+    <programlisting language="javascript">
+<![CDATA[
+// Single-line comment
+
+/*
+ * Multi-line comment
+ */
+]]>
+    </programlisting>
+    <para>
+      The value of this property is [[true]] by default.
+    </para>
+  </refsection>
+
+  <refsection role="examples">
+    <example>
+      <title><property>AllowComments</property> examples</title>
+      <programlisting language="csharp">
+<![CDATA[
+using LitJson;
+
+class JsonSample
+{
+    void ReadJsonWithComments ()
+    {
+        string json = @"
+            {
+                // This specifies the kind of animal
+                ""animal"" : ""rabbit"",
+
+                /*
+                 * This tells the color of the animal
+                 */
+                ""color"" : ""white""
+            }";
+
+        JsonReader reader = new JsonReader (json);
+
+        while (reader.Read ()) {
+            // Do something with every token read
+        }
+
+        // New instance to begin reading again
+        reader = new JsonReader (json);
+        reader.AllowComments = false;
+
+        while (reader.Read ()) {
+            // An exception is thrown in this case
+        }
+    }
+}
+]]>
+      </programlisting>
+    </example>
+  </refsection>
+</refentry>
