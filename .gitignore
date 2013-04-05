@@ -10,3 +10,4 @@ configure
 discheck.out
 install-sh
 missing
+node_modules
