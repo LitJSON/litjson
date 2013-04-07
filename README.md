@@ -4,11 +4,7 @@ LitJSON
 A .Net library to handle conversions from and to JSON (JavaScript Object
 Notation) strings.
 
-  Note:
-  This is the binary distribution. A pre-compiled .dll can be found in the
-  'bin' directory.
-
-Home page: http://litjson.sourceforge.net/
+Home page: http://lbv.github.io/litjson/
 
 
 Installation
@@ -16,7 +12,7 @@ Installation
 
 See the file INSTALL for generic building and installation instructions.
 
-The 'configure' script for this package recognizes the following specific
+The `configure` script for this package recognizes the following specific
 flags:
 
   --disable-debug
@@ -28,10 +24,10 @@ Tests
 -----
 
 This library comes with a set of unit tests using the NUnit framework. The
-'configure' script tries to find the necessary information in order to use
+`configure` script tries to find the necessary information in order to use
 them.
 
-If everything is set up properly, you may run the tests with 'make check'.
+If everything is set up properly, you may run the tests with `make check`.
 
 
 Using LitJSON from an application
@@ -50,23 +46,15 @@ project's source directory, and a text file is created with the flags that
 are to be passed to the compiler. Then this text file is used in the rules
 used to compile the project. For example:
 
-
+```
 update-libraries:
 	cp `pkg-config --variable=Libraries litjson` .
 	pkg-config --libs litjson > litjson.flags
 
 Demo.exe: Demo.cs litjson.flags
 	mcs -out:$@ Demo.cs `cat litjson.flags`
-
+```
 
 For more information on this process, please see
-<http://www.mono-project.com/Guidelines:Application_Deployment>, section 2.
+http://www.mono-project.com/Guidelines:Application_Deployment, section 2.
 Libraries with Unstable APIs.
-
-
-Bug Reports
------------
-
-Please submit all bug reports, feature requests and patches on the project's
-website at:
-  http://sourceforge.net/tracker/?group_id=202631
