@@ -617,6 +617,38 @@ namespace LitJson.Test
         }
 
         [Test]
+        public void ImportObjectAllowNotExistMemberTest()
+        {
+            string json = @"
+{
+    ""title""  : ""First"",
+    ""name""   : ""First Window"",
+    ""width""  : 640,
+            
+    ""notmember"": false,
+    ""notobject"":  {
+      ""title"": ""Sample Widget"",
+      ""name"": ""main_window"",
+      ""width"": 500,
+      ""height"": 500
+    },
+
+    ""height"" : 480
+
+}";
+            JsonReader reader = new JsonReader(json);
+            reader.AllowNotExistMember = true;
+            
+            UiWindow window = JsonMapper.ToObject<UiWindow>(reader);
+
+            Assert.IsNotNull(window, "A1");
+            Assert.AreEqual("First", window.title, "A2");
+            Assert.AreEqual("First Window", window.name, "A3");
+            Assert.AreEqual(640, window.width, "A4");
+            Assert.AreEqual(480, window.height, "A5");
+        }
+
+        [Test]
         [ExpectedException (typeof (JsonException))]
         public void ImportStrictCommentsTest ()
         {
