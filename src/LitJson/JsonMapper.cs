@@ -446,10 +446,21 @@ namespace LitJson
                         }
 
                     } else {
-                        if (! t_data.IsDictionary)
-                            throw new JsonException (String.Format (
-                                    "The type {0} doesn't have the " +
-                                    "property '{1}'", inst_type, property));
+                        if (! t_data.IsDictionary) {
+
+                            if (! reader.AllowNotExistMember) {
+                                throw new JsonException(String.Format(
+                                        "The type {0} doesn't have the " +
+                                        "property '{1}'", inst_type, property));
+                            } else {
+                                reader.Read ();
+                                if (reader.Token == JsonToken.ObjectStart) {
+                                    while (reader.Token != JsonToken.ObjectEnd)
+                                        reader.Read ();
+                                }
+                                continue;
+                            }
+                        }
 
                         ((IDictionary) instance).Add (
                             property, ReadValue (
