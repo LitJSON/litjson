@@ -193,7 +193,7 @@ namespace LitJson.Test
             writer.Write (100);
             writer.Write ((byte) 200);
             writer.Write (-256);
-            writer.Write (10000000000l);
+            writer.Write (10000000000L);
             writer.Write ((decimal) 0.333);
             writer.Write ((float) 0.0001);
             writer.Write (9e-20);

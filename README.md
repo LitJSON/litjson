@@ -1,60 +1,42 @@
 LitJSON
 =======
 
-A .Net library to handle conversions from and to JSON (JavaScript Object
+A *.Net* library to handle conversions from and to JSON (JavaScript Object
 Notation) strings.
 
 Home page: http://lbv.github.io/litjson/
 
 
-Installation
-------------
+## Compiling
 
-See the file INSTALL for generic building and installation instructions.
+See the files under the `build` directory.
 
-The `configure` script for this package recognizes the following specific
-flags:
+### Using GNU Make
 
-  --disable-debug
-    Disables the creation of debug binaries (e.g. LitJson.dll.mdb). These
-    are enabled by default.
+Change directory to `build/make/` and run `make` from it.
+
+### Using other tools
+
+Currently, LitJSON doesn't have any other auxiliary files for compiling this
+library with other tools.
+
+If you want to contribute your own solutions to compile it with tools like
+*NAnt* or *MSBuild*, that would be most appreciated. Please create those
+auxiliary files under the path `build/some-tool`. Thanks.
+
+## Tests
+
+This library comes with a set of unit tests using the NUnit framework. This
+currently depends on
+[pkg-config](http://www.freedesktop.org/wiki/Software/pkg-config), and the
+*Mono* suite providing the `mono-nunit.pc` file.
+
+If everything is set up properly, you may run the tests with `make test`
+under the `build/make` directory.
 
 
-Tests
------
+## Using LitJSON from an application
 
-This library comes with a set of unit tests using the NUnit framework. The
-`configure` script tries to find the necessary information in order to use
-them.
-
-If everything is set up properly, you may run the tests with `make check`.
-
-
-Using LitJSON from an application
----------------------------------
-
-Once this library is compiled and optionally installed in the root
-filesystem, .Net developers may use it by simply copying the .dll file into
-their project's directory.
-
-For those developers using standard Unix tools such as pkg-config and make,
-this library comes with a .pc file to help in the process of consuming it.
-
-One way this could work would be adding a rule in the Makefile (normally
-called 'update-libraries') where the necessary .dll's are copied into the
-project's source directory, and a text file is created with the flags that
-are to be passed to the compiler. Then this text file is used in the rules
-used to compile the project. For example:
-
-```
-update-libraries:
-	cp `pkg-config --variable=Libraries litjson` .
-	pkg-config --libs litjson > litjson.flags
-
-Demo.exe: Demo.cs litjson.flags
-	mcs -out:$@ Demo.cs `cat litjson.flags`
-```
-
-For more information on this process, please see
-http://www.mono-project.com/Guidelines:Application_Deployment, section 2.
-Libraries with Unstable APIs.
+Once this library is compiled, .Net developers may use it by simply copying
+the `.dll` file into their project's directory. Or you may copy the whole
+tree of files under `src/LitJSON` to your own project's working directory.

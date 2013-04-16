@@ -235,9 +235,9 @@ namespace LitJson.Test
 
             reader.Read ();
             Assert.AreEqual (typeof (Int64), reader.Value.GetType (), "A1");
-            Assert.AreEqual (2147483648l, (long) reader.Value, "A2");
+            Assert.AreEqual (2147483648L, (long) reader.Value, "A2");
             reader.Read ();
-            Assert.AreEqual (-10000000000l, (long) reader.Value, "A3");
+            Assert.AreEqual (-10000000000L, (long) reader.Value, "A3");
 
             reader.Close ();
         }

@@ -142,13 +142,13 @@ namespace LitJson.Test
             Assert.IsFalse (a.Equals (b), "A3");
 
             // Compare longs
-            a = 10l;
-            b = 10l;
+            a = 10L;
+            b = 10L;
             Assert.IsTrue (a.Equals (b), "A4");
 
             b = 10;
             Assert.IsFalse (a.Equals (b), "A5");
-            b = 11l;
+            b = 11L;
             Assert.IsFalse (a.Equals (b), "A6");
 
             // Compare doubles

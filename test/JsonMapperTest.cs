@@ -357,7 +357,7 @@ namespace LitJson.Test
             test.TestShort    = 1024;
             test.TestUShort   = 30000;
             test.TestUInt     = 90000000;
-            test.TestULong    = 1l;
+            test.TestULong    = 1L;
 
             string json = JsonMapper.ToJson (test);
             string expected =
@@ -679,7 +679,7 @@ namespace LitJson.Test
             Assert.AreEqual (1024, test.TestShort, "A6");
             Assert.AreEqual (30000, test.TestUShort, "A7");
             Assert.AreEqual (90000000, test.TestUInt, "A8");
-            Assert.AreEqual (1l, test.TestULong, "A9");
+            Assert.AreEqual (1L, test.TestULong, "A9");
         }
 
         [Test]
