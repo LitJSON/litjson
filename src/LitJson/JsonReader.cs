@@ -57,7 +57,7 @@ namespace LitJson
         private bool          reader_is_owned;
         private object        token_value;
         private JsonToken     token;
-        private bool          allow_not_exist_member;
+        private bool          skip_non_members;
         #endregion
 
 
@@ -72,9 +72,9 @@ namespace LitJson
             set { lexer.AllowSingleQuotedStrings = value; }
         }
 
-        public bool AllowNotExistMember {
-            get { return allow_not_exist_member; }
-            set { allow_not_exist_member = value; }
+        public bool SkipNonMembers {
+            get { return skip_non_members; }
+            set { skip_non_members = value; }
         }
 
         public bool EndOfInput {
@@ -128,7 +128,7 @@ namespace LitJson
 
             end_of_input = false;
             end_of_json  = false;
-            allow_not_exist_member = false;
+            skip_non_members = false;
 
             this.reader = reader;
             reader_is_owned = owned;

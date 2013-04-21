@@ -448,7 +448,7 @@ namespace LitJson
                     } else {
                         if (! t_data.IsDictionary) {
 
-                            if (! reader.AllowNotExistMember) {
+                            if (! reader.SkipNonMembers) {
                                 throw new JsonException(String.Format(
                                         "The type {0} doesn't have the " +
                                         "property '{1}'", inst_type, property));

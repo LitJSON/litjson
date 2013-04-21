@@ -617,7 +617,7 @@ namespace LitJson.Test
         }
 
         [Test]
-        public void ImportObjectAllowNotExistMemberTest()
+        public void ImportObjectSkipNonMembersTest()
         {
             string json = @"
 {
@@ -637,7 +637,7 @@ namespace LitJson.Test
 
 }";
             JsonReader reader = new JsonReader(json);
-            reader.AllowNotExistMember = true;
+            reader.SkipNonMembers = true;
             
             UiWindow window = JsonMapper.ToObject<UiWindow>(reader);
 
