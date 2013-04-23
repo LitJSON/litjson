@@ -622,16 +622,35 @@ namespace LitJson.Test
             string json = @"
 {
     ""title""  : ""First"",
-    ""name""   : ""First Window"",
-    ""width""  : 640,
             
-    ""notmember"": false,
-    ""notobject"":  {
+    ""nonmember"": false,
+    ""nonobject"":  {
       ""title"": ""Sample Widget"",
       ""name"": ""main_window"",
       ""width"": 500,
       ""height"": 500
     },
+
+    ""name""   : ""First Window"",
+    
+    ""nonarraydata"" :[1, 2, 3],
+    
+    ""width""  : 640,
+
+    ""nonarrayobject"" :[ 
+        {
+            ""obj1"": { ""checked"": false },
+            ""obj2"": [7, 6, 5]
+        },
+        {
+            ""member1"": false,
+            ""member2"": true,
+            ""member3"": -1,
+            ""member4"": ""vars2"",
+            ""member5"": [9, 8, 7],
+            ""member6"": { ""checked"": true }
+        }
+    ],
 
     ""height"" : 480
 

@@ -449,15 +449,11 @@ namespace LitJson
                         if (! t_data.IsDictionary) {
 
                             if (! reader.SkipNonMembers) {
-                                throw new JsonException(String.Format(
+                                throw new JsonException (String.Format (
                                         "The type {0} doesn't have the " +
                                         "property '{1}'", inst_type, property));
                             } else {
-                                reader.Read ();
-                                if (reader.Token == JsonToken.ObjectStart) {
-                                    while (reader.Token != JsonToken.ObjectEnd)
-                                        reader.Read ();
-                                }
+                                ReadSkip (reader);
                                 continue;
                             }
                         }
@@ -539,6 +535,11 @@ namespace LitJson
             }
 
             return instance;
+        }
+
+        private static void ReadSkip (JsonReader reader)
+        {
+            ToObject (reader);
         }
 
         private static void RegisterBaseExporters ()
