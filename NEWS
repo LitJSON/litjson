@@ -12,6 +12,9 @@ Bug fixes:
 
 * Convert `null` properties properly in `JsonData.ToJson`.
 
+* Read nested arrays in `JsonMapper.ToObject` and `JsonMapper.ToObject<T>`
+  correctly.
+
 Contributors for this release:
 
   - whoo24
