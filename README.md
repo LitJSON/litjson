@@ -13,7 +13,9 @@ See the files under the `build` directory.
 
 ### Using GNU Make
 
-Change directory to `build/make/` and run `make` from it.
+Change directory to `build/make/` and run `make` from it. This tries to use
+the `gmcs` compiler by default. Feel free to open the `Makefile` and tweak
+it according to your needs.
 
 ### Using other tools
 
@@ -26,13 +28,13 @@ auxiliary files under the path `build/some-tool`. Thanks.
 
 ## Tests
 
-This library comes with a set of unit tests using the NUnit framework. This
-currently depends on
-[pkg-config](http://www.freedesktop.org/wiki/Software/pkg-config), and the
-*Mono* suite providing the `mono-nunit.pc` file.
+This library comes with a set of unit tests using the
+[NUnit](http://www.nunit.org/) framework.
 
-If everything is set up properly, you may run the tests with `make test`
-under the `build/make` directory.
+If you have
+[pkg-config](http://www.freedesktop.org/wiki/Software/pkg-config) in your
+system, and the *Mono* suite provides the `mono-nunit.pc` file, you can try
+running these tests by running `make test` from the `build/make` directory.
 
 
 ## Using LitJSON from an application
