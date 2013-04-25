@@ -26,13 +26,14 @@ LITJSON_VERSION = $(shell cat $(DATA_VERSION))
 
 GEN_FILES = $(srcdir)/AssemblyInfo.cs
 SRC_FILES = \
-	$(srcdir)/IJsonWrapper.cs  \
-	$(srcdir)/JsonData.cs      \
-	$(srcdir)/JsonException.cs \
-	$(srcdir)/JsonMapper.cs    \
-	$(srcdir)/JsonReader.cs    \
-	$(srcdir)/JsonWriter.cs    \
-	$(srcdir)/Lexer.cs         \
+	$(srcdir)/IJsonWrapper.cs    \
+	$(srcdir)/JsonMockWrapper.cs \
+	$(srcdir)/JsonData.cs        \
+	$(srcdir)/JsonException.cs   \
+	$(srcdir)/JsonMapper.cs      \
+	$(srcdir)/JsonReader.cs      \
+	$(srcdir)/JsonWriter.cs      \
+	$(srcdir)/Lexer.cs           \
 	$(srcdir)/ParserToken.cs
 
 CLEAN_FILES += $(LITJSON_ASSEMBLY) $(GEN_FILES) $(LITJSON_MDB_FILE)

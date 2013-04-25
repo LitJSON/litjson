@@ -685,6 +685,7 @@ namespace LitJson.Test
             reader.SkipNonMembers = false;
 
             UiWindow window = JsonMapper.ToObject<UiWindow>(reader);
+            window.title = "Unreachable";
         }
 
         [Test]

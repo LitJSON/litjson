@@ -540,7 +540,8 @@ namespace LitJson
 
         private static void ReadSkip (JsonReader reader)
         {
-            ToObject (reader);
+            ToWrapper (
+                delegate { return new JsonMockWrapper (); }, reader);
         }
 
         private static void RegisterBaseExporters ()
