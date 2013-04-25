@@ -189,6 +189,17 @@ namespace LitJson.Test
         }
 
         [Test]
+        public void NullValue ()
+        {
+            string json = "{\"test\":null}";
+
+            JsonData data = new JsonData ();
+            data["test"] = null;
+
+            Assert.AreEqual (json, data.ToJson ());
+        }
+
+        [Test]
         public void PropertiesOrderTest ()
         {
             JsonData data = new JsonData ();

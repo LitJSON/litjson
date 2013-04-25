@@ -737,6 +737,11 @@ namespace LitJson
 
         private static void WriteJson (IJsonWrapper obj, JsonWriter writer)
         {
+            if (obj == null) {
+                writer.Write (null);
+                return;
+            }
+
             if (obj.IsString) {
                 writer.Write (obj.GetString ());
                 return;
