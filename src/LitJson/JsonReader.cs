@@ -55,9 +55,9 @@ namespace LitJson
         private bool          read_started;
         private TextReader    reader;
         private bool          reader_is_owned;
+        private bool          skip_non_members;
         private object        token_value;
         private JsonToken     token;
-        private bool          skip_non_members;
         #endregion
 
 
@@ -117,7 +117,7 @@ namespace LitJson
                 throw new ArgumentNullException ("reader");
 
             parser_in_string = false;
-            parser_return = false;
+            parser_return    = false;
 
             read_started = false;
             automaton_stack = new Stack<int> ();
@@ -128,7 +128,8 @@ namespace LitJson
 
             end_of_input = false;
             end_of_json  = false;
-            skip_non_members = false;
+
+            skip_non_members = true;
 
             this.reader = reader;
             reader_is_owned = owned;

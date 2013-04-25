@@ -622,25 +622,25 @@ namespace LitJson.Test
             string json = @"
 {
     ""title""  : ""First"",
-            
-    ""nonmember"": false,
-    ""nonobject"":  {
-      ""title"": ""Sample Widget"",
-      ""name"": ""main_window"",
-      ""width"": 500,
-      ""height"": 500
+
+    ""extra_bool"": false,
+    ""extra_object"":  {
+      ""title""  : ""Sample Widget"",
+      ""name""   : ""main_window"",
+      ""width""  : 500,
+      ""height"" : 500
     },
 
     ""name""   : ""First Window"",
-    
-    ""nonarraydata"" :[1, 2, 3],
-    
+
+    ""extra_array"" :[1, 2, 3],
+
     ""width""  : 640,
 
-    ""nonarrayobject"" :[ 
+    ""extra_array_object"" : [
         {
             ""obj1"": { ""checked"": false },
-            ""obj2"": [7, 6, 5]
+            ""obj2"": [ 7, 6, 5 ]
         },
         {
             ""member1"": false,
@@ -655,16 +655,36 @@ namespace LitJson.Test
     ""height"" : 480
 
 }";
-            JsonReader reader = new JsonReader(json);
-            reader.SkipNonMembers = true;
-            
-            UiWindow window = JsonMapper.ToObject<UiWindow>(reader);
+
+            UiWindow window = JsonMapper.ToObject<UiWindow>(json);
 
             Assert.IsNotNull(window, "A1");
             Assert.AreEqual("First", window.title, "A2");
             Assert.AreEqual("First Window", window.name, "A3");
             Assert.AreEqual(640, window.width, "A4");
             Assert.AreEqual(480, window.height, "A5");
+        }
+
+        [Test]
+        [ExpectedException (typeof (JsonException))]
+        public void ImportObjectNonMembersTest()
+        {
+            string json = @"
+{
+    ""title""  : ""First"",
+
+    ""extra_string"": ""Hello world"",
+
+    ""name""   : ""First Window"",
+    ""width""  : 640,
+    ""height"" : 480
+
+}";
+
+            JsonReader reader = new JsonReader(json);
+            reader.SkipNonMembers = false;
+
+            UiWindow window = JsonMapper.ToObject<UiWindow>(reader);
         }
 
         [Test]

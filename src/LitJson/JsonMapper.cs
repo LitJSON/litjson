@@ -451,7 +451,8 @@ namespace LitJson
                             if (! reader.SkipNonMembers) {
                                 throw new JsonException (String.Format (
                                         "The type {0} doesn't have the " +
-                                        "property '{1}'", inst_type, property));
+                                        "property '{1}'",
+                                        inst_type, property));
                             } else {
                                 ReadSkip (reader);
                                 continue;
