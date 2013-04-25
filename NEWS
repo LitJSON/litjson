@@ -1,11 +1,15 @@
+* Added `SkipNonMembers` property to `JsonReader`. When active, it allows to
+  parse JSON data using `JsonMapper.ToObject<T>` and ignore any propoerties
+  not available in the type `T`. Its default value is `true`.
 
 * Simplified the building mechanism. Dropped the entire autotools
   infrastructure, and instead added a single Makefile to compile the project
-  and run the tests with GNU make.
+  and run the tests with *GNU make*.
 
-=============   ----------
-LitJSON 0.5.0 | 2007-10-04
-=============   ----------
+LitJSON 0.5.0
+=============
+
+2007-10-04
 
 New features and improvements:
 
@@ -54,9 +58,10 @@ for this release:
   andi
 
 
-=============   ----------
-LitJSON 0.3.0 | 2007-08-15
-=============   ----------
+LitJSON 0.3.0
+=============
+
+2007-08-15
 
 New features and improvements:
 
@@ -134,8 +139,9 @@ Bugs fixed:
   array and as an object.
 
 
-=============   ----------
-LitJSON 0.1.0 | 2007-08-09
-=============   ----------
+LitJSON 0.1.0
+=============
+
+2007-08-09
 
 First release.
