@@ -1,3 +1,8 @@
+
+* Simplified the building mechanism. Dropped the entire autotools
+  infrastructure, and instead added a single Makefile to compile the project
+  and run the tests with GNU make.
+
 =============   ----------
 LitJSON 0.5.0 | 2007-10-04
 =============   ----------
