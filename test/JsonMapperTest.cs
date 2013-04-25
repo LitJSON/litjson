@@ -617,6 +617,57 @@ namespace LitJson.Test
         }
 
         [Test]
+        public void ImportObjectSkipNonMembersTest()
+        {
+            string json = @"
+{
+    ""title""  : ""First"",
+            
+    ""nonmember"": false,
+    ""nonobject"":  {
+      ""title"": ""Sample Widget"",
+      ""name"": ""main_window"",
+      ""width"": 500,
+      ""height"": 500
+    },
+
+    ""name""   : ""First Window"",
+    
+    ""nonarraydata"" :[1, 2, 3],
+    
+    ""width""  : 640,
+
+    ""nonarrayobject"" :[ 
+        {
+            ""obj1"": { ""checked"": false },
+            ""obj2"": [7, 6, 5]
+        },
+        {
+            ""member1"": false,
+            ""member2"": true,
+            ""member3"": -1,
+            ""member4"": ""vars2"",
+            ""member5"": [9, 8, 7],
+            ""member6"": { ""checked"": true }
+        }
+    ],
+
+    ""height"" : 480
+
+}";
+            JsonReader reader = new JsonReader(json);
+            reader.SkipNonMembers = true;
+            
+            UiWindow window = JsonMapper.ToObject<UiWindow>(reader);
+
+            Assert.IsNotNull(window, "A1");
+            Assert.AreEqual("First", window.title, "A2");
+            Assert.AreEqual("First Window", window.name, "A3");
+            Assert.AreEqual(640, window.width, "A4");
+            Assert.AreEqual(480, window.height, "A5");
+        }
+
+        [Test]
         [ExpectedException (typeof (JsonException))]
         public void ImportStrictCommentsTest ()
         {
