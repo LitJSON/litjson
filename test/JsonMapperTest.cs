@@ -13,6 +13,7 @@ using LitJson;
 using NUnit.Framework;
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.IO;
 using System.Reflection;
@@ -44,6 +45,13 @@ namespace LitJson.Test
         public Planets FavouritePlanet;
 
         public Instruments Band;
+    }
+
+    public class NestedArrays
+    {
+        public int[][] numbers;
+
+        public List<List<List<string>>> strings;
     }
 
     public class PropertyReadOnly
@@ -543,6 +551,58 @@ namespace LitJson.Test
             }
 
             Assert.AreEqual (2, i, "A17");
+        }
+
+        [Test]
+        public void ImportNestedArrays ()
+        {
+            string json = "[ [ [ 42 ] ] ]";
+            JsonData data = JsonMapper.ToObject (json);
+
+            Assert.IsTrue (data.IsArray, "A1");
+            Assert.AreEqual (1, data.Count, "A2");
+
+            Assert.IsTrue (data[0].IsArray, "A3");
+            Assert.AreEqual (1, data[0].Count, "A4");
+
+            Assert.IsTrue (data[0][0].IsArray, "A5");
+            Assert.AreEqual (1, data[0][0].Count, "A6");
+
+            Assert.AreEqual (42, (int) data[0][0][0], "A7");
+            Assert.AreEqual ("[[[42]]]", data.ToJson(), "A8");
+
+            json = "  [ [ 10, 20, 30 ], \"hi\", [ null, null ] ] ";
+            data = JsonMapper.ToObject (json);
+
+            Assert.IsTrue (data.IsArray, "B1");
+            Assert.AreEqual (3, data.Count, "B2");
+
+            Assert.AreEqual (20, (int) data[0][1], "B3");
+            Assert.AreEqual ("hi", (string) data[1], "B4");
+
+            Assert.IsTrue (data[2].IsArray, "B5");
+            Assert.AreEqual (2, data[2].Count, "B6");
+            Assert.IsNull (data[2][0], "B7");
+            Assert.IsNull (data[2][1], "B8");
+
+            json = @"{
+                ""numbers"" : [ [ 0, 1, 2 ], [], [ 2, 3, 5, 7, 11 ] ],
+                ""strings"" : [
+                    [ [ ""abc"", ""def"" ], [ ""hi there"" ], null ],
+                    [ [ ""Bob Marley is in the house"" ] ]
+                ]
+            }";
+
+            var obj = JsonMapper.ToObject<NestedArrays> (json);
+            Assert.IsNotNull (obj, "C1");
+            Assert.AreEqual (2, obj.numbers[0][2], "C2");
+            Assert.AreEqual (0, obj.numbers[1].Length, "C3");
+            Assert.AreEqual (5, obj.numbers[2].Length, "C4");
+            Assert.AreEqual (11, obj.numbers[2][4], "C5");
+            Assert.AreEqual ("abc", obj.strings[0][0][0], "C6");
+            Assert.AreEqual ("hi there", obj.strings[0][1][0], "C7");
+            Assert.IsNull (obj.strings[0][2], "C8");
+            Assert.AreEqual (1, obj.strings[1][0].Count, "C9");
         }
 
         [Test]
