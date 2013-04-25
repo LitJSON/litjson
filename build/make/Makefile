@@ -66,7 +66,7 @@ all: library
 library: $(LITJSON_ASSEMBLY)
 
 test: $(TEST_ASSEMBLY)
-	$(NUNIT) -nologo -exclude=RuntimeBug $(TEST_ASSEMBLY)
+	$(NUNIT) -nologo $(TEST_ASSEMBLY)
 
 $(srcdir)/AssemblyInfo.cs: $(srcdir)/AssemblyInfo.cs.in $(DATA_VERSION)
 	sed -e 's#@ASSEMBLY_VERSION@#$(LITJSON_VERSION)#' $< > $@
