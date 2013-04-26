@@ -27,32 +27,34 @@ using System;
 
 public class Person
 {
-    // Person members are defined here ...
+    // C# 3.0 auto-implemented properties
+    public string   Name     { get; set; }
+    public int      Age      { get; set; }
+    public DateTime Birthday { get; set; }
 }
 
 public class JsonSample
 {
-    public static void Main ()
+    public static void Main()
     {
-        PersonToJson ();
-        JsonToPerson ();
+        PersonToJson();
+        JsonToPerson();
     }
 
-    public static void PersonToJson ()
+    public static void PersonToJson()
     {
-        Person bill = new Person ();
+        Person bill = new Person();
 
         bill.Name = "William Shakespeare";
         bill.Age  = 51;
-        bill.Birthday = new DateTime (1564, 4, 26);
+        bill.Birthday = new DateTime(1564, 4, 26);
 
-        string json_bill = JsonMapper.ToJson (bill);
+        string json_bill = JsonMapper.ToJson(bill);
 
-        Console.WriteLine (json_bill);
-        // {"Name":"William Shakespeare","Age":51,"Birthday":"04/26/1564 00:00:00"}
+        Console.WriteLine(json_bill);
     }
 
-    public static void JsonToPerson ()
+    public static void JsonToPerson()
     {
         string json = @"
             {
@@ -61,18 +63,24 @@ public class JsonSample
                 ""Birthday"" : ""02/07/1478 00:00:00""
             }";
 
-        Person thomas = JsonMapper.ToObject<Person> (json);
+        Person thomas = JsonMapper.ToObject<Person>(json);
 
-        Console.WriteLine ("Thomas' age: {0}", thomas.Age);
-        // Thomas' age: 57
+        Console.WriteLine("Thomas' age: {0}", thomas.Age);
     }
 }
 ```
 
-### Using the non-generic variant of `JsonMapper.ToObject`
+Output from the example:
+
+```console
+{"Name":"William Shakespeare","Age":51,"Birthday":"04/26/1564 00:00:00"}
+Thomas' age: 57
+```
+
+### Using the non--generic variant of `JsonMapper.ToObject`
 
 When JSON data is to be read and a custom class that matches a particular
-data structure is not available or desired, users can use the non-generic
+data structure is not available or desired, users can use the non--generic
 variant of `ToObject`, which returns a `JsonData` instance. `JsonData` is a
 general purpose type that can hold any of the data types supported by JSON,
 including lists and dictionaries.
@@ -83,22 +91,69 @@ using System;
 
 public class JsonSample
 {
-    public void LoadAlbumData (string json_text)
+    public static void Main()
     {
-        JsonData data = JsonMapper.ToObject (json_text);
+        string json = @"
+          {
+            ""album"" : {
+              ""name""   : ""The Dark Side of the Moon"",
+              ""artist"" : ""Pink Floyd"",
+              ""year""   : 1973,
+              ""tracks"" : [
+                ""Speak To Me"",
+                ""Breathe"",
+                ""On The Run""
+              ]
+            }
+          }
+        ";
+
+        LoadAlbumData(json);
+    }
+
+    public static void LoadAlbumData(string json_text)
+    {
+        Console.WriteLine("Reading data from the following JSON string: {0}",
+                          json_text);
+
+        JsonData data = JsonMapper.ToObject(json_text);
 
         // Dictionaries are accessed like a hash-table
-        Console.WriteLine ("Album's name: {0}", data["album"]["name"]);
+        Console.WriteLine("Album's name: {0}", data["album"]["name"]);
 
         // Scalar elements stored in a JsonData instance can be cast to
         // their natural types
         string artist = (string) data["album"]["artist"];
         int    year   = (int) data["album"]["year"];
 
+        Console.WriteLine("Recorded by {0} in {1}", artist, year);
+
         // Arrays are accessed like regular lists as well
-        Console.WriteLine ("First track: {0}", data["album"]["tracks"][0]);
+        Console.WriteLine("First track: {0}", data["album"]["tracks"][0]);
     }
 }
+```
+
+Output from the example:
+
+```console
+Reading data from the following JSON string:
+          {
+            "album" : {
+              "name"   : "The Dark Side of the Moon",
+              "artist" : "Pink Floyd",
+              "year"   : 1973,
+              "tracks" : [
+                "Speak To Me",
+                "Breathe",
+                "On The Run"
+              ]
+            }
+          }
+
+Album's name: The Dark Side of the Moon
+Recorded by Pink Floyd in 1973
+First track: Speak To Me
 ```
 
 ## Readers and Writers
@@ -121,7 +176,7 @@ using System;
 
 public class DataReader
 {
-    public static void Main ()
+    public static void Main()
     {
         string sample = @"{
             ""name""  : ""Bill"",
@@ -131,23 +186,23 @@ public class DataReader
             ""note""  : [ ""life"", ""is"", ""but"", ""a"", ""dream"" ]
           }";
 
-        PrintJson (sample);
+        PrintJson(sample);
     }
 
-    public static void PrintJson (string json)
+    public static void PrintJson(string json)
     {
-        JsonReader reader = new JsonReader (json);
+        JsonReader reader = new JsonReader(json);
 
         Console.WriteLine ("{0,14} {1,10} {2,16}", "Token", "Value", "Type");
         Console.WriteLine (new String ('-', 42));
 
         // The Read() method returns false when there's nothing else to read
-        while (reader.Read ()) {
+        while (reader.Read()) {
             string type = reader.Value != null ?
-                reader.Value.GetType ().ToString () : "";
+                reader.Value.GetType().ToString() : "";
 
-            Console.WriteLine ("{0,14} {1,10} {2,16}",
-                               reader.Token, reader.Value, type);
+            Console.WriteLine("{0,14} {1,10} {2,16}",
+                              reader.Token, reader.Value, type);
         }
     }
 }
@@ -180,6 +235,10 @@ This example would produce the following output:
 
 ### Using `JsonWriter`
 
+The `JsonWriter` class is quite simple. Keep in mind that if you want to
+convert some arbitrary object into a JSON string, you'd normally just use
+`JsonMapper.ToJson`.
+
 ```cs
 using LitJson;
 using System;
@@ -187,25 +246,195 @@ using System.Text;
 
 public class DataWriter
 {
-    public static void WriteJson ()
+    public static void Main()
     {
-        StringBuilder sb = new StringBuilder ();
-        JsonWriter writer = new JsonWriter (sb);
+        StringBuilder sb = new StringBuilder();
+        JsonWriter writer = new JsonWriter(sb);
 
-        writer.WriteArrayStart ();
-        writer.Write (1);
-        writer.Write (2);
-        writer.Write (3);
+        writer.WriteArrayStart();
+        writer.Write(1);
+        writer.Write(2);
+        writer.Write(3);
 
-        writer.WriteObjectStart ();
-        writer.WritePropertyName ("color");
-        writer.Write ("blue");
-        writer.WriteObjectEnd ();
+        writer.WriteObjectStart();
+        writer.WritePropertyName("color");
+        writer.Write("blue");
+        writer.WriteObjectEnd();
 
-        writer.WriteArrayEnd ();
+        writer.WriteArrayEnd();
 
-        Console.WriteLine (sb.ToString ());
-        // [1,2,3,{"color":"blue"}]
+        Console.WriteLine(sb.ToString());
     }
+}
+```
+
+Output from the example:
+
+```console
+[1,2,3,{"color":"blue"}]
+```
+
+## Configuring the library's behaviour
+
+JSON is a very concise data--interchange format; nothing more, nothing less.
+For this reason, handling data in JSON format inside a program may require a
+deliberate decision on your part regarding some little detail that goes
+beyond the scope of JSON's specs.
+
+Consider, for example, reading data from JSON strings where
+single--quotes are used to delimit strings, or Javascript--style
+comments are included as a form of documentation. Those things are not part
+of the JSON standard, but they are commonly used by some developers, so you
+may want to be forgiving or strict depending on the situation. Or what about
+if you want to convert a *.Net* object into a JSON string, but
+pretty--printed (using indentation)?
+
+To declare the behaviour you want, you may change a few properties from your
+`JsonReader` and `JsonWriter` objects.
+
+```cs
+using LitJson;
+using System;
+
+public enum AnimalType
+{
+    Dog,
+    Cat,
+    Parrot
+}
+
+public class Animal
+{
+    public string     Name { get; set; }
+    public AnimalType Type { get; set; }
+    public int        Age  { get; set; }
+    public string[]   Toys { get; set; }
+}
+
+public class LitJsonConfigExample
+{
+    public static void Main()
+    {
+        Console.WriteLine("\n### Configuring JsonReader ###\n");
+        string json;
+
+        json = " /* these are some numbers */ [ 2, 3, 5, 7, 11 ] ";
+        TestReadingArray(json);
+
+        json = " [ \"hello\", 'world' ] ";
+        TestReadingArray(json);
+
+
+        Console.WriteLine("\n### Configuring JsonWriter ###\n");
+        var dog = new Animal {
+            Name = "Noam Chompsky",
+            Type = AnimalType.Dog,
+            Age  = 3,
+            Toys = new string[] { "rubber bone", "tennis ball" }
+        };
+
+        var cat = new Animal {
+            Name = "Colonel Meow",
+            Type = AnimalType.Cat,
+            Age  = 5,
+            Toys = new string[] { "cardboard box" }
+        };
+
+        TestWritingAnimal(dog);
+        TestWritingAnimal(cat, 2);
+    }
+
+    static void TestReadingArray(string json_array)
+    {
+        JsonReader defaultReader, customReader;
+
+        defaultReader = new JsonReader(json_array);
+        customReader  = new JsonReader(json_array);
+
+        customReader.AllowComments            = false;
+        customReader.AllowSingleQuotedStrings = false;
+
+        ReadArray(defaultReader);
+        ReadArray(customReader);
+    }
+
+    static void ReadArray(JsonReader reader)
+    {
+        Console.WriteLine("Reading an array");
+
+        try {
+            JsonData data = JsonMapper.ToObject(reader);
+
+            foreach (JsonData elem in data)
+                Console.Write("  {0}", elem);
+
+            Console.WriteLine("  [end]");
+        }
+        catch (Exception e) {
+            Console.WriteLine("  Exception caught: {0}", e.Message);
+        }
+    }
+
+    static void TestWritingAnimal(Animal pet, int indentLevel = 0)
+    {
+        Console.WriteLine("Converting {0}'s data into JSON..", pet.Name);
+        JsonWriter writer1 = new JsonWriter(Console.Out);
+        JsonWriter writer2 = new JsonWriter(Console.Out);
+
+        writer2.PrettyPrint = true;
+        if (indentLevel != 0)
+            writer2.IndentValue = indentLevel;
+
+        Console.WriteLine("Default JSON string:");
+        JsonMapper.ToJson(pet, writer1);
+
+        Console.Write("\nPretty-printed:");
+        JsonMapper.ToJson(pet, writer2);
+        Console.WriteLine("");
+    }
+}
+```
+
+The output from this example is:
+
+```console
+
+### Configuring JsonReader ###
+
+Reading an array
+  2  3  5  7  11  [end]
+Reading an array
+  Exception caught: Invalid character '/' in input string
+Reading an array
+  hello  world  [end]
+Reading an array
+  Exception caught: Invalid character ''' in input string
+
+### Configuring JsonWriter ###
+
+Converting Noam Chompsky's data into JSON..
+Default JSON string:
+{"Name":"Noam Chompsky","Type":0,"Age":3,"Toys":["rubber bone","tennis ball"]}
+Pretty-printed:
+{
+    "Name" : "Noam Chompsky",
+    "Type" : 0,
+    "Age"  : 3,
+    "Toys" : [
+        "rubber bone",
+        "tennis ball"
+    ]
+}
+Converting Colonel Meow's data into JSON..
+Default JSON string:
+{"Name":"Colonel Meow","Type":1,"Age":5,"Toys":["cardboard box"]}
+Pretty-printed:
+{
+  "Name" : "Colonel Meow",
+  "Type" : 1,
+  "Age"  : 5,
+  "Toys" : [
+    "cardboard box"
+  ]
 }
 ```
