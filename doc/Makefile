@@ -30,11 +30,12 @@ $(QUICKSTART_OUT): $(QUICKSTART_FILES) template.htm
 		-o $(QUICKSTART_OUT) $(QUICKSTART_FILES)
 
 website:
-	mkdir -p $(website_dir)/doc
+	mkdir -p $(website_dir)/out/docs
+	cp -f out/css/docs.css $(website_dir)/out/css/
 	pandoc $(PANDOC_OPTS) --template=template-web.htm \
 		-V title="LitJSON Quickstart Guide" \
 		-V pagetitle="LitJSON Quickstart Guide" \
-		-o $(website_dir)/doc/quickstart.html $(QUICKSTART_FILES)
+		-o $(website_dir)/out/docs/quickstart.html $(QUICKSTART_FILES)
 
 clean:
 	rm -rf $(QUICKSTART_OUT)
