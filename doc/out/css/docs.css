@@ -1,0 +1,37 @@
+body {
+    font-size: 0.8em;
+}
+
+pre.sourceCode, code.sourceCode {
+    background-color: #eeeeec;
+}
+pre.sourceCode {
+    padding: 16px;
+    min-width: 50em;
+    width: auto;
+    display: inline-block;
+    border-radius: 8px;
+    border: 1px solid #babdb6;
+}
+pre.console {
+    padding: 16px;
+    min-width: 50em;
+    width: auto;
+    display: inline-block;
+    border-radius: 8px;
+    color: #ffffff;
+    background-color: #2e3436;
+    border: 1px solid #000000;
+}
+
+h1.title {
+    color: #204a87;
+}
+
+h1 a, h2 a, h3 a, h4 a {
+    color: #3465a4;
+    text-decoration: none;
+}
+h1 a:hover, h2 a:hover, h3 a:hover, h4 a:hover {
+    text-decoration: underline;
+}
