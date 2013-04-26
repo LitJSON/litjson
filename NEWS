@@ -1,12 +1,22 @@
-General changes and improvements:
+LitJSON 0.7.0
+=============
 
-* Added `SkipNonMembers` property to `JsonReader`. When active, it allows to
-  parse JSON data using `JsonMapper.ToObject<T>` and ignore any propoerties
-  not available in the type `T`. Its default value is `true`.
+*To Be Announced*
+
+General changes and improvements:
 
 * Simplified the building mechanism. Dropped the entire autotools
   infrastructure, and instead added a single Makefile to compile the project
   and run the tests with *GNU make*.
+
+* Added `SkipNonMembers` property to `JsonReader`. When active, it allows to
+  parse JSON data using `JsonMapper.ToObject<T>` and ignore any properties
+  not available in the type `T`. Its default value is `true`.
+
+* Started moving the documentation into Markdown format.
+
+* Added a new section to the QuickStart Guide, regarding customisation of
+  the library's behaviour.
 
 Bug fixes:
 

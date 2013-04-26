@@ -2,8 +2,8 @@ PANDOC_OPTS = \
 	-S -s --toc --toc-depth=2 -t html5 \
 	--template=template.htm \
 	--css="css/docs.css"
-#	--highlight-style=tango \
 
+QUICKSTART_OUT = out/quickstart.html
 QUICKSTART_FILES = \
 	quickstart/intro.md \
 	quickstart/guide.md
@@ -16,10 +16,15 @@ all: api quickstart
 
 api:
 
-quickstart: $(QUICKSTART_FILES)
+quickstart: $(QUICKSTART_OUT)
+
+$(QUICKSTART_OUT): $(QUICKSTART_FILES) template.htm
 	pandoc $(PANDOC_OPTS) \
 		-V title="LitJSON Quickstart Guide" \
 		-V pagetitle="LitJSON Quickstart Guide" \
-		-o out/quickstart.html $(QUICKSTART_FILES)
+		-o $(QUICKSTART_OUT) $(QUICKSTART_FILES)
 
-.PHONY: all api quickstart
+clean:
+	rm -rf $(QUICKSTART_OUT)
+
+.PHONY: all api clean quickstart

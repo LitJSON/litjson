@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="generator" content="pandoc">
+  <title>LitJSON Quickstart Guide</title>
+  <link rel="stylesheet" href="css/normalize.css">
+  <link rel="stylesheet" href="css/unsemantic.css">
+  <style type="text/css">code{white-space: pre;}</style>
+  <style type="text/css">
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; }
+code > span.dt { color: #902000; }
+code > span.dv { color: #40a070; }
+code > span.bn { color: #40a070; }
+code > span.fl { color: #40a070; }
+code > span.ch { color: #4070a0; }
+code > span.st { color: #4070a0; }
+code > span.co { color: #60a0b0; font-style: italic; }
+code > span.ot { color: #007020; }
+code > span.al { color: #ff0000; font-weight: bold; }
+code > span.fu { color: #06287e; }
+code > span.er { color: #ff0000; font-weight: bold; }
+  </style>
+  <link rel="stylesheet" href="css/docs.css">
+</head>
+<body>
+<div class="grid-container"><div class="grid-100">
+<header>
+<h1 class="title">LitJSON Quickstart Guide</h1>
+</header>
+<nav id="TOC">
+<ul>
+<li><a href="#introduction">Introduction</a></li>
+<li><a href="#quick-start">Quick Start</a><ul>
+<li><a href="#mapping-json-to-objects-and-vice-versa">Mapping JSON to objects and vice versa</a></li>
+<li><a href="#readers-and-writers">Readers and Writers</a></li>
+<li><a href="#configuring-the-librarys-behaviour">Configuring the library’s behaviour</a></li>
+</ul></li>
+</ul>
+</nav>
+<h1 id="introduction"><a href="#introduction">Introduction</a></h1>
+<p>JSON is a simple, yet powerful notation to specify data. It defines simple scalar types such as <em>boolean</em>, <em>number</em> (integers and reals) and <em>string</em>, and a couple of data structures: arrays (lists) and objects (dictionaries). For more information on the JSON format, visit <a href="http://www.json.org/">JSON.org</a>.</p>
+<p>LitJSON is written in C#, and it’s intended to be small, fast and easy to use. It was developed on a GNU/Linux environment, using the <a href="http://www.mono-project.com/">Mono</a> framework.</p>
+<h1 id="quick-start"><a href="#quick-start">Quick Start</a></h1>
+<h2 id="mapping-json-to-objects-and-vice-versa"><a href="#mapping-json-to-objects-and-vice-versa">Mapping JSON to objects and vice versa</a></h2>
+<p>In order to consume data in JSON format inside .Net programs, the natural approach that comes to mind is to use JSON text to populate a new instance of a particular class; either a custom one, built to match the structure of the input JSON text, or a more general one which acts as a dictionary.</p>
+<p>Conversely, in order to build new JSON strings from data stored in objects, a simple <em>export</em>–like operation sounds like a good idea.</p>
+<p>For this purpose, <em>LitJSON</em> includes the <code>JsonMapper</code> class, which provides two main methods used to do JSON–to–object and object–to–JSON conversions. These methods are <code>JsonMapper.ToObject</code> and <code>JsonMapper.ToJson</code>.</p>
+<h3 id="simple-jsonmapper-examples"><a href="#simple-jsonmapper-examples">Simple <code>JsonMapper</code> examples</a></h3>
+<p>As the following example demonstrates, the <code>ToObject</code> method has a generic variant, <code>JsonMapper.ToObject&lt;T&gt;</code>, that is used to specify the type of the object to be returned.</p>
+<pre class="sourceCode cs"><code class="sourceCode cs"><span class="kw">using</span> LitJson;
+<span class="kw">using</span> System;
+
+<span class="kw">public</span> <span class="kw">class</span> Person
+{
+    <span class="co">// C# 3.0 auto-implemented properties</span>
+    <span class="kw">public</span> <span class="dt">string</span>   Name     { <span class="kw">get</span>; <span class="kw">set</span>; }
+    <span class="kw">public</span> <span class="dt">int</span>      Age      { <span class="kw">get</span>; <span class="kw">set</span>; }
+    <span class="kw">public</span> DateTime Birthday { <span class="kw">get</span>; <span class="kw">set</span>; }
+}
+
+<span class="kw">public</span> <span class="kw">class</span> JsonSample
+{
+    <span class="kw">public</span> <span class="kw">static</span> <span class="dt">void</span> <span class="fu">Main</span>()
+    {
+        <span class="fu">PersonToJson</span>();
+        <span class="fu">JsonToPerson</span>();
+    }
+
+    <span class="kw">public</span> <span class="kw">static</span> <span class="dt">void</span> <span class="fu">PersonToJson</span>()
+    {
+        Person bill = <span class="kw">new</span> <span class="fu">Person</span>();
+
+        bill.<span class="fu">Name</span> = <span class="st">&quot;William Shakespeare&quot;</span>;
+        bill.<span class="fu">Age</span>  = <span class="dv">51</span>;
+        bill.<span class="fu">Birthday</span> = <span class="kw">new</span> <span class="fu">DateTime</span>(<span class="dv">1564</span>, <span class="dv">4</span>, <span class="dv">26</span>);
+
+        <span class="dt">string</span> json_bill = JsonMapper.<span class="fu">ToJson</span>(bill);
+
+        Console.<span class="fu">WriteLine</span>(json_bill);
+    }
+
+    <span class="kw">public</span> <span class="kw">static</span> <span class="dt">void</span> <span class="fu">JsonToPerson</span>()
+    {
+        <span class="dt">string</span> json = @<span class="st">&quot;</span>
+            {
+                <span class="st">&quot;&quot;</span>Name<span class="st">&quot;&quot;</span>     : <span class="st">&quot;&quot;</span>Thomas More<span class="st">&quot;&quot;</span>,
+                <span class="st">&quot;&quot;</span>Age<span class="st">&quot;&quot;</span>      : <span class="dv">57</span>,
+                <span class="st">&quot;&quot;</span>Birthday<span class="st">&quot;&quot;</span> : <span class="st">&quot;&quot;</span><span class="dv">02</span>/<span class="dv">07</span>/<span class="dv">1478</span> <span class="dv">00</span>:<span class="dv">00</span>:<span class="dv">00</span><span class="st">&quot;&quot;</span>
+            }<span class="st">&quot;;</span>
+
+        Person thomas = JsonMapper.<span class="fu">ToObject</span>&lt;Person&gt;(json);
+
+        Console.<span class="fu">WriteLine</span>(<span class="st">&quot;Thomas&#39; age: {0}&quot;</span>, thomas.<span class="fu">Age</span>);
+    }
+}</code></pre>
+<p>Output from the example:</p>
+<pre class="console"><code>{&quot;Name&quot;:&quot;William Shakespeare&quot;,&quot;Age&quot;:51,&quot;Birthday&quot;:&quot;04/26/1564 00:00:00&quot;}
+Thomas&#39; age: 57</code></pre>
+<h3 id="using-the-nongeneric-variant-of-jsonmapper.toobject"><a href="#using-the-nongeneric-variant-of-jsonmapper.toobject">Using the non–generic variant of <code>JsonMapper.ToObject</code></a></h3>
+<p>When JSON data is to be read and a custom class that matches a particular data structure is not available or desired, users can use the non–generic variant of <code>ToObject</code>, which returns a <code>JsonData</code> instance. <code>JsonData</code> is a general purpose type that can hold any of the data types supported by JSON, including lists and dictionaries.</p>
+<pre class="sourceCode cs"><code class="sourceCode cs"><span class="kw">using</span> LitJson;
+<span class="kw">using</span> System;
+
+<span class="kw">public</span> <span class="kw">class</span> JsonSample
+{
+    <span class="kw">public</span> <span class="kw">static</span> <span class="dt">void</span> <span class="fu">Main</span>()
+    {
+        <span class="dt">string</span> json = @<span class="st">&quot;</span>
+          {
+            <span class="st">&quot;&quot;</span>album<span class="st">&quot;&quot;</span> : {
+              <span class="st">&quot;&quot;</span>name<span class="st">&quot;&quot;</span>   : <span class="st">&quot;&quot;</span>The Dark Side of the Moon<span class="st">&quot;&quot;</span>,
+              <span class="st">&quot;&quot;</span>artist<span class="st">&quot;&quot;</span> : <span class="st">&quot;&quot;</span>Pink Floyd<span class="st">&quot;&quot;</span>,
+              <span class="st">&quot;&quot;</span>year<span class="st">&quot;&quot;</span>   : <span class="dv">1973</span>,
+              <span class="st">&quot;&quot;</span>tracks<span class="st">&quot;&quot;</span> : [
+                <span class="st">&quot;&quot;</span>Speak To Me<span class="st">&quot;&quot;</span>,
+                <span class="st">&quot;&quot;</span>Breathe<span class="st">&quot;&quot;</span>,
+                <span class="st">&quot;&quot;</span>On The Run<span class="st">&quot;&quot;</span>
+              ]
+            }
+          }
+        <span class="st">&quot;;</span>
+
+        <span class="fu">LoadAlbumData</span>(json);
+    }
+
+    <span class="kw">public</span> <span class="kw">static</span> <span class="dt">void</span> <span class="fu">LoadAlbumData</span>(<span class="dt">string</span> json_text)
+    {
+        Console.<span class="fu">WriteLine</span>(<span class="st">&quot;Reading data from the following JSON string: {0}&quot;</span>,
+                          json_text);
+
+        JsonData data = JsonMapper.<span class="fu">ToObject</span>(json_text);
+
+        <span class="co">// Dictionaries are accessed like a hash-table</span>
+        Console.<span class="fu">WriteLine</span>(<span class="st">&quot;Album&#39;s name: {0}&quot;</span>, data[<span class="st">&quot;album&quot;</span>][<span class="st">&quot;name&quot;</span>]);
+
+        <span class="co">// Scalar elements stored in a JsonData instance can be cast to</span>
+        <span class="co">// their natural types</span>
+        <span class="dt">string</span> artist = (<span class="dt">string</span>) data[<span class="st">&quot;album&quot;</span>][<span class="st">&quot;artist&quot;</span>];
+        <span class="dt">int</span>    year   = (<span class="dt">int</span>) data[<span class="st">&quot;album&quot;</span>][<span class="st">&quot;year&quot;</span>];
+
+        Console.<span class="fu">WriteLine</span>(<span class="st">&quot;Recorded by {0} in {1}&quot;</span>, artist, year);
+
+        <span class="co">// Arrays are accessed like regular lists as well</span>
+        Console.<span class="fu">WriteLine</span>(<span class="st">&quot;First track: {0}&quot;</span>, data[<span class="st">&quot;album&quot;</span>][<span class="st">&quot;tracks&quot;</span>][<span class="dv">0</span>]);
+    }
+}</code></pre>
+<p>Output from the example:</p>
+<pre class="console"><code>Reading data from the following JSON string:
+          {
+            &quot;album&quot; : {
+              &quot;name&quot;   : &quot;The Dark Side of the Moon&quot;,
+              &quot;artist&quot; : &quot;Pink Floyd&quot;,
+              &quot;year&quot;   : 1973,
+              &quot;tracks&quot; : [
+                &quot;Speak To Me&quot;,
+                &quot;Breathe&quot;,
+                &quot;On The Run&quot;
+              ]
+            }
+          }
+
+Album&#39;s name: The Dark Side of the Moon
+Recorded by Pink Floyd in 1973
+First track: Speak To Me</code></pre>
+<h2 id="readers-and-writers"><a href="#readers-and-writers">Readers and Writers</a></h2>
+<p>An alternative interface to handling JSON data that might be familiar to some developers is through classes that make it possible to read and write data in a stream–like fashion. These classes are <code>JsonReader</code> and <code>JsonWriter</code>.</p>
+<p>These two types are in fact the foundation of this library, and the <code>JsonMapper</code> type is built on top of them, so in a way, the developer can think of the reader and writer classes as the low–level programming interface for LitJSON.</p>
+<h3 id="using-jsonreader"><a href="#using-jsonreader">Using <code>JsonReader</code></a></h3>
+<pre class="sourceCode cs"><code class="sourceCode cs"><span class="kw">using</span> LitJson;
+<span class="kw">using</span> System;
+
+<span class="kw">public</span> <span class="kw">class</span> DataReader
+{
+    <span class="kw">public</span> <span class="kw">static</span> <span class="dt">void</span> <span class="fu">Main</span>()
+    {
+        <span class="dt">string</span> sample = @<span class="st">&quot;{</span>
+            <span class="st">&quot;&quot;</span>name<span class="st">&quot;&quot;</span>  : <span class="st">&quot;&quot;</span>Bill<span class="st">&quot;&quot;</span>,
+            <span class="st">&quot;&quot;</span>age<span class="st">&quot;&quot;</span>   : <span class="dv">32</span>,
+            <span class="st">&quot;&quot;</span>awake<span class="st">&quot;&quot;</span> : <span class="kw">true</span>,
+            <span class="st">&quot;&quot;</span>n<span class="st">&quot;&quot;</span>     : <span class="fl">1994.0226</span>,
+            <span class="st">&quot;&quot;</span>note<span class="st">&quot;&quot;</span>  : [ <span class="st">&quot;&quot;</span>life<span class="st">&quot;&quot;</span>, <span class="st">&quot;&quot;</span>is<span class="st">&quot;&quot;</span>, <span class="st">&quot;&quot;</span>but<span class="st">&quot;&quot;</span>, <span class="st">&quot;&quot;</span>a<span class="st">&quot;&quot;</span>, <span class="st">&quot;&quot;</span>dream<span class="st">&quot;&quot;</span> ]
+          }<span class="st">&quot;;</span>
+
+        <span class="fu">PrintJson</span>(sample);
+    }
+
+    <span class="kw">public</span> <span class="kw">static</span> <span class="dt">void</span> <span class="fu">PrintJson</span>(<span class="dt">string</span> json)
+    {
+        JsonReader reader = <span class="kw">new</span> <span class="fu">JsonReader</span>(json);
+
+        Console.<span class="fu">WriteLine</span> (<span class="st">&quot;{0,14} {1,10} {2,16}&quot;</span>, <span class="st">&quot;Token&quot;</span>, <span class="st">&quot;Value&quot;</span>, <span class="st">&quot;Type&quot;</span>);
+        Console.<span class="fu">WriteLine</span> (<span class="kw">new</span> <span class="fu">String</span> (&#39;-&#39;, <span class="dv">42</span>));
+
+        <span class="co">// The Read() method returns false when there&#39;s nothing else to read</span>
+        <span class="kw">while</span> (reader.<span class="fu">Read</span>()) {
+            <span class="dt">string</span> type = reader.<span class="fu">Value</span> != <span class="kw">null</span> ?
+                reader.<span class="fu">Value</span>.<span class="fu">GetType</span>().<span class="fu">ToString</span>() : <span class="st">&quot;&quot;</span>;
+
+            Console.<span class="fu">WriteLine</span>(<span class="st">&quot;{0,14} {1,10} {2,16}&quot;</span>,
+                              reader.<span class="fu">Token</span>, reader.<span class="fu">Value</span>, type);
+        }
+    }
+}</code></pre>
+<p>This example would produce the following output:</p>
+<pre class="console"><code>         Token      Value             Type
+------------------------------------------
+   ObjectStart                            
+  PropertyName       name    System.String
+        String       Bill    System.String
+  PropertyName        age    System.String
+           Int         32     System.Int32
+  PropertyName      awake    System.String
+       Boolean       True   System.Boolean
+  PropertyName          n    System.String
+        Double  1994.0226    System.Double
+  PropertyName       note    System.String
+    ArrayStart                            
+        String       life    System.String
+        String         is    System.String
+        String        but    System.String
+        String          a    System.String
+        String      dream    System.String
+      ArrayEnd                            
+     ObjectEnd                            </code></pre>
+<h3 id="using-jsonwriter"><a href="#using-jsonwriter">Using <code>JsonWriter</code></a></h3>
+<p>The <code>JsonWriter</code> class is quite simple. Keep in mind that if you want to convert some arbitrary object into a JSON string, you’d normally just use <code>JsonMapper.ToJson</code>.</p>
+<pre class="sourceCode cs"><code class="sourceCode cs"><span class="kw">using</span> LitJson;
+<span class="kw">using</span> System;
+<span class="kw">using</span> System.<span class="fu">Text</span>;
+
+<span class="kw">public</span> <span class="kw">class</span> DataWriter
+{
+    <span class="kw">public</span> <span class="kw">static</span> <span class="dt">void</span> <span class="fu">Main</span>()
+    {
+        StringBuilder sb = <span class="kw">new</span> <span class="fu">StringBuilder</span>();
+        JsonWriter writer = <span class="kw">new</span> <span class="fu">JsonWriter</span>(sb);
+
+        writer.<span class="fu">WriteArrayStart</span>();
+        writer.<span class="fu">Write</span>(<span class="dv">1</span>);
+        writer.<span class="fu">Write</span>(<span class="dv">2</span>);
+        writer.<span class="fu">Write</span>(<span class="dv">3</span>);
+
+        writer.<span class="fu">WriteObjectStart</span>();
+        writer.<span class="fu">WritePropertyName</span>(<span class="st">&quot;color&quot;</span>);
+        writer.<span class="fu">Write</span>(<span class="st">&quot;blue&quot;</span>);
+        writer.<span class="fu">WriteObjectEnd</span>();
+
+        writer.<span class="fu">WriteArrayEnd</span>();
+
+        Console.<span class="fu">WriteLine</span>(sb.<span class="fu">ToString</span>());
+    }
+}</code></pre>
+<p>Output from the example:</p>
+<pre class="console"><code>[1,2,3,{&quot;color&quot;:&quot;blue&quot;}]</code></pre>
+<h2 id="configuring-the-librarys-behaviour"><a href="#configuring-the-librarys-behaviour">Configuring the library’s behaviour</a></h2>
+<p>JSON is a very concise data–interchange format; nothing more, nothing less. For this reason, handling data in JSON format inside a program may require a deliberate decision on your part regarding some little detail that goes beyond the scope of JSON’s specs.</p>
+<p>Consider, for example, reading data from JSON strings where single–quotes are used to delimit strings, or Javascript–style comments are included as a form of documentation. Those things are not part of the JSON standard, but they are commonly used by some developers, so you may want to be forgiving or strict depending on the situation. Or what about if you want to convert a <em>.Net</em> object into a JSON string, but pretty–printed (using indentation)?</p>
+<p>To declare the behaviour you want, you may change a few properties from your <code>JsonReader</code> and <code>JsonWriter</code> objects.</p>
+<pre class="sourceCode cs"><code class="sourceCode cs"><span class="kw">using</span> LitJson;
+<span class="kw">using</span> System;
+
+<span class="kw">public</span> <span class="kw">enum</span> AnimalType
+{
+    Dog,
+    Cat,
+    Parrot
+}
+
+<span class="kw">public</span> <span class="kw">class</span> Animal
+{
+    <span class="kw">public</span> <span class="dt">string</span>     Name { <span class="kw">get</span>; <span class="kw">set</span>; }
+    <span class="kw">public</span> AnimalType Type { <span class="kw">get</span>; <span class="kw">set</span>; }
+    <span class="kw">public</span> <span class="dt">int</span>        Age  { <span class="kw">get</span>; <span class="kw">set</span>; }
+    <span class="kw">public</span> <span class="dt">string</span>[]   Toys { <span class="kw">get</span>; <span class="kw">set</span>; }
+}
+
+<span class="kw">public</span> <span class="kw">class</span> LitJsonConfigExample
+{
+    <span class="kw">public</span> <span class="kw">static</span> <span class="dt">void</span> <span class="fu">Main</span>()
+    {
+        Console.<span class="fu">WriteLine</span>(<span class="st">&quot;</span><span class="ch">\n</span><span class="st">### Configuring JsonReader ###</span><span class="ch">\n</span><span class="st">&quot;</span>);
+        <span class="dt">string</span> json;
+
+        json = <span class="st">&quot; /* these are some numbers */ [ 2, 3, 5, 7, 11 ] &quot;</span>;
+        <span class="fu">TestReadingArray</span>(json);
+
+        json = <span class="st">&quot; [ </span><span class="ch">\&quot;</span><span class="st">hello</span><span class="ch">\&quot;</span><span class="st">, &#39;world&#39; ] &quot;</span>;
+        <span class="fu">TestReadingArray</span>(json);
+
+
+        Console.<span class="fu">WriteLine</span>(<span class="st">&quot;</span><span class="ch">\n</span><span class="st">### Configuring JsonWriter ###</span><span class="ch">\n</span><span class="st">&quot;</span>);
+        <span class="dt">var</span> dog = <span class="kw">new</span> Animal {
+            Name = <span class="st">&quot;Noam Chompsky&quot;</span>,
+            Type = AnimalType.<span class="fu">Dog</span>,
+            Age  = <span class="dv">3</span>,
+            Toys = <span class="kw">new</span> <span class="dt">string</span>[] { <span class="st">&quot;rubber bone&quot;</span>, <span class="st">&quot;tennis ball&quot;</span> }
+        };
+
+        <span class="dt">var</span> cat = <span class="kw">new</span> Animal {
+            Name = <span class="st">&quot;Colonel Meow&quot;</span>,
+            Type = AnimalType.<span class="fu">Cat</span>,
+            Age  = <span class="dv">5</span>,
+            Toys = <span class="kw">new</span> <span class="dt">string</span>[] { <span class="st">&quot;cardboard box&quot;</span> }
+        };
+
+        <span class="fu">TestWritingAnimal</span>(dog);
+        <span class="fu">TestWritingAnimal</span>(cat, <span class="dv">2</span>);
+    }
+
+    <span class="kw">static</span> <span class="dt">void</span> <span class="fu">TestReadingArray</span>(<span class="dt">string</span> json_array)
+    {
+        JsonReader defaultReader, customReader;
+
+        defaultReader = <span class="kw">new</span> <span class="fu">JsonReader</span>(json_array);
+        customReader  = <span class="kw">new</span> <span class="fu">JsonReader</span>(json_array);
+
+        customReader.<span class="fu">AllowComments</span>            = <span class="kw">false</span>;
+        customReader.<span class="fu">AllowSingleQuotedStrings</span> = <span class="kw">false</span>;
+
+        <span class="fu">ReadArray</span>(defaultReader);
+        <span class="fu">ReadArray</span>(customReader);
+    }
+
+    <span class="kw">static</span> <span class="dt">void</span> <span class="fu">ReadArray</span>(JsonReader reader)
+    {
+        Console.<span class="fu">WriteLine</span>(<span class="st">&quot;Reading an array&quot;</span>);
+
+        <span class="kw">try</span> {
+            JsonData data = JsonMapper.<span class="fu">ToObject</span>(reader);
+
+            <span class="kw">foreach</span> (JsonData elem <span class="kw">in</span> data)
+                Console.<span class="fu">Write</span>(<span class="st">&quot;  {0}&quot;</span>, elem);
+
+            Console.<span class="fu">WriteLine</span>(<span class="st">&quot;  [end]&quot;</span>);
+        }
+        <span class="kw">catch</span> (Exception e) {
+            Console.<span class="fu">WriteLine</span>(<span class="st">&quot;  Exception caught: {0}&quot;</span>, e.<span class="fu">Message</span>);
+        }
+    }
+
+    <span class="kw">static</span> <span class="dt">void</span> <span class="fu">TestWritingAnimal</span>(Animal pet, <span class="dt">int</span> indentLevel = <span class="dv">0</span>)
+    {
+        Console.<span class="fu">WriteLine</span>(<span class="st">&quot;Converting {0}&#39;s data into JSON..&quot;</span>, pet.<span class="fu">Name</span>);
+        JsonWriter writer1 = <span class="kw">new</span> <span class="fu">JsonWriter</span>(Console.<span class="fu">Out</span>);
+        JsonWriter writer2 = <span class="kw">new</span> <span class="fu">JsonWriter</span>(Console.<span class="fu">Out</span>);
+
+        writer2.<span class="fu">PrettyPrint</span> = <span class="kw">true</span>;
+        <span class="kw">if</span> (indentLevel != <span class="dv">0</span>)
+            writer2.<span class="fu">IndentValue</span> = indentLevel;
+
+        Console.<span class="fu">WriteLine</span>(<span class="st">&quot;Default JSON string:&quot;</span>);
+        JsonMapper.<span class="fu">ToJson</span>(pet, writer1);
+
+        Console.<span class="fu">Write</span>(<span class="st">&quot;</span><span class="ch">\n</span><span class="st">Pretty-printed:&quot;</span>);
+        JsonMapper.<span class="fu">ToJson</span>(pet, writer2);
+        Console.<span class="fu">WriteLine</span>(<span class="st">&quot;&quot;</span>);
+    }
+}</code></pre>
+<p>The output from this example is:</p>
+<pre class="console"><code>
+### Configuring JsonReader ###
+
+Reading an array
+  2  3  5  7  11  [end]
+Reading an array
+  Exception caught: Invalid character &#39;/&#39; in input string
+Reading an array
+  hello  world  [end]
+Reading an array
+  Exception caught: Invalid character &#39;&#39;&#39; in input string
+
+### Configuring JsonWriter ###
+
+Converting Noam Chompsky&#39;s data into JSON..
+Default JSON string:
+{&quot;Name&quot;:&quot;Noam Chompsky&quot;,&quot;Type&quot;:0,&quot;Age&quot;:3,&quot;Toys&quot;:[&quot;rubber bone&quot;,&quot;tennis ball&quot;]}
+Pretty-printed:
+{
+    &quot;Name&quot; : &quot;Noam Chompsky&quot;,
+    &quot;Type&quot; : 0,
+    &quot;Age&quot;  : 3,
+    &quot;Toys&quot; : [
+        &quot;rubber bone&quot;,
+        &quot;tennis ball&quot;
+    ]
+}
+Converting Colonel Meow&#39;s data into JSON..
+Default JSON string:
+{&quot;Name&quot;:&quot;Colonel Meow&quot;,&quot;Type&quot;:1,&quot;Age&quot;:5,&quot;Toys&quot;:[&quot;cardboard box&quot;]}
+Pretty-printed:
+{
+  &quot;Name&quot; : &quot;Colonel Meow&quot;,
+  &quot;Type&quot; : 1,
+  &quot;Age&quot;  : 5,
+  &quot;Toys&quot; : [
+    &quot;cardboard box&quot;
+  ]
+}</code></pre>
+</div></div>
+</body>
+</html>
