@@ -1,0 +1,30 @@
+span.classname, span.type {
+    font-weight: bold;
+}
+
+span.comment {
+    color: #228b22;
+}
+
+span.keyword, span.modifier {
+    color:       #00e;
+    font-weight: bold;
+}
+
+span.number {
+    color: #b452cd;
+}
+
+span.preproc {
+    color:       #8b4513;
+    font-weight: bold;
+}
+
+span.specialchar {
+    color: #e33;
+}
+
+span.string {
+    color: #cd5555;
+}
+
