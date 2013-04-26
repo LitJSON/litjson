@@ -1,8 +1,13 @@
+website_dir = $(CURDIR)/../website
+
 PANDOC_OPTS = \
 	-S -s --toc --toc-depth=2 -t html5 \
-	--template=template.htm \
 	--css="css/docs.css"
 
+
+##
+## Quick Start Guide
+##
 QUICKSTART_OUT = out/quickstart.html
 QUICKSTART_FILES = \
 	quickstart/intro.md \
@@ -19,12 +24,19 @@ api:
 quickstart: $(QUICKSTART_OUT)
 
 $(QUICKSTART_OUT): $(QUICKSTART_FILES) template.htm
-	pandoc $(PANDOC_OPTS) \
+	pandoc $(PANDOC_OPTS) --template=template.htm \
 		-V title="LitJSON Quickstart Guide" \
 		-V pagetitle="LitJSON Quickstart Guide" \
 		-o $(QUICKSTART_OUT) $(QUICKSTART_FILES)
 
+website:
+	mkdir -p $(website_dir)/doc
+	pandoc $(PANDOC_OPTS) --template=template-web.htm \
+		-V title="LitJSON Quickstart Guide" \
+		-V pagetitle="LitJSON Quickstart Guide" \
+		-o $(website_dir)/doc/quickstart.html $(QUICKSTART_FILES)
+
 clean:
 	rm -rf $(QUICKSTART_OUT)
 
-.PHONY: all api clean quickstart
+.PHONY: all api clean quickstart website

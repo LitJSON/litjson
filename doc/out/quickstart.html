@@ -4,8 +4,8 @@
   <meta charset="utf-8">
   <meta name="generator" content="pandoc">
   <title>LitJSON Quickstart Guide</title>
-  <link rel="stylesheet" href="css/normalize.css">
-  <link rel="stylesheet" href="css/unsemantic.css">
+  <link rel="stylesheet" href="css/vendor/normalize.css">
+  <link rel="stylesheet" href="css/vendor/unsemantic.css">
   <style type="text/css">code{white-space: pre;}</style>
   <style type="text/css">
 table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
@@ -262,29 +262,14 @@ First track: Speak To Me</code></pre>
 <p>JSON is a very concise data–interchange format; nothing more, nothing less. For this reason, handling data in JSON format inside a program may require a deliberate decision on your part regarding some little detail that goes beyond the scope of JSON’s specs.</p>
 <p>Consider, for example, reading data from JSON strings where single–quotes are used to delimit strings, or Javascript–style comments are included as a form of documentation. Those things are not part of the JSON standard, but they are commonly used by some developers, so you may want to be forgiving or strict depending on the situation. Or what about if you want to convert a <em>.Net</em> object into a JSON string, but pretty–printed (using indentation)?</p>
 <p>To declare the behaviour you want, you may change a few properties from your <code>JsonReader</code> and <code>JsonWriter</code> objects.</p>
+<h3 id="configuration-of-jsonreader"><a href="#configuration-of-jsonreader">Configuration of <code>JsonReader</code></a></h3>
 <pre class="sourceCode cs"><code class="sourceCode cs"><span class="kw">using</span> LitJson;
 <span class="kw">using</span> System;
 
-<span class="kw">public</span> <span class="kw">enum</span> AnimalType
-{
-    Dog,
-    Cat,
-    Parrot
-}
-
-<span class="kw">public</span> <span class="kw">class</span> Animal
-{
-    <span class="kw">public</span> <span class="dt">string</span>     Name { <span class="kw">get</span>; <span class="kw">set</span>; }
-    <span class="kw">public</span> AnimalType Type { <span class="kw">get</span>; <span class="kw">set</span>; }
-    <span class="kw">public</span> <span class="dt">int</span>        Age  { <span class="kw">get</span>; <span class="kw">set</span>; }
-    <span class="kw">public</span> <span class="dt">string</span>[]   Toys { <span class="kw">get</span>; <span class="kw">set</span>; }
-}
-
-<span class="kw">public</span> <span class="kw">class</span> LitJsonConfigExample
+<span class="kw">public</span> <span class="kw">class</span> JsonReaderConfigExample
 {
     <span class="kw">public</span> <span class="kw">static</span> <span class="dt">void</span> <span class="fu">Main</span>()
     {
-        Console.<span class="fu">WriteLine</span>(<span class="st">&quot;</span><span class="ch">\n</span><span class="st">### Configuring JsonReader ###</span><span class="ch">\n</span><span class="st">&quot;</span>);
         <span class="dt">string</span> json;
 
         json = <span class="st">&quot; /* these are some numbers */ [ 2, 3, 5, 7, 11 ] &quot;</span>;
@@ -292,25 +277,6 @@ First track: Speak To Me</code></pre>
 
         json = <span class="st">&quot; [ </span><span class="ch">\&quot;</span><span class="st">hello</span><span class="ch">\&quot;</span><span class="st">, &#39;world&#39; ] &quot;</span>;
         <span class="fu">TestReadingArray</span>(json);
-
-
-        Console.<span class="fu">WriteLine</span>(<span class="st">&quot;</span><span class="ch">\n</span><span class="st">### Configuring JsonWriter ###</span><span class="ch">\n</span><span class="st">&quot;</span>);
-        <span class="dt">var</span> dog = <span class="kw">new</span> Animal {
-            Name = <span class="st">&quot;Noam Chompsky&quot;</span>,
-            Type = AnimalType.<span class="fu">Dog</span>,
-            Age  = <span class="dv">3</span>,
-            Toys = <span class="kw">new</span> <span class="dt">string</span>[] { <span class="st">&quot;rubber bone&quot;</span>, <span class="st">&quot;tennis ball&quot;</span> }
-        };
-
-        <span class="dt">var</span> cat = <span class="kw">new</span> Animal {
-            Name = <span class="st">&quot;Colonel Meow&quot;</span>,
-            Type = AnimalType.<span class="fu">Cat</span>,
-            Age  = <span class="dv">5</span>,
-            Toys = <span class="kw">new</span> <span class="dt">string</span>[] { <span class="st">&quot;cardboard box&quot;</span> }
-        };
-
-        <span class="fu">TestWritingAnimal</span>(dog);
-        <span class="fu">TestWritingAnimal</span>(cat, <span class="dv">2</span>);
     }
 
     <span class="kw">static</span> <span class="dt">void</span> <span class="fu">TestReadingArray</span>(<span class="dt">string</span> json_array)
@@ -343,10 +309,60 @@ First track: Speak To Me</code></pre>
             Console.<span class="fu">WriteLine</span>(<span class="st">&quot;  Exception caught: {0}&quot;</span>, e.<span class="fu">Message</span>);
         }
     }
+}</code></pre>
+<p>The output would be:</p>
+<pre class="console"><code>Reading an array
+  2  3  5  7  11  [end]
+Reading an array
+  Exception caught: Invalid character &#39;/&#39; in input string
+Reading an array
+  hello  world  [end]
+Reading an array
+  Exception caught: Invalid character &#39;&#39;&#39; in input string</code></pre>
+<h3 id="configuration-of-jsonwriter"><a href="#configuration-of-jsonwriter">Configuration of <code>JsonWriter</code></a></h3>
+<pre class="sourceCode cs"><code class="sourceCode cs"><span class="kw">using</span> LitJson;
+<span class="kw">using</span> System;
+
+<span class="kw">public</span> <span class="kw">enum</span> AnimalType
+{
+    Dog,
+    Cat,
+    Parrot
+}
+
+<span class="kw">public</span> <span class="kw">class</span> Animal
+{
+    <span class="kw">public</span> <span class="dt">string</span>     Name { <span class="kw">get</span>; <span class="kw">set</span>; }
+    <span class="kw">public</span> AnimalType Type { <span class="kw">get</span>; <span class="kw">set</span>; }
+    <span class="kw">public</span> <span class="dt">int</span>        Age  { <span class="kw">get</span>; <span class="kw">set</span>; }
+    <span class="kw">public</span> <span class="dt">string</span>[]   Toys { <span class="kw">get</span>; <span class="kw">set</span>; }
+}
+
+<span class="kw">public</span> <span class="kw">class</span> JsonWriterConfigExample
+{
+    <span class="kw">public</span> <span class="kw">static</span> <span class="dt">void</span> <span class="fu">Main</span>()
+    {
+        <span class="dt">var</span> dog = <span class="kw">new</span> Animal {
+            Name = <span class="st">&quot;Noam Chompsky&quot;</span>,
+            Type = AnimalType.<span class="fu">Dog</span>,
+            Age  = <span class="dv">3</span>,
+            Toys = <span class="kw">new</span> <span class="dt">string</span>[] { <span class="st">&quot;rubber bone&quot;</span>, <span class="st">&quot;tennis ball&quot;</span> }
+        };
+
+        <span class="dt">var</span> cat = <span class="kw">new</span> Animal {
+            Name = <span class="st">&quot;Colonel Meow&quot;</span>,
+            Type = AnimalType.<span class="fu">Cat</span>,
+            Age  = <span class="dv">5</span>,
+            Toys = <span class="kw">new</span> <span class="dt">string</span>[] { <span class="st">&quot;cardboard box&quot;</span> }
+        };
+
+        <span class="fu">TestWritingAnimal</span>(dog);
+        <span class="fu">TestWritingAnimal</span>(cat, <span class="dv">2</span>);
+    }
 
     <span class="kw">static</span> <span class="dt">void</span> <span class="fu">TestWritingAnimal</span>(Animal pet, <span class="dt">int</span> indentLevel = <span class="dv">0</span>)
     {
-        Console.<span class="fu">WriteLine</span>(<span class="st">&quot;Converting {0}&#39;s data into JSON..&quot;</span>, pet.<span class="fu">Name</span>);
+        Console.<span class="fu">WriteLine</span>(<span class="st">&quot;</span><span class="ch">\n</span><span class="st">Converting {0}&#39;s data into JSON..&quot;</span>, pet.<span class="fu">Name</span>);
         JsonWriter writer1 = <span class="kw">new</span> <span class="fu">JsonWriter</span>(Console.<span class="fu">Out</span>);
         JsonWriter writer2 = <span class="kw">new</span> <span class="fu">JsonWriter</span>(Console.<span class="fu">Out</span>);
 
@@ -364,19 +380,6 @@ First track: Speak To Me</code></pre>
 }</code></pre>
 <p>The output from this example is:</p>
 <pre class="console"><code>
-### Configuring JsonReader ###
-
-Reading an array
-  2  3  5  7  11  [end]
-Reading an array
-  Exception caught: Invalid character &#39;/&#39; in input string
-Reading an array
-  hello  world  [end]
-Reading an array
-  Exception caught: Invalid character &#39;&#39;&#39; in input string
-
-### Configuring JsonWriter ###
-
 Converting Noam Chompsky&#39;s data into JSON..
 Default JSON string:
 {&quot;Name&quot;:&quot;Noam Chompsky&quot;,&quot;Type&quot;:0,&quot;Age&quot;:3,&quot;Toys&quot;:[&quot;rubber bone&quot;,&quot;tennis ball&quot;]}
@@ -390,6 +393,7 @@ Pretty-printed:
         &quot;tennis ball&quot;
     ]
 }
+
 Converting Colonel Meow&#39;s data into JSON..
 Default JSON string:
 {&quot;Name&quot;:&quot;Colonel Meow&quot;,&quot;Type&quot;:1,&quot;Age&quot;:5,&quot;Toys&quot;:[&quot;cardboard box&quot;]}

@@ -292,30 +292,16 @@ pretty--printed (using indentation)?
 To declare the behaviour you want, you may change a few properties from your
 `JsonReader` and `JsonWriter` objects.
 
+### Configuration of `JsonReader`
+
 ```cs
 using LitJson;
 using System;
 
-public enum AnimalType
-{
-    Dog,
-    Cat,
-    Parrot
-}
-
-public class Animal
-{
-    public string     Name { get; set; }
-    public AnimalType Type { get; set; }
-    public int        Age  { get; set; }
-    public string[]   Toys { get; set; }
-}
-
-public class LitJsonConfigExample
+public class JsonReaderConfigExample
 {
     public static void Main()
     {
-        Console.WriteLine("\n### Configuring JsonReader ###\n");
         string json;
 
         json = " /* these are some numbers */ [ 2, 3, 5, 7, 11 ] ";
@@ -323,25 +309,6 @@ public class LitJsonConfigExample
 
         json = " [ \"hello\", 'world' ] ";
         TestReadingArray(json);
-
-
-        Console.WriteLine("\n### Configuring JsonWriter ###\n");
-        var dog = new Animal {
-            Name = "Noam Chompsky",
-            Type = AnimalType.Dog,
-            Age  = 3,
-            Toys = new string[] { "rubber bone", "tennis ball" }
-        };
-
-        var cat = new Animal {
-            Name = "Colonel Meow",
-            Type = AnimalType.Cat,
-            Age  = 5,
-            Toys = new string[] { "cardboard box" }
-        };
-
-        TestWritingAnimal(dog);
-        TestWritingAnimal(cat, 2);
     }
 
     static void TestReadingArray(string json_array)
@@ -374,10 +341,68 @@ public class LitJsonConfigExample
             Console.WriteLine("  Exception caught: {0}", e.Message);
         }
     }
+}
+```
+
+The output would be:
+
+```console
+Reading an array
+  2  3  5  7  11  [end]
+Reading an array
+  Exception caught: Invalid character '/' in input string
+Reading an array
+  hello  world  [end]
+Reading an array
+  Exception caught: Invalid character ''' in input string
+```
+
+### Configuration of `JsonWriter`
+
+```cs
+using LitJson;
+using System;
+
+public enum AnimalType
+{
+    Dog,
+    Cat,
+    Parrot
+}
+
+public class Animal
+{
+    public string     Name { get; set; }
+    public AnimalType Type { get; set; }
+    public int        Age  { get; set; }
+    public string[]   Toys { get; set; }
+}
+
+public class JsonWriterConfigExample
+{
+    public static void Main()
+    {
+        var dog = new Animal {
+            Name = "Noam Chompsky",
+            Type = AnimalType.Dog,
+            Age  = 3,
+            Toys = new string[] { "rubber bone", "tennis ball" }
+        };
+
+        var cat = new Animal {
+            Name = "Colonel Meow",
+            Type = AnimalType.Cat,
+            Age  = 5,
+            Toys = new string[] { "cardboard box" }
+        };
+
+        TestWritingAnimal(dog);
+        TestWritingAnimal(cat, 2);
+    }
 
     static void TestWritingAnimal(Animal pet, int indentLevel = 0)
     {
-        Console.WriteLine("Converting {0}'s data into JSON..", pet.Name);
+        Console.WriteLine("\nConverting {0}'s data into JSON..", pet.Name);
         JsonWriter writer1 = new JsonWriter(Console.Out);
         JsonWriter writer2 = new JsonWriter(Console.Out);
 
@@ -399,19 +424,6 @@ The output from this example is:
 
 ```console
 
-### Configuring JsonReader ###
-
-Reading an array
-  2  3  5  7  11  [end]
-Reading an array
-  Exception caught: Invalid character '/' in input string
-Reading an array
-  hello  world  [end]
-Reading an array
-  Exception caught: Invalid character ''' in input string
-
-### Configuring JsonWriter ###
-
 Converting Noam Chompsky's data into JSON..
 Default JSON string:
 {"Name":"Noam Chompsky","Type":0,"Age":3,"Toys":["rubber bone","tennis ball"]}
@@ -425,6 +437,7 @@ Pretty-printed:
         "tennis ball"
     ]
 }
+
 Converting Colonel Meow's data into JSON..
 Default JSON string:
 {"Name":"Colonel Meow","Type":1,"Age":5,"Toys":["cardboard box"]}
