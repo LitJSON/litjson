@@ -299,6 +299,12 @@ namespace LitJson.Test
             writer.Write ("I \u2665 you");
             writer.Write ("She said, \"I know what it's like to be dead\"");
             writer.WriteArrayEnd ();
+
+            string json =
+                "[\"Hello World!\",\"\\n\\r\\b\\f\\t\",\"I \\u2665 you\"" +
+                ",\"She said, \\\"I know what it's like to be dead\\\"\"]";
+
+            Assert.AreEqual (json, writer.ToString(), "A1");
         }
     }
 }
