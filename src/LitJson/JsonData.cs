@@ -69,6 +69,10 @@ namespace LitJson
         public bool IsString {
             get { return type == JsonType.String; }
         }
+
+        public ICollection<string> Keys {
+            get { EnsureDictionary (); return inst_object.Keys; }
+        }
         #endregion
 
 

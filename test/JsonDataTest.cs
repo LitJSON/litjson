@@ -12,6 +12,7 @@
 using LitJson;
 using NUnit.Framework;
 using System;
+using System.Collections.Generic;
 
 
 namespace LitJson.Test
@@ -174,6 +175,34 @@ namespace LitJson.Test
 
             b = "Walrus";
             Assert.IsFalse (a.Equals (b), "A12");
+        }
+
+        [Test]
+        public void GetKeysTest ()
+        {
+            JsonData data = new JsonData ();
+
+            data["first"]  = "one";
+            data["second"] = "two";
+            data["third"]  = "three";
+            data["fourth"] = "four";
+
+            Assert.AreEqual (4, data.Keys.Count, "A1");
+
+            foreach (string k in data.Keys)
+                Assert.IsNotNull (data[k], "A2");
+        }
+
+        [Test]
+        [ExpectedException (typeof (InvalidOperationException))]
+        public void GetKeysInvalidTypeTest ()
+        {
+            JsonData data = new JsonData ();
+            data.Add (42);  // turns it into an array
+
+            // .. but an array doesn't have keys
+            ICollection<string> keys = data.Keys;
+            Assert.IsNotNull (keys);
         }
 
         [Test]
