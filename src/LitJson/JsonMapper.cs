@@ -591,6 +591,12 @@ namespace LitJson
                 delegate (object obj, JsonWriter writer) {
                     writer.Write ((ulong) obj);
                 };
+
+            base_exporters_table[typeof(float)] =
+                delegate(object obj, JsonWriter writer)
+                {
+                    writer.Write((double)(float)obj);
+                };
         }
 
         private static void RegisterBaseImporters ()
@@ -651,6 +657,12 @@ namespace LitJson
             RegisterImporter (base_importers_table, typeof (double),
                               typeof (decimal), importer);
 
+            importer = delegate(object input)
+            {
+                return Convert.ToSingle((float)(double)input);
+            };
+            RegisterImporter (base_importers_table, typeof (double),
+                              typeof(float), importer);
 
             importer = delegate (object input) {
                 return Convert.ToUInt32 ((long) input);
