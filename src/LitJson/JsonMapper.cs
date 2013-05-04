@@ -595,7 +595,7 @@ namespace LitJson
             base_exporters_table[typeof(float)] =
                 delegate(object obj, JsonWriter writer)
                 {
-                    writer.Write((double)(float)obj);
+                    writer.Write(Convert.ToDouble ((float) obj));
                 };
         }
 
