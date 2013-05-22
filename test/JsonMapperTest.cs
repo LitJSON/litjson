@@ -173,6 +173,18 @@ namespace LitJson.Test
         public ulong    TestULong;
     }
 
+    public class PrivateConstructorTest
+    {
+        public int TestValue;
+
+        // Parameterless constructor used by JsonMapper
+        private PrivateConstructorTest() { }
+
+        public PrivateConstructorTest(int testValue)
+        {
+            TestValue = testValue;
+        }
+    }
 
     [TestFixture]
     public class JsonMapperTest
@@ -867,6 +879,17 @@ namespace LitJson.Test
             json = JsonMapper.ToJson (p_obj);
 
             Assert.AreEqual ("{}", json, "A2");
+        }
+
+        [Test]
+        public void PrivateConstructorTest()
+        {
+            PrivateConstructorTest value = new Test.PrivateConstructorTest(5);
+            string expectedJson = "{\"TestValue\":5}";
+            Assert.AreEqual(expectedJson, JsonMapper.ToJson(value));
+
+            PrivateConstructorTest newValue = JsonMapper.ToObject<PrivateConstructorTest>(expectedJson);
+            Assert.AreEqual(value.TestValue, newValue.TestValue);
         }
     }
 }
