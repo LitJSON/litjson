@@ -437,8 +437,13 @@ namespace LitJson.Test
 
             Assembly asmb = typeof (JsonMapperTest).Assembly;
 
-            StreamReader stream = new StreamReader (
-                asmb.GetManifestResourceStream ("json-example.txt"));
+            var fileStream = asmb.GetManifestResourceStream ("json-example.txt");
+            if (fileStream == null)
+            {
+                fileStream = asmb.GetManifestResourceStream ("litjsontest.json-example.txt");
+            }
+
+            StreamReader stream = new StreamReader (fileStream);
 
             using (stream) {
                 data = JsonMapper.ToObject (stream);
