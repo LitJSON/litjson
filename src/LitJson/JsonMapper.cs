@@ -415,7 +415,12 @@ namespace LitJson
                 AddObjectMetadata (inst_type);
                 ObjectMetadata t_data = object_metadata[inst_type];
 
-                instance = Activator.CreateInstance (inst_type);
+                ConstructorInfo constructor = inst_type.GetConstructor(
+                    BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance, 
+                    null, 
+                    Type.EmptyTypes, 
+                    null);
+                instance = constructor != null ? constructor.Invoke(null) : Activator.CreateInstance(inst_type);
 
                 while (true) {
                     reader.Read ();
