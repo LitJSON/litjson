@@ -99,6 +99,18 @@ namespace LitJson
 
     public class JsonMapper
     {
+        /// <summary>
+        /// Attribute to be placed on non-public fields or properties to include them in serialization.
+        /// </summary>
+        [AttributeUsage(AttributeTargets.Field | AttributeTargets.Property)]
+        public class IncludeAttribute : Attribute { }
+
+        /// <summary>
+        /// Attribute to be placed on public fields or properties to exclude them from serialization.
+        /// </summary>
+        [AttributeUsage(AttributeTargets.Field | AttributeTargets.Property)]
+        public class IgnoreAttribute : Attribute { }
+
         #region Fields
         private static int max_nesting_depth;
 
@@ -207,7 +219,7 @@ namespace LitJson
 
             data.Properties = new Dictionary<string, PropertyMetadata> ();
 
-            foreach (PropertyInfo p_info in type.GetProperties ()) {
+            foreach (PropertyInfo p_info in type.GetProperties (BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic)) {
                 if (p_info.Name == "Item") {
                     ParameterInfo[] parameters = p_info.GetIndexParameters ();
 
@@ -220,6 +232,21 @@ namespace LitJson
                     continue;
                 }
 
+                // If the property has an [Ignore] attribute, skip it
+                if (p_info.GetCustomAttributes(typeof(IgnoreAttribute), true).Length > 0) {
+                    continue;
+                }
+                
+                // Include properties automatically that have at least one public accessor
+                bool autoInclude =
+                    (p_info.GetGetMethod() != null && p_info.GetGetMethod().IsPublic) ||
+                    (p_info.GetSetMethod() != null && p_info.GetSetMethod().IsPublic);
+
+                // If neither accessor is public and we don't have an [Include] attribute, skip it
+                if (!autoInclude && p_info.GetCustomAttributes(typeof(IncludeAttribute), true).Length == 0) {
+                    continue;
+                }
+
                 PropertyMetadata p_data = new PropertyMetadata ();
                 p_data.Info = p_info;
                 p_data.Type = p_info.PropertyType;
@@ -227,7 +254,17 @@ namespace LitJson
                 data.Properties.Add (p_info.Name, p_data);
             }
 
-            foreach (FieldInfo f_info in type.GetFields ()) {
+            foreach (FieldInfo f_info in type.GetFields (BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic)) {
+                // If the field has an [Ignore] attribute, skip it
+                if (f_info.GetCustomAttributes(typeof(IgnoreAttribute), true).Length > 0) {
+                    continue;
+                }
+
+                // If the field isn't public and doesn't have an [Include] attribute, skip it
+                if (!f_info.IsPublic && f_info.GetCustomAttributes(typeof(IncludeAttribute), true).Length == 0) {
+                    continue;
+                }
+
                 PropertyMetadata p_data = new PropertyMetadata ();
                 p_data.Info = f_info;
                 p_data.IsField = true;
@@ -252,9 +289,24 @@ namespace LitJson
 
             IList<PropertyMetadata> props = new List<PropertyMetadata> ();
 
-            foreach (PropertyInfo p_info in type.GetProperties ()) {
+            foreach (PropertyInfo p_info in type.GetProperties (BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic)) {
                 if (p_info.Name == "Item")
                     continue;
+                
+                // If the property has an [Ignore] attribute, skip it
+                if (p_info.GetCustomAttributes(typeof(IgnoreAttribute), true).Length > 0) {
+                    continue;
+                }
+
+                // Include properties automatically that have at least one public accessor
+                bool autoInclude =
+                    (p_info.GetGetMethod() != null && p_info.GetGetMethod().IsPublic) ||
+                    (p_info.GetSetMethod() != null && p_info.GetSetMethod().IsPublic);
+
+                // If neither accessor is public and we don't have an [Include] attribute, skip it
+                if (!autoInclude && p_info.GetCustomAttributes(typeof(IncludeAttribute), true).Length == 0) {
+                    continue;
+                }
 
                 PropertyMetadata p_data = new PropertyMetadata ();
                 p_data.Info = p_info;
@@ -262,7 +314,17 @@ namespace LitJson
                 props.Add (p_data);
             }
 
-            foreach (FieldInfo f_info in type.GetFields ()) {
+            foreach (FieldInfo f_info in type.GetFields (BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic)) {
+                // If the field has an [Ignore] attribute, skip it
+                if (f_info.GetCustomAttributes(typeof(IgnoreAttribute), true).Length > 0) {
+                    continue;
+                }
+
+                // If the field isn't public and doesn't have an [Include] attribute, skip it
+                if (!f_info.IsPublic && f_info.GetCustomAttributes(typeof(IncludeAttribute), true).Length == 0) {
+                    continue;
+                }
+
                 PropertyMetadata p_data = new PropertyMetadata ();
                 p_data.Info = f_info;
                 p_data.IsField = true;

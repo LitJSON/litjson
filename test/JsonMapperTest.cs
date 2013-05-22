@@ -186,6 +186,29 @@ namespace LitJson.Test
         }
     }
 
+    public class AttributeTest
+    {
+        [JsonMapper.Include]
+        private int included;
+
+        [JsonMapper.Ignore]
+        public string Ignored;
+
+        // Parameterless constructor used by JsonMapper
+        private AttributeTest() { }
+
+        public AttributeTest(int value, string ignored)
+        {
+            included = value;
+            Ignored = ignored;
+        }
+
+        public int GetPrivateValue()
+        {
+            return included;
+        }
+    }
+
     [TestFixture]
     public class JsonMapperTest
     {
@@ -890,6 +913,18 @@ namespace LitJson.Test
 
             PrivateConstructorTest newValue = JsonMapper.ToObject<PrivateConstructorTest>(expectedJson);
             Assert.AreEqual(value.TestValue, newValue.TestValue);
+        }
+
+        [Test]
+        public void AttributeTest()
+        {
+            AttributeTest value = new AttributeTest(21, "Hello, world!");
+            string expectedJson = "{\"included\":21}";
+            Assert.AreEqual(expectedJson, JsonMapper.ToJson(value));
+
+            AttributeTest newValue = JsonMapper.ToObject<AttributeTest>(expectedJson);
+            Assert.IsNull(newValue.Ignored);
+            Assert.AreEqual(value.GetPrivateValue(), newValue.GetPrivateValue());
         }
     }
 }
