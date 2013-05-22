@@ -1,2 +1,5 @@
 /src/LitJson/AssemblyInfo.cs
 /website
+/build/vs2010/*/bin
+/build/vs2010/*/obj
+/build/vs2010/*.suo

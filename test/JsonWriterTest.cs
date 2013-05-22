@@ -271,7 +271,7 @@ namespace LitJson.Test
             writer.WriteObjectEnd ();
             writer.WriteArrayEnd ();
 
-            Assert.AreEqual (writer.ToString (), json);
+            Assert.AreEqual (json, writer.ToString ());
         }
 
         [Test]

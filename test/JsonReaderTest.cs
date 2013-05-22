@@ -160,8 +160,14 @@ namespace LitJson.Test
         public void FromFileTest ()
         {
             Assembly asmb = typeof (JsonReaderTest).Assembly;
-            StreamReader stream = new StreamReader (
-                asmb.GetManifestResourceStream ("json-example.txt"));
+
+            var fileStream = asmb.GetManifestResourceStream ("json-example.txt");
+            if (fileStream == null)
+            {
+                fileStream = asmb.GetManifestResourceStream ("litjsontest.json-example.txt");
+            }
+
+            StreamReader stream = new StreamReader (fileStream);
 
             JsonReader reader = new JsonReader (stream);
 

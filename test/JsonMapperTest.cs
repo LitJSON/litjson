@@ -173,6 +173,41 @@ namespace LitJson.Test
         public ulong    TestULong;
     }
 
+    public class PrivateConstructorTest
+    {
+        public int TestValue;
+
+        // Parameterless constructor used by JsonMapper
+        private PrivateConstructorTest() { }
+
+        public PrivateConstructorTest(int testValue)
+        {
+            TestValue = testValue;
+        }
+    }
+
+    public class AttributeTest
+    {
+        [JsonMapper.Include]
+        private int included;
+
+        [JsonMapper.Ignore]
+        public string Ignored;
+
+        // Parameterless constructor used by JsonMapper
+        private AttributeTest() { }
+
+        public AttributeTest(int value, string ignored)
+        {
+            included = value;
+            Ignored = ignored;
+        }
+
+        public int GetPrivateValue()
+        {
+            return included;
+        }
+    }
 
     [TestFixture]
     public class JsonMapperTest
@@ -437,8 +472,13 @@ namespace LitJson.Test
 
             Assembly asmb = typeof (JsonMapperTest).Assembly;
 
-            StreamReader stream = new StreamReader (
-                asmb.GetManifestResourceStream ("json-example.txt"));
+            var fileStream = asmb.GetManifestResourceStream ("json-example.txt");
+            if (fileStream == null)
+            {
+                fileStream = asmb.GetManifestResourceStream ("litjsontest.json-example.txt");
+            }
+
+            StreamReader stream = new StreamReader (fileStream);
 
             using (stream) {
                 data = JsonMapper.ToObject (stream);
@@ -862,6 +902,29 @@ namespace LitJson.Test
             json = JsonMapper.ToJson (p_obj);
 
             Assert.AreEqual ("{}", json, "A2");
+        }
+
+        [Test]
+        public void PrivateConstructorTest()
+        {
+            PrivateConstructorTest value = new Test.PrivateConstructorTest(5);
+            string expectedJson = "{\"TestValue\":5}";
+            Assert.AreEqual(expectedJson, JsonMapper.ToJson(value));
+
+            PrivateConstructorTest newValue = JsonMapper.ToObject<PrivateConstructorTest>(expectedJson);
+            Assert.AreEqual(value.TestValue, newValue.TestValue);
+        }
+
+        [Test]
+        public void AttributeTest()
+        {
+            AttributeTest value = new AttributeTest(21, "Hello, world!");
+            string expectedJson = "{\"included\":21}";
+            Assert.AreEqual(expectedJson, JsonMapper.ToJson(value));
+
+            AttributeTest newValue = JsonMapper.ToObject<AttributeTest>(expectedJson);
+            Assert.IsNull(newValue.Ignored);
+            Assert.AreEqual(value.GetPrivateValue(), newValue.GetPrivateValue());
         }
     }
 }

@@ -216,7 +216,7 @@ namespace LitJson
                 writer.Write (',');
 
             if (pretty_print && ! context.ExpectingValue)
-                writer.Write ('\n');
+                writer.Write (Environment.NewLine);
         }
 
         private void PutString (string str)
