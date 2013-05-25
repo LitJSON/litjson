@@ -3,6 +3,8 @@ Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LitJson", "LitJson.csproj", "{1C91AE0D-C5CD-4BA4-934E-0A899CCA455E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LitJSONTest", "LitJSONTest\LitJSONTest.csproj", "{59FC0C8B-6B3C-4516-995C-5B8ED089794E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -13,6 +15,10 @@ Global
 		{1C91AE0D-C5CD-4BA4-934E-0A899CCA455E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1C91AE0D-C5CD-4BA4-934E-0A899CCA455E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1C91AE0D-C5CD-4BA4-934E-0A899CCA455E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{59FC0C8B-6B3C-4516-995C-5B8ED089794E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{59FC0C8B-6B3C-4516-995C-5B8ED089794E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{59FC0C8B-6B3C-4516-995C-5B8ED089794E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{59FC0C8B-6B3C-4516-995C-5B8ED089794E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(MonoDevelopProperties) = preSolution
 		StartupItem = LitJson.csproj

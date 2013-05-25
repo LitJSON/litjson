@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>10.0.0</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{59FC0C8B-6B3C-4516-995C-5B8ED089794E}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <RootNamespace>LitJSONTest</RootNamespace>
+    <AssemblyName>LitJSONTest</AssemblyName>
+    <ReleaseVersion>0.7.0</ReleaseVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>True</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>False</Optimize>
+    <OutputPath>bin\Debug</OutputPath>
+    <DefineConstants>DEBUG;</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <ConsolePause>False</ConsolePause>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>none</DebugType>
+    <Optimize>True</Optimize>
+    <OutputPath>bin\Release</OutputPath>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <ConsolePause>False</ConsolePause>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="nunit.framework">
+      <Private>False</Private>
+    </Reference>
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <ItemGroup>
+    <Compile Include="..\..\..\test\JsonDataTest.cs">
+      <Link>JsonDataTest.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\test\JsonMapperTest.cs">
+      <Link>JsonMapperTest.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\test\JsonReaderTest.cs">
+      <Link>JsonReaderTest.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\test\JsonWriterTest.cs">
+      <Link>JsonWriterTest.cs</Link>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\LitJson.csproj">
+      <Project>{1C91AE0D-C5CD-4BA4-934E-0A899CCA455E}</Project>
+      <Name>LitJson</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="..\..\..\test\json-example.txt">
+      <Link>json-example.txt</Link>
+      <LogicalName>litjsontest.json-example.txt</LogicalName>
+    </EmbeddedResource>
+  </ItemGroup>
+</Project>

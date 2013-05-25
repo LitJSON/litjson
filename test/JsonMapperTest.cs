@@ -173,6 +173,14 @@ namespace LitJson.Test
         public ulong    TestULong;
     }
 
+    public class SignedNumericConversionsTest
+    {
+        public int    TestInt;
+        public long   TestLong;
+        public float  TestFloat;
+        public double TestDouble;
+    }
+
     public class PrivateConstructorTest
     {
         public int TestValue;
@@ -925,6 +933,66 @@ namespace LitJson.Test
             AttributeTest newValue = JsonMapper.ToObject<AttributeTest>(expectedJson);
             Assert.IsNull(newValue.Ignored);
             Assert.AreEqual(value.GetPrivateValue(), newValue.GetPrivateValue());
+        }
+
+        [Test]
+        public void SignedNumericConversionsImportTest()
+        {
+            string json = @"
+            {
+                ""TestInt"": 42,
+                ""TestLong"": 43,
+                ""TestFloat"": 44,
+                ""TestDouble"": 45
+            }";
+            SignedNumericConversionsTest value = JsonMapper.ToObject<SignedNumericConversionsTest>(json);
+            Assert.AreEqual(value.TestInt, 42);
+            Assert.AreEqual(value.TestLong, 43L);
+            Assert.AreEqual(value.TestFloat, 44F);
+            Assert.AreEqual(value.TestDouble, 45.0);
+
+            json = @"
+            {
+                ""TestFloat"": 42.3,
+                ""TestDouble"": 44.5
+            }";
+            value = JsonMapper.ToObject<SignedNumericConversionsTest>(json);
+            Assert.AreEqual(value.TestFloat, 42.3F);
+            Assert.AreEqual(value.TestDouble, 44.5);
+
+            json = @"
+            {
+                ""TestInt"": 42.2,
+            }";
+            Assert.Throws<JsonException>(delegate {
+                JsonMapper.ToObject<SignedNumericConversionsTest> (json);
+            });
+
+            json = @"
+            {
+                ""TestLong"": 42.2
+            }";
+            Assert.Throws<JsonException>(delegate {
+                JsonMapper.ToObject<SignedNumericConversionsTest> (json);
+            });
+        }
+
+        [Test]
+        public void SignedNumericConversionsExportTest()
+        {
+            SignedNumericConversionsTest value = new SignedNumericConversionsTest () {
+                TestInt = 42,
+                TestLong = 43L,
+                TestFloat = 44.5F,
+                TestDouble = 46.7
+            };
+            string expectedJson = @"{""TestInt"":42,""TestLong"":43,""TestFloat"":44.5,""TestDouble"":46.7}";
+            Assert.AreEqual(expectedJson, JsonMapper.ToJson(value));
+
+            // Test with Long.MaxValue
+            value.TestLong = 9223372036854775807;
+            expectedJson = @"{""TestInt"":42,""TestLong"":9223372036854775807,""TestFloat"":44.5,""TestDouble"":46.7}";
+            Assert.AreEqual(expectedJson, JsonMapper.ToJson(value));
         }
     }
 }
