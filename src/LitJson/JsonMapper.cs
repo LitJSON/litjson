@@ -664,12 +664,6 @@ namespace LitJson
                 {
                     writer.Write(Convert.ToDouble ((float) obj));
                 };
-
-            base_exporters_table[typeof(Int64)] =
-                delegate(object obj, JsonWriter writer)
-                {
-                    writer.Write((Int64) obj);
-                };
         }
 
         private static void RegisterBaseImporters ()
@@ -756,10 +750,10 @@ namespace LitJson
                               typeof (DateTime), importer);
 
             importer = delegate(object input) {
-                return Convert.ToInt64 ((Int32)input);
+                return Convert.ToInt64 ((int)input);
             };
-            RegisterImporter (base_importers_table, typeof (Int32),
-                              typeof(Int64), importer);
+            RegisterImporter (base_importers_table, typeof (int),
+                              typeof (long), importer);
         }
 
         private static void RegisterImporter (
