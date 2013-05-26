@@ -34,7 +34,8 @@ SRC_FILES = \
 	$(srcdir)/JsonReader.cs      \
 	$(srcdir)/JsonWriter.cs      \
 	$(srcdir)/Lexer.cs           \
-	$(srcdir)/ParserToken.cs
+	$(srcdir)/ParserToken.cs     \
+	$(srcdir)/JsonAttribute.cs
 
 CLEAN_FILES += $(LITJSON_ASSEMBLY) $(GEN_FILES) $(LITJSON_MDB_FILE)
 
@@ -43,6 +44,7 @@ CLEAN_FILES += $(LITJSON_ASSEMBLY) $(GEN_FILES) $(LITJSON_MDB_FILE)
 ## Tests
 ##
 TEST_ASSEMBLY = $(topdir)/bin/LitJson.Tests.dll
+TEST_MDB_FILE = $(TEST_ASSEMBLY).mdb
 
 TEST_MONO_NUNIT = $(shell pkg-config --libs mono-nunit)
 
@@ -51,9 +53,10 @@ TEST_SRC_FILES = \
 	$(testdir)/JsonDataTest.cs   \
 	$(testdir)/JsonMapperTest.cs \
 	$(testdir)/JsonReaderTest.cs \
-	$(testdir)/JsonWriterTest.cs
+	$(testdir)/JsonWriterTest.cs \
+	$(testdir)/JsonIgnoreTest.cs
 
-CLEAN_FILES += $(TEST_ASSEMBLY) $(builddir)/TestResult.xml
+CLEAN_FILES += $(TEST_ASSEMBLY) $(TEST_MDB_FILE) $(builddir)/TestResult.xml
 
 
 ##
