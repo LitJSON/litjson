@@ -173,7 +173,7 @@ namespace LitJson.Test
         public ulong    TestULong;
     }
 
-    public class SignedNumericConversionsTest
+        public class SignedNumericConversionsTest
     {
         public int    TestInt;
         public long   TestLong;
@@ -216,6 +216,35 @@ namespace LitJson.Test
             return included;
         }
     }
+
+    public class NullableTypesTest
+    {
+        public int? TestNullableInt;
+    }
+
+    public class CompoundNullableTypesTest
+    {
+        public CompoundNullableType<int>? TestNested;
+        public CompoundNullableType<int>?[] TestNullableTypeArray;
+    }
+
+    public struct CompoundNullableType<T>
+    {
+        public T TestValue;
+    }
+
+    public enum NullableEnum
+    {
+        TestVal0 = 0,
+        TestVal1 = 1,
+        TestVal2 = 2
+    }
+
+    public class NullableEnumTest
+    {
+        public NullableEnum? TestEnum;
+    }
+
 
     [TestFixture]
     public class JsonMapperTest
@@ -960,21 +989,23 @@ namespace LitJson.Test
             Assert.AreEqual(value.TestFloat, 42.3F);
             Assert.AreEqual(value.TestDouble, 44.5);
 
-            json = @"
-            {
-                ""TestInt"": 42.2,
-            }";
-            Assert.Throws<JsonException>(delegate {
+            json = "{ \"TestInt\": 42.2 }";
+            bool exceptionThrown = false;
+            try {
                 JsonMapper.ToObject<SignedNumericConversionsTest> (json);
-            });
+            } catch (JsonException) {
+                exceptionThrown = true;
+            }
+            Assert.IsTrue(exceptionThrown);
 
-            json = @"
-            {
-                ""TestLong"": 42.2
-            }";
-            Assert.Throws<JsonException>(delegate {
+            json = "{ \"TestLong\": 42.2 }";
+            exceptionThrown = false;
+            try {
                 JsonMapper.ToObject<SignedNumericConversionsTest> (json);
-            });
+            } catch (JsonException) {
+                exceptionThrown = true;
+            }
+            Assert.IsTrue(exceptionThrown);
         }
 
         [Test]
@@ -986,12 +1017,135 @@ namespace LitJson.Test
                 TestFloat = 44.5F,
                 TestDouble = 46.7
             };
-            string expectedJson = @"{""TestInt"":42,""TestLong"":43,""TestFloat"":44.5,""TestDouble"":46.7}";
+            string expectedJson = "{\"TestInt\":42,\"TestLong\":43,\"TestFloat\":44.5,\"TestDouble\":46.7}";
             Assert.AreEqual(expectedJson, JsonMapper.ToJson(value));
 
             // Test with Long.MaxValue
             value.TestLong = 9223372036854775807;
-            expectedJson = @"{""TestInt"":42,""TestLong"":9223372036854775807,""TestFloat"":44.5,""TestDouble"":46.7}";
+            expectedJson = "{\"TestInt\":42,\"TestLong\":9223372036854775807,\"TestFloat\":44.5,\"TestDouble\":46.7}";
+            Assert.AreEqual(expectedJson, JsonMapper.ToJson(value));
+        }
+
+        [Test]
+        public void NullableTypesImportTest()
+        {
+            string json = @" {
+                ""TestNullableInt"": 42
+            }";
+            NullableTypesTest value = JsonMapper.ToObject<NullableTypesTest>(json);
+            Assert.AreEqual(value.TestNullableInt, 42);
+
+            json = @" {
+                ""TestNullableInt"": null
+            }";
+            value = JsonMapper.ToObject<NullableTypesTest>(json);
+            Assert.AreEqual(value.TestNullableInt, null);
+        }
+
+        [Test]
+        public void NullableTypesExportTest()
+        {
+            string expectedJson = "{\"TestNullableInt\":42}";
+            NullableTypesTest value = new NullableTypesTest() { TestNullableInt = 42 };
+            Assert.AreEqual(expectedJson, JsonMapper.ToJson(value));
+
+            expectedJson = "{\"TestNullableInt\":null}";
+            value = new NullableTypesTest() { TestNullableInt = null };
+            Assert.AreEqual(expectedJson, JsonMapper.ToJson(value));
+        }
+
+        [Test]
+        public void CompoundNullableTypesImportTest()
+        {
+            string json = @" {
+                ""TestNested"": {
+                    ""TestValue"": 42
+                }
+            }";
+            JsonReader reader = new JsonReader(json);
+            reader.SkipNonMembers = false;
+            CompoundNullableTypesTest value = JsonMapper.ToObject<CompoundNullableTypesTest>(reader);
+            Assert.AreNotEqual(value.TestNested, null);
+            CompoundNullableType<int> innerValue = (CompoundNullableType<int>)value.TestNested;
+            Assert.AreEqual(innerValue.TestValue, 42);
+
+            json = @" {
+                ""TestNested"": null
+            }";
+            value = JsonMapper.ToObject<CompoundNullableTypesTest>(json);
+            Assert.AreEqual(value.TestNested, null);
+
+            json = @" {
+                ""TestNullableTypeArray"": [
+                    { ""TestValue"": 42 },
+                    { ""TestValue"": 43 },
+                    { ""TestValue"": 44 }
+                ]
+            }";
+            value = JsonMapper.ToObject<CompoundNullableTypesTest>(json);
+            Assert.AreNotEqual(value.TestNullableTypeArray, null);
+            Assert.AreEqual(value.TestNullableTypeArray.Length, 3);
+            Assert.AreNotEqual(value.TestNullableTypeArray[0], null);
+            innerValue = (CompoundNullableType<int>)value.TestNullableTypeArray[0];
+            Assert.AreEqual(innerValue.TestValue, 42);
+            Assert.AreNotEqual(value.TestNullableTypeArray[1], null);
+            innerValue = (CompoundNullableType<int>)value.TestNullableTypeArray[1];
+            Assert.AreEqual(innerValue.TestValue, 43);
+            Assert.AreNotEqual(value.TestNullableTypeArray[2], null);
+            innerValue = (CompoundNullableType<int>)value.TestNullableTypeArray[2];
+            Assert.AreEqual(innerValue.TestValue, 44);
+        }
+
+        [Test]
+        public void CompoundNullableTypesExportTest()
+        {
+            CompoundNullableTypesTest value = new CompoundNullableTypesTest() {
+                TestNested = new CompoundNullableType<int>() { TestValue = 42 }
+            };
+            string expectedJson = "{\"TestNested\":{\"TestValue\":42},\"TestNullableTypeArray\":null}";
+            Assert.AreEqual(expectedJson, JsonMapper.ToJson(value));
+
+            value = new CompoundNullableTypesTest() {
+                TestNullableTypeArray = new[] {
+                    new Nullable<CompoundNullableType<int>>(
+                        new CompoundNullableType<int>() { TestValue = 42 }),
+                    new Nullable<CompoundNullableType<int>>(
+                        new CompoundNullableType<int>() { TestValue = 43 }),
+                    new Nullable<CompoundNullableType<int>>(
+                        new CompoundNullableType<int>() { TestValue = 44 })
+                }
+            };
+            expectedJson = "{\"TestNested\":null,\"TestNullableTypeArray\":[{\"TestValue\":42},{\"TestValue\":43},{\"TestValue\":44}]}";
+            Assert.AreEqual(expectedJson, JsonMapper.ToJson(value));
+        }
+
+        [Test]
+        public void NullableEnumImportTest()
+        {
+            string json = @"{
+                ""TestEnum"": 1
+            }";
+            NullableEnumTest value = JsonMapper.ToObject<NullableEnumTest>(json);
+            Assert.AreNotEqual(value.TestEnum, null);
+            NullableEnum enumValue = (NullableEnum)value.TestEnum;
+            Assert.AreEqual(value.TestEnum, NullableEnum.TestVal1);
+
+            json = @"{
+                ""TestEnum"": null
+            }";
+            value = JsonMapper.ToObject<NullableEnumTest>(json);
+            Assert.AreEqual(value.TestEnum, null);
+        }
+
+        [Test]
+        public void NullableEnumExportTest()
+        {
+            NullableEnumTest value = new NullableEnumTest() { TestEnum = NullableEnum.TestVal2 };
+            string expectedJson = "{\"TestEnum\":2}";
+            Assert.AreEqual(expectedJson, JsonMapper.ToJson(value));
+
+            value = new NullableEnumTest() { TestEnum = null };
+            expectedJson = "{\"TestEnum\":null}";
             Assert.AreEqual(expectedJson, JsonMapper.ToJson(value));
         }
     }
