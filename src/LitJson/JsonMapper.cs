@@ -589,6 +589,11 @@ namespace LitJson
                                                     datetime_format));
                 };
 
+            base_exporters_table[typeof (float)] =
+                delegate (object obj, JsonWriter writer) {
+                    writer.Write (Convert.ToDouble ((float)obj));
+                };
+
             base_exporters_table[typeof (decimal)] =
                 delegate (object obj, JsonWriter writer) {
                     writer.Write ((decimal) obj);
