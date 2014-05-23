@@ -42,6 +42,7 @@ namespace LitJson
 
         bool     GetBoolean ();
         double   GetDouble ();
+        double[] GetDoubleArray ();
         int      GetInt ();
         JsonType GetJsonType ();
         long     GetLong ();
