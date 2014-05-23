@@ -545,6 +545,34 @@ namespace LitJson
             return inst_int;
         }
 
+        int[] IJsonWrapper.GetIntArray ()
+        {
+            if (type != JsonType.Array)
+            {
+                throw new InvalidOperationException (
+                    "JsonData instance doesn't hold a array");
+            }
+
+            if (inst_array.Count > 0)
+            {
+                if (!(inst_array[0] as IJsonWrapper).IsInt)
+                {
+                    throw new InvalidOperationException (
+                        "JsonData instance doesn't hold a int[]");
+                }
+
+                int[] array = new int[inst_array.Count];
+                for (int i = 0; i < inst_array.Count; i++)
+                {
+                    array[i] = (inst_array[i] as IJsonWrapper).GetInt ();
+                }
+
+                return array;
+            }
+
+            return new int[0];
+        }
+
         long IJsonWrapper.GetLong ()
         {
             if (type != JsonType.Long)
