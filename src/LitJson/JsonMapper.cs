@@ -19,10 +19,10 @@ using System.Reflection;
 
 namespace LitJson
 {
-    public class JSONName : Attribute
+    public class JsonName : Attribute
     {
         public string Name { get; protected set; }
-        public JSONName(string name)
+        public JsonName(string name)
         {
             this.Name = name;
         }
@@ -830,9 +830,9 @@ namespace LitJson
 
         //When the field has the JSONName property it will 
         private static string getPropertyName(MemberInfo memInfo) {
-            var attrs = memInfo.GetCustomAttributes(typeof(JSONName), true);
+            var attrs = memInfo.GetCustomAttributes(typeof(JsonName), true);
             if (attrs.Length > 0)
-                return ((JSONName)attrs[0]).Name;
+                return ((JsonName)attrs[0]).Name;
             else
                 return memInfo.Name;
         }
