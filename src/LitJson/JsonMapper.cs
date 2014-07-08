@@ -19,6 +19,15 @@ using System.Reflection;
 
 namespace LitJson
 {
+    public class JSONName : Attribute
+    {
+        public string Name { get; protected set; }
+        public JSONName(string name)
+        {
+            this.Name = name;
+        }
+    }
+
     internal struct PropertyMetadata
     {
         public MemberInfo Info;
@@ -224,7 +233,7 @@ namespace LitJson
                 p_data.Info = p_info;
                 p_data.Type = p_info.PropertyType;
 
-                data.Properties.Add (p_info.Name, p_data);
+                data.Properties.Add (getPropertyName(p_info), p_data);
             }
 
             foreach (FieldInfo f_info in type.GetFields ()) {
@@ -233,7 +242,7 @@ namespace LitJson
                 p_data.IsField = true;
                 p_data.Type = f_info.FieldType;
 
-                data.Properties.Add (f_info.Name, p_data);
+                data.Properties.Add(getPropertyName(f_info), p_data);
             }
 
             lock (object_metadata_lock) {
@@ -802,7 +811,7 @@ namespace LitJson
             writer.WriteObjectStart ();
             foreach (PropertyMetadata p_data in props) {
                 if (p_data.IsField) {
-                    writer.WritePropertyName (p_data.Info.Name);
+                    writer.WritePropertyName (getPropertyName(p_data.Info));
                     WriteValue (((FieldInfo) p_data.Info).GetValue (obj),
                                 writer, writer_is_private, depth + 1);
                 }
@@ -818,6 +827,16 @@ namespace LitJson
             }
             writer.WriteObjectEnd ();
         }
+
+        //When the field has the JSONName property it will 
+        private static string getPropertyName(MemberInfo memInfo) {
+            var attrs = memInfo.GetCustomAttributes(typeof(JSONName), true);
+            if (attrs.Length > 0)
+                return ((JSONName)attrs[0]).Name;
+            else
+                return memInfo.Name;
+        }
+
         #endregion
 
 
