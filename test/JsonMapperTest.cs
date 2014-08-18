@@ -173,6 +173,11 @@ namespace LitJson.Test
         public ulong    TestULong;
     }
 
+    public class DateTimeTest
+    {
+	public DateTime dateTimeValue;
+    }
+
 
     [TestFixture]
     public class JsonMapperTest
@@ -863,5 +868,28 @@ namespace LitJson.Test
 
             Assert.AreEqual ("{}", json, "A2");
         }
+
+	[Test]
+	public void DateTimeShouldBeUniversalTest()
+	{
+	    string json = @"{
+                ""dateTimeValue"": ""2014-05-02T05:52:10.569000+00:00""
+            }";
+
+	    JsonMapper.Options = JsonMapperOptions.DateTimesAlwaysUniversal;
+
+	    DateTimeTest dateTimeTest = JsonMapper.ToObject<DateTimeTest>(json);
+	    Assert.AreEqual(DateTimeKind.Utc, dateTimeTest.dateTimeValue.Kind);
+
+	    json = @"{
+                ""dateTimeValue"": ""2014-05-02T05:52:10.569000""
+            }";
+
+	    dateTimeTest = JsonMapper.ToObject<DateTimeTest>(json);
+	    Assert.AreEqual(DateTimeKind.Utc, dateTimeTest.dateTimeValue.Kind);
+
+	    JsonMapper.Options = JsonMapperOptions.None;
+	}
+		
     }
 }
