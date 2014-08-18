@@ -193,6 +193,10 @@ namespace LitJson.Test
             TestValue = testValue;
         }
     }
+    public class DateTimeTest
+    {
+        public DateTime dateTimeValue;
+    }
 
     public class AttributeTest
     {
@@ -247,7 +251,7 @@ namespace LitJson.Test
 
     public class DateTimeTest
     {
-	public DateTime dateTimeValue;
+        public DateTime dateTimeValue;
     }
 
 
@@ -1154,26 +1158,26 @@ namespace LitJson.Test
             Assert.AreEqual(expectedJson, JsonMapper.ToJson(value));
         }
 
-	[Test]
-	public void DateTimeShouldBeUniversalTest()
-	{
-	    string json = @"{
-                ""dateTimeValue"": ""2014-05-02T05:52:10.569000+00:00""
-            }";
+        [Test]
+        public void DateTimeShouldBeUniversalTest()
+        {
+            string json = @"{
+                    ""dateTimeValue"": ""2014-05-02T05:52:10.569000+00:00""
+                }";
 
-	    JsonMapper.Options = JsonMapperOptions.DateTimesAlwaysUniversal;
+            JsonMapper.Options = JsonMapperOptions.DateTimesAlwaysUniversal;
 
-	    DateTimeTest dateTimeTest = JsonMapper.ToObject<DateTimeTest>(json);
-	    Assert.AreEqual(DateTimeKind.Utc, dateTimeTest.dateTimeValue.Kind);
+            DateTimeTest dateTimeTest = JsonMapper.ToObject<DateTimeTest>(json);
+            Assert.AreEqual(DateTimeKind.Utc, dateTimeTest.dateTimeValue.Kind);
 
-	    json = @"{
-                ""dateTimeValue"": ""2014-05-02T05:52:10.569000""
-            }";
+            json = @"{
+                    ""dateTimeValue"": ""2014-05-02T05:52:10.569000""
+                }";
 
-	    dateTimeTest = JsonMapper.ToObject<DateTimeTest>(json);
-	    Assert.AreEqual(DateTimeKind.Utc, dateTimeTest.dateTimeValue.Kind);
+            dateTimeTest = JsonMapper.ToObject<DateTimeTest>(json);
+            Assert.AreEqual(DateTimeKind.Utc, dateTimeTest.dateTimeValue.Kind);
 
-	    JsonMapper.Options = JsonMapperOptions.None;
-	}
+            JsonMapper.Options = JsonMapperOptions.None;
+        }
     }
 }
