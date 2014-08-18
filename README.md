@@ -36,6 +36,18 @@ If you have
 system, and the *Mono* suite provides the `mono-nunit.pc` file, you can try
 running these tests by running `make test` from the `build/make` directory.
 
+You can specify which `pkg-config` is invoked by passing a `PKG_CONFIG`
+variable to `make test`. This is useful when you have mutiple conflicting
+`pkg-config`s on your system and need to select the correct one (i.e. to
+avoid conflicts with Homebrew on Mac OSX).
+
+Example of running the tests on Mac OSX:
+
+```bash
+# In litjson/ directory
+$ cd build/make
+$ make PKG_CONFIG=/Library/Frameworks/Mono.framework/Commands/pkg-config test
+```
 
 ## Using LitJSON from an application
 
