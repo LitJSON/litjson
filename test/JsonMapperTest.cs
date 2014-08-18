@@ -173,7 +173,7 @@ namespace LitJson.Test
         public ulong    TestULong;
     }
 
-        public class SignedNumericConversionsTest
+    public class SignedNumericConversionsTest
     {
         public int    TestInt;
         public long   TestLong;
@@ -243,6 +243,11 @@ namespace LitJson.Test
     public class NullableEnumTest
     {
         public NullableEnum? TestEnum;
+    }
+
+    public class DateTimeTest
+    {
+	public DateTime dateTimeValue;
     }
 
 
@@ -1148,5 +1153,27 @@ namespace LitJson.Test
             expectedJson = "{\"TestEnum\":null}";
             Assert.AreEqual(expectedJson, JsonMapper.ToJson(value));
         }
+
+	[Test]
+	public void DateTimeShouldBeUniversalTest()
+	{
+	    string json = @"{
+                ""dateTimeValue"": ""2014-05-02T05:52:10.569000+00:00""
+            }";
+
+	    JsonMapper.Options = JsonMapperOptions.DateTimesAlwaysUniversal;
+
+	    DateTimeTest dateTimeTest = JsonMapper.ToObject<DateTimeTest>(json);
+	    Assert.AreEqual(DateTimeKind.Utc, dateTimeTest.dateTimeValue.Kind);
+
+	    json = @"{
+                ""dateTimeValue"": ""2014-05-02T05:52:10.569000""
+            }";
+
+	    dateTimeTest = JsonMapper.ToObject<DateTimeTest>(json);
+	    Assert.AreEqual(DateTimeKind.Utc, dateTimeTest.dateTimeValue.Kind);
+
+	    JsonMapper.Options = JsonMapperOptions.None;
+	}
     }
 }
