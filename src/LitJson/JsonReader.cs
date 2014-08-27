@@ -289,7 +289,7 @@ namespace LitJson
 
                 return;
             }
-            
+
             ulong n_uint64;
             if (UInt64.TryParse(number, out n_uint64))
             {
@@ -298,7 +298,6 @@ namespace LitJson
 
                 return;
             }
-            
 
             // Shouldn't happen, but just in case, return something
             token = JsonToken.Int;

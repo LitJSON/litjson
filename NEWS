@@ -10,10 +10,12 @@ Additions:
 Bug fixes:
 
 * Handle nullable types (Issue #3)
+* Parse UInt64 numbers correctly
 
 Contributors for this release:
 
-  -  Michael Bartnett (@michaelbartnett)
+  - Michael Bartnett (@michaelbartnett)
+  - @MickeyKim
 
 
 LitJSON 0.7.0
@@ -126,7 +128,7 @@ New features and improvements:
     ushort
     uint
     ulong
-  
+
   Custom exporters and importers can be defined through
   JsonMapper.RegisterExporter and JsonMapper.RegisterImporter, and they
   override the built-in conversions.
