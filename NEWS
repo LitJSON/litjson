@@ -12,6 +12,10 @@ Bug fixes:
 * Handle nullable types (Issue #3)
 * Parse UInt64 numbers correctly
 
+Other changes:
+
+* Allow specifying a custom PKG_CONFIG in build/make.
+
 Contributors for this release:
 
   - Michael Bartnett (@michaelbartnett)
