@@ -392,14 +392,14 @@ namespace LitJson.Test
             test.TestShort    = 1024;
             test.TestUShort   = 30000;
             test.TestUInt     = 90000000;
-            test.TestULong    = 1L;
+            test.TestULong    = 0xFFFFFFFFFFFFFFFF; // = =18446744073709551615
 
             string json = JsonMapper.ToJson (test);
             string expected =
                 "{\"TestByte\":200,\"TestChar\":\"P\",\"TestDateTime\":" +
                 "\"12/22/2012 00:00:00\",\"TestDecimal\":10.333," +
                 "\"TestSByte\":-5,\"TestShort\":1024,\"TestUShort\":30000" +
-                ",\"TestUInt\":90000000,\"TestULong\":1}";
+                ",\"TestUInt\":90000000,\"TestULong\":18446744073709551615}";
 
             Assert.AreEqual (expected, json);
         }
@@ -824,7 +824,7 @@ namespace LitJson.Test
   ""TestShort"":    1024,
   ""TestUShort"":   30000,
   ""TestUInt"":     90000000,
-  ""TestULong"":    1
+  ""TestULong"":    18446744073709551615
 }";
 
             ValueTypesTest test = JsonMapper.ToObject<ValueTypesTest> (json);
@@ -838,7 +838,7 @@ namespace LitJson.Test
             Assert.AreEqual (1024, test.TestShort, "A6");
             Assert.AreEqual (30000, test.TestUShort, "A7");
             Assert.AreEqual (90000000, test.TestUInt, "A8");
-            Assert.AreEqual (1L, test.TestULong, "A9");
+            Assert.AreEqual (18446744073709551615L, test.TestULong, "A9");
         }
 
         [Test]
