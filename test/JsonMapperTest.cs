@@ -897,7 +897,7 @@ namespace LitJson.Test
             string json = @" {
                 ""TestNullableInt"": 42
             }";
-            NullableTypesTest value = JsonMapper.ToObject<NullableTypesTest>(json);
+            var value = JsonMapper.ToObject<NullableTypesTest>(json);
             Assert.AreEqual(value.TestNullableInt, 42);
 
             json = @" {
@@ -911,7 +911,7 @@ namespace LitJson.Test
         public void NullableTypesExportTest()
         {
             string expectedJson = "{\"TestNullableInt\":42}";
-            NullableTypesTest value = new NullableTypesTest() { TestNullableInt = 42 };
+            var value = new NullableTypesTest() { TestNullableInt = 42 };
             Assert.AreEqual(expectedJson, JsonMapper.ToJson(value));
 
             expectedJson = "{\"TestNullableInt\":null}";
@@ -929,9 +929,9 @@ namespace LitJson.Test
             }";
             JsonReader reader = new JsonReader(json);
             reader.SkipNonMembers = false;
-            CompoundNullableTypesTest value = JsonMapper.ToObject<CompoundNullableTypesTest>(reader);
+            var value = JsonMapper.ToObject<CompoundNullableTypesTest>(reader);
             Assert.AreNotEqual(value.TestNested, null);
-            CompoundNullableType<int> innerValue = (CompoundNullableType<int>)value.TestNested;
+            var innerValue = (CompoundNullableType<int>)value.TestNested;
             Assert.AreEqual(innerValue.TestValue, 42);
 
             json = @" {
@@ -950,14 +950,20 @@ namespace LitJson.Test
             value = JsonMapper.ToObject<CompoundNullableTypesTest>(json);
             Assert.AreNotEqual(value.TestNullableTypeArray, null);
             Assert.AreEqual(value.TestNullableTypeArray.Length, 3);
+
             Assert.AreNotEqual(value.TestNullableTypeArray[0], null);
-            innerValue = (CompoundNullableType<int>)value.TestNullableTypeArray[0];
+            innerValue =
+                (CompoundNullableType<int>)value.TestNullableTypeArray[0];
             Assert.AreEqual(innerValue.TestValue, 42);
+
             Assert.AreNotEqual(value.TestNullableTypeArray[1], null);
-            innerValue = (CompoundNullableType<int>)value.TestNullableTypeArray[1];
+            innerValue =
+                (CompoundNullableType<int>)value.TestNullableTypeArray[1];
             Assert.AreEqual(innerValue.TestValue, 43);
+
             Assert.AreNotEqual(value.TestNullableTypeArray[2], null);
-            innerValue = (CompoundNullableType<int>)value.TestNullableTypeArray[2];
+            innerValue =
+                (CompoundNullableType<int>)value.TestNullableTypeArray[2];
             Assert.AreEqual(innerValue.TestValue, 44);
         }
 
@@ -967,7 +973,9 @@ namespace LitJson.Test
             CompoundNullableTypesTest value = new CompoundNullableTypesTest() {
                 TestNested = new CompoundNullableType<int>() { TestValue = 42 }
             };
-            string expectedJson = "{\"TestNested\":{\"TestValue\":42},\"TestNullableTypeArray\":null}";
+            var expectedJson =
+                "{\"TestNested\":{\"TestValue\":42}," +
+                "\"TestNullableTypeArray\":null}";
             Assert.AreEqual(expectedJson, JsonMapper.ToJson(value));
 
             value = new CompoundNullableTypesTest() {
@@ -980,7 +988,9 @@ namespace LitJson.Test
                         new CompoundNullableType<int>() { TestValue = 44 })
                 }
             };
-            expectedJson = "{\"TestNested\":null,\"TestNullableTypeArray\":[{\"TestValue\":42},{\"TestValue\":43},{\"TestValue\":44}]}";
+            expectedJson =
+                "{\"TestNested\":null,\"TestNullableTypeArray\":" +
+                "[{\"TestValue\":42},{\"TestValue\":43},{\"TestValue\":44}]}";
             Assert.AreEqual(expectedJson, JsonMapper.ToJson(value));
         }
 
@@ -990,10 +1000,10 @@ namespace LitJson.Test
             string json = @"{
                 ""TestEnum"": 1
             }";
-            NullableEnumTest value = JsonMapper.ToObject<NullableEnumTest>(json);
+            var value = JsonMapper.ToObject<NullableEnumTest>(json);
             Assert.AreNotEqual(value.TestEnum, null);
-            NullableEnum enumValue = (NullableEnum)value.TestEnum;
-            Assert.AreEqual(value.TestEnum, NullableEnum.TestVal1);
+            var enumValue = (NullableEnum)value.TestEnum;
+            Assert.AreEqual(enumValue, NullableEnum.TestVal1);
 
             json = @"{
                 ""TestEnum"": null
@@ -1005,7 +1015,8 @@ namespace LitJson.Test
         [Test]
         public void NullableEnumExportTest()
         {
-            NullableEnumTest value = new NullableEnumTest() { TestEnum = NullableEnum.TestVal2 };
+            var value = new NullableEnumTest() {
+                TestEnum = NullableEnum.TestVal2 };
             string expectedJson = "{\"TestEnum\":2}";
             Assert.AreEqual(expectedJson, JsonMapper.ToJson(value));
 

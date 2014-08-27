@@ -7,6 +7,14 @@ Additions:
 
 * Added `JsonData.Keys` property, with type `ICollection<string>`.
 
+Bug fixes:
+
+* Handle nullable types (Issue #3)
+
+Contributors for this release:
+
+  -  Michael Bartnett (@michaelbartnett)
+
 
 LitJSON 0.7.0
 =============
