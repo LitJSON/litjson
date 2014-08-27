@@ -9,6 +9,7 @@ CSC = gmcs
 CSC_FLAGS =
 DATA_VERSION = $(topdir)/build/version
 NUNIT = nunit-console2
+PKG_CONFIG = pkg-config
 
 
 ifdef ENABLE_DEBUG
@@ -44,7 +45,7 @@ CLEAN_FILES += $(LITJSON_ASSEMBLY) $(GEN_FILES) $(LITJSON_MDB_FILE)
 ##
 TEST_ASSEMBLY = $(topdir)/bin/LitJson.Tests.dll
 
-TEST_MONO_NUNIT = $(shell pkg-config --libs mono-nunit)
+TEST_MONO_NUNIT = $(shell "$(PKG_CONFIG)" --libs mono-nunit)
 
 TEST_RES_FILES = $(testdir)/json-example.txt
 TEST_SRC_FILES = \
