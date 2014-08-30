@@ -21,9 +21,10 @@ namespace LitJson
 {
     internal struct PropertyMetadata
     {
-        public MemberInfo Info;
-        public bool       IsField;
-        public Type       Type;
+        public MemberInfo     Info;
+        public bool           IsField;
+        public Type           Type;
+        public JsonIgnoreWhen Ignore;
     }
 
 
@@ -224,6 +225,8 @@ namespace LitJson
                 p_data.Info = p_info;
                 p_data.Type = p_info.PropertyType;
 
+                ProcessAttributes(ref p_data, p_info);
+
                 data.Properties.Add (p_info.Name, p_data);
             }
 
@@ -232,6 +235,8 @@ namespace LitJson
                 p_data.Info = f_info;
                 p_data.IsField = true;
                 p_data.Type = f_info.FieldType;
+
+                ProcessAttributes(ref p_data, f_info);
 
                 data.Properties.Add (f_info.Name, p_data);
             }
@@ -259,6 +264,9 @@ namespace LitJson
                 PropertyMetadata p_data = new PropertyMetadata ();
                 p_data.Info = p_info;
                 p_data.IsField = false;
+
+                ProcessAttributes(ref p_data, p_info);
+
                 props.Add (p_data);
             }
 
@@ -266,6 +274,8 @@ namespace LitJson
                 PropertyMetadata p_data = new PropertyMetadata ();
                 p_data.Info = f_info;
                 p_data.IsField = true;
+
+                ProcessAttributes(ref p_data, f_info);
 
                 props.Add (p_data);
             }
@@ -275,6 +285,17 @@ namespace LitJson
                     type_properties.Add (type, props);
                 } catch (ArgumentException) {
                     return;
+                }
+            }
+        }
+
+        private static void ProcessAttributes (ref PropertyMetadata p_data, MemberInfo m_info)
+        {
+            foreach (Attribute attr in m_info.GetCustomAttributes(true)) {
+                if (attr is JsonIgnore) {
+                    JsonIgnore ignore_attr = (JsonIgnore)attr;
+                    p_data.Ignore = ignore_attr.Usage;
+
                 }
             }
         }
@@ -431,6 +452,12 @@ namespace LitJson
                         PropertyMetadata prop_data =
                             t_data.Properties[property];
 
+                        // Don't deserialize a field or property that has a JsonIgnore attribute with deserialization usage.
+                        if ((prop_data.Ignore & JsonIgnoreWhen.Deserializing) > 0) {
+                            ReadSkip (reader);
+                            continue;
+                        }
+
                         if (prop_data.IsField) {
                             ((FieldInfo) prop_data.Info).SetValue (
                                 instance, ReadValue (prop_data.Type, reader));
@@ -564,6 +591,11 @@ namespace LitJson
                                                     datetime_format));
                 };
 
+            base_exporters_table[typeof (float)] =
+                delegate (object obj, JsonWriter writer) {
+                    writer.Write (Convert.ToDouble ((float)obj));
+                };
+
             base_exporters_table[typeof (decimal)] =
                 delegate (object obj, JsonWriter writer) {
                     writer.Write ((decimal) obj);
@@ -636,9 +668,21 @@ namespace LitJson
                               typeof (uint), importer);
 
             importer = delegate (object input) {
+                return Convert.ToInt64 ((int) input);
+            };
+            RegisterImporter (base_importers_table, typeof (int),
+                              typeof (long), importer);
+
+            importer = delegate (object input) {
                 return Convert.ToSingle ((int) input);
             };
             RegisterImporter (base_importers_table, typeof (int),
+                              typeof (float), importer);
+
+            importer = delegate (object input) {
+                return Convert.ToSingle ((double) input);
+            };
+            RegisterImporter (base_importers_table, typeof (double),
                               typeof (float), importer);
 
             importer = delegate (object input) {
@@ -652,7 +696,6 @@ namespace LitJson
             };
             RegisterImporter (base_importers_table, typeof (double),
                               typeof (decimal), importer);
-
 
             importer = delegate (object input) {
                 return Convert.ToUInt32 ((long) input);
@@ -803,6 +846,11 @@ namespace LitJson
 
             writer.WriteObjectStart ();
             foreach (PropertyMetadata p_data in props) {
+
+                // Don't serialize a field or property with the JsonIgnore attribute with serialization usage
+                if ((p_data.Ignore & JsonIgnoreWhen.Serializing) > 0)
+                    continue;
+
                 if (p_data.IsField) {
                     writer.WritePropertyName (p_data.Info.Name);
                     WriteValue (((FieldInfo) p_data.Info).GetValue (obj),
