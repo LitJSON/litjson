@@ -4,7 +4,7 @@ LitJSON
 A *.Net* library to handle conversions from and to JSON (JavaScript Object
 Notation) strings.
 
-Home page: http://lbv.github.io/litjson/
+[Project website][litjson].
 
 
 ## Compiling
@@ -28,13 +28,12 @@ auxiliary files under the path `build/some-tool`. Thanks.
 
 ## Tests
 
-This library comes with a set of unit tests using the
-[NUnit](http://www.nunit.org/) framework.
+This library comes with a set of unit tests using the [NUnit][nunit]
+framework.
 
-If you have
-[pkg-config](http://www.freedesktop.org/wiki/Software/pkg-config) in your
-system, and the *Mono* suite provides the `mono-nunit.pc` file, you can try
-running these tests by running `make test` from the `build/make` directory.
+If you have [pkg-config][pkg-config] in your system, and the *Mono* suite
+provides the `mono-nunit.pc` file, you can try running these tests by running
+`make test` from the `build/make` directory.
 
 You can specify which `pkg-config` is invoked by passing a `PKG_CONFIG`
 variable to `make test`. This is useful when you have mutiple conflicting
@@ -51,6 +50,19 @@ $ make PKG_CONFIG=/Library/Frameworks/Mono.framework/Commands/pkg-config test
 
 ## Using LitJSON from an application
 
-Once this library is compiled, .Net developers may use it by simply copying
-the `.dll` file into their project's directory. Or you may copy the whole
-tree of files under `src/LitJSON` to your own project's working directory.
+Reference the `LitJson.dll` file when compiling your code. For a link to
+download this file, see the *Download* section in the project's
+[website][litjson].
+
+Alternatively, just copy the whole tree of files under `src/LitJSON` to your
+own project's source tree and integrate it with your development environment.
+
+## License
+
+[Unlicense][unlicense] (public domain).
+
+
+[litjson]: http://lbv.github.io/litjson/
+[nunit]: http://www.nunit.org/
+[pkg-config]: http://www.freedesktop.org/wiki/Software/pkg-config
+[unlicense]: http://unlicense.org/
