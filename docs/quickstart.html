@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <base href="http://lbv.github.io/litjson/">
   <meta charset="utf-8">
   <meta name="generator" content="pandoc">
   <title>LitJSON Quickstart Guide</title>
@@ -44,15 +43,15 @@ code > span.er { color: #ff0000; font-weight: bold; }
 </ul></li>
 </ul>
 </nav>
-<h1 id="introduction"><a href="#introduction">Introduction</a></h1>
+<h1 id="introduction">Introduction</h1>
 <p>JSON is a simple, yet powerful notation to specify data. It defines simple scalar types such as <em>boolean</em>, <em>number</em> (integers and reals) and <em>string</em>, and a couple of data structures: arrays (lists) and objects (dictionaries). For more information on the JSON format, visit <a href="http://www.json.org/">JSON.org</a>.</p>
 <p>LitJSON is written in C#, and it’s intended to be small, fast and easy to use. It was developed on a GNU/Linux environment, using the <a href="http://www.mono-project.com/">Mono</a> framework.</p>
-<h1 id="quick-start"><a href="#quick-start">Quick Start</a></h1>
-<h2 id="mapping-json-to-objects-and-vice-versa"><a href="#mapping-json-to-objects-and-vice-versa">Mapping JSON to objects and vice versa</a></h2>
+<h1 id="quick-start">Quick Start</h1>
+<h2 id="mapping-json-to-objects-and-vice-versa">Mapping JSON to objects and vice versa</h2>
 <p>In order to consume data in JSON format inside .Net programs, the natural approach that comes to mind is to use JSON text to populate a new instance of a particular class; either a custom one, built to match the structure of the input JSON text, or a more general one which acts as a dictionary.</p>
-<p>Conversely, in order to build new JSON strings from data stored in objects, a simple <em>export</em>–like operation sounds like a good idea.</p>
-<p>For this purpose, <em>LitJSON</em> includes the <code>JsonMapper</code> class, which provides two main methods used to do JSON–to–object and object–to–JSON conversions. These methods are <code>JsonMapper.ToObject</code> and <code>JsonMapper.ToJson</code>.</p>
-<h3 id="simple-jsonmapper-examples"><a href="#simple-jsonmapper-examples">Simple <code>JsonMapper</code> examples</a></h3>
+<p>Conversely, in order to build new JSON strings from data stored in objects, a simple <em>export</em> operation sounds like a good idea.</p>
+<p>For this purpose, <em>LitJSON</em> includes the <code>JsonMapper</code> class, which provides two main methods used to do JSON-to-object and object-to-JSON conversions. These methods are <code>JsonMapper.ToObject</code> and <code>JsonMapper.ToJson</code>.</p>
+<h3 id="simple-jsonmapper-examples">Simple <code>JsonMapper</code> examples</h3>
 <p>As the following example demonstrates, the <code>ToObject</code> method has a generic variant, <code>JsonMapper.ToObject&lt;T&gt;</code>, that is used to specify the type of the object to be returned.</p>
 <pre class="sourceCode cs"><code class="sourceCode cs"><span class="kw">using</span> LitJson;
 <span class="kw">using</span> System;
@@ -103,8 +102,8 @@ code > span.er { color: #ff0000; font-weight: bold; }
 <p>Output from the example:</p>
 <pre class="console"><code>{&quot;Name&quot;:&quot;William Shakespeare&quot;,&quot;Age&quot;:51,&quot;Birthday&quot;:&quot;04/26/1564 00:00:00&quot;}
 Thomas&#39; age: 57</code></pre>
-<h3 id="using-the-nongeneric-variant-of-jsonmapper.toobject"><a href="#using-the-nongeneric-variant-of-jsonmapper.toobject">Using the non–generic variant of <code>JsonMapper.ToObject</code></a></h3>
-<p>When JSON data is to be read and a custom class that matches a particular data structure is not available or desired, users can use the non–generic variant of <code>ToObject</code>, which returns a <code>JsonData</code> instance. <code>JsonData</code> is a general purpose type that can hold any of the data types supported by JSON, including lists and dictionaries.</p>
+<h3 id="using-the-non-generic-variant-of-jsonmapper.toobject">Using the non-generic variant of <code>JsonMapper.ToObject</code></h3>
+<p>When JSON data is to be read and a custom class that matches a particular data structure is not available or desired, users can use the non-generic variant of <code>ToObject</code>, which returns a <code>JsonData</code> instance. <code>JsonData</code> is a general purpose type that can hold any of the data types supported by JSON, including lists and dictionaries.</p>
 <pre class="sourceCode cs"><code class="sourceCode cs"><span class="kw">using</span> LitJson;
 <span class="kw">using</span> System;
 
@@ -169,10 +168,10 @@ Thomas&#39; age: 57</code></pre>
 Album&#39;s name: The Dark Side of the Moon
 Recorded by Pink Floyd in 1973
 First track: Speak To Me</code></pre>
-<h2 id="readers-and-writers"><a href="#readers-and-writers">Readers and Writers</a></h2>
-<p>An alternative interface to handling JSON data that might be familiar to some developers is through classes that make it possible to read and write data in a stream–like fashion. These classes are <code>JsonReader</code> and <code>JsonWriter</code>.</p>
-<p>These two types are in fact the foundation of this library, and the <code>JsonMapper</code> type is built on top of them, so in a way, the developer can think of the reader and writer classes as the low–level programming interface for LitJSON.</p>
-<h3 id="using-jsonreader"><a href="#using-jsonreader">Using <code>JsonReader</code></a></h3>
+<h2 id="readers-and-writers">Readers and Writers</h2>
+<p>An alternative interface to handling JSON data that might be familiar to some developers is through classes that make it possible to read and write data in a stream-like fashion. These classes are <code>JsonReader</code> and <code>JsonWriter</code>.</p>
+<p>These two types are in fact the foundation of this library, and the <code>JsonMapper</code> type is built on top of them, so in a way, the developer can think of the reader and writer classes as the low-level programming interface for LitJSON.</p>
+<h3 id="using-jsonreader">Using <code>JsonReader</code></h3>
 <pre class="sourceCode cs"><code class="sourceCode cs"><span class="kw">using</span> LitJson;
 <span class="kw">using</span> System;
 
@@ -229,7 +228,7 @@ First track: Speak To Me</code></pre>
         String      dream    System.String
       ArrayEnd                            
      ObjectEnd                            </code></pre>
-<h3 id="using-jsonwriter"><a href="#using-jsonwriter">Using <code>JsonWriter</code></a></h3>
+<h3 id="using-jsonwriter">Using <code>JsonWriter</code></h3>
 <p>The <code>JsonWriter</code> class is quite simple. Keep in mind that if you want to convert some arbitrary object into a JSON string, you’d normally just use <code>JsonMapper.ToJson</code>.</p>
 <pre class="sourceCode cs"><code class="sourceCode cs"><span class="kw">using</span> LitJson;
 <span class="kw">using</span> System;
@@ -259,11 +258,11 @@ First track: Speak To Me</code></pre>
 }</code></pre>
 <p>Output from the example:</p>
 <pre class="console"><code>[1,2,3,{&quot;color&quot;:&quot;blue&quot;}]</code></pre>
-<h2 id="configuring-the-librarys-behaviour"><a href="#configuring-the-librarys-behaviour">Configuring the library’s behaviour</a></h2>
-<p>JSON is a very concise data–interchange format; nothing more, nothing less. For this reason, handling data in JSON format inside a program may require a deliberate decision on your part regarding some little detail that goes beyond the scope of JSON’s specs.</p>
-<p>Consider, for example, reading data from JSON strings where single–quotes are used to delimit strings, or Javascript–style comments are included as a form of documentation. Those things are not part of the JSON standard, but they are commonly used by some developers, so you may want to be forgiving or strict depending on the situation. Or what about if you want to convert a <em>.Net</em> object into a JSON string, but pretty–printed (using indentation)?</p>
+<h2 id="configuring-the-librarys-behaviour">Configuring the library’s behaviour</h2>
+<p>JSON is a very concise data-interchange format; nothing more, nothing less. For this reason, handling data in JSON format inside a program may require a deliberate decision on your part regarding some little detail that goes beyond the scope of JSON’s specs.</p>
+<p>Consider, for example, reading data from JSON strings where single-quotes are used to delimit strings, or Javascript-style comments are included as a form of documentation. Those things are not part of the JSON standard, but they are commonly used by some developers, so you may want to be forgiving or strict depending on the situation. Or what about if you want to convert a <em>.Net</em> object into a JSON string, but pretty-printed (using indentation)?</p>
 <p>To declare the behaviour you want, you may change a few properties from your <code>JsonReader</code> and <code>JsonWriter</code> objects.</p>
-<h3 id="configuration-of-jsonreader"><a href="#configuration-of-jsonreader">Configuration of <code>JsonReader</code></a></h3>
+<h3 id="configuration-of-jsonreader">Configuration of <code>JsonReader</code></h3>
 <pre class="sourceCode cs"><code class="sourceCode cs"><span class="kw">using</span> LitJson;
 <span class="kw">using</span> System;
 
@@ -320,7 +319,7 @@ Reading an array
   hello  world  [end]
 Reading an array
   Exception caught: Invalid character &#39;&#39;&#39; in input string</code></pre>
-<h3 id="configuration-of-jsonwriter"><a href="#configuration-of-jsonwriter">Configuration of <code>JsonWriter</code></a></h3>
+<h3 id="configuration-of-jsonwriter">Configuration of <code>JsonWriter</code></h3>
 <pre class="sourceCode cs"><code class="sourceCode cs"><span class="kw">using</span> LitJson;
 <span class="kw">using</span> System;
 
