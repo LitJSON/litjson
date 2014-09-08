@@ -1,25 +1,28 @@
 LitJSON 0.9.0
 =============
 
-*To Be Announced*
+2014-09-08
 
-Additions:
+## Additions
 
 * Added `JsonData.Keys` property, with type `ICollection<string>`.
 
-Bug fixes:
+## Bug fixes
 
 * Handle nullable types (Issue #3)
 * Parse UInt64 numbers correctly
 
-Other changes:
+## Other changes
 
 * Allow specifying a custom PKG_CONFIG in build/make.
 
-Contributors for this release:
+## Contributors for this release
 
-  - Michael Bartnett (@michaelbartnett)
-  - @MickeyKim
+- Michael Bartnett (@michaelbartnett)
+- @MickeyKim
+
+
+- - -
 
 
 LitJSON 0.7.0
