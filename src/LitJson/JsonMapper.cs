@@ -396,6 +396,12 @@ namespace LitJson
                     elem_type = inst_type.GetElementType ();
                 }
 
+                // make the JsonData object set its type to JsonType.Array
+                // (otherwise empty lists would have JsonType.None)
+
+                if (list.GetType() == typeof (JsonData))
+                    list.Clear();
+
                 while (true) {
                     object item = ReadValue (elem_type, reader);
                     if (item == null && reader.Token == JsonToken.ArrayEnd)
@@ -418,6 +424,12 @@ namespace LitJson
                 ObjectMetadata t_data = object_metadata[value_type];
 
                 instance = Activator.CreateInstance (value_type);
+
+                // make the JsonData object set its type to JsonType.Object
+                // (otherwise empty objects would have JsonType.None)
+
+                if (instance.GetType() == typeof (JsonData))
+                    ((IDictionary)instance).Clear();
 
                 while (true) {
                     reader.Read ();
