@@ -148,7 +148,9 @@ namespace LitJson.Test
             Assert.IsTrue (a.Equals (b), "A4");
 
             b = 10;
-            Assert.IsFalse (a.Equals (b), "A5");
+            //Assert.IsFalse (a.Equals (b), "A5");
+            // actually we expect ints and longs to compare true if they are within range
+            Assert.IsTrue (a.Equals (b), "A5");
             b = 11L;
             Assert.IsFalse (a.Equals (b), "A6");
 
