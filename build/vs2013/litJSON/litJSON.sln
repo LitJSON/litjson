@@ -1,0 +1,33 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.31101.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "litJSON", "litJSON.csproj", "{46540366-39B8-4A53-A1EB-3F739F11D03D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "litJSONTests", "..\litJSONTests\litJSONTests.csproj", "{2B4C7214-ED43-4F23-8B54-26BBA72BE3AA}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{DD56CE60-8221-4925-B1B6-467D2DBB1377}"
+	ProjectSection(SolutionItems) = preProject
+		.nuget\packages.config = .nuget\packages.config
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{46540366-39B8-4A53-A1EB-3F739F11D03D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{46540366-39B8-4A53-A1EB-3F739F11D03D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{46540366-39B8-4A53-A1EB-3F739F11D03D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{46540366-39B8-4A53-A1EB-3F739F11D03D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2B4C7214-ED43-4F23-8B54-26BBA72BE3AA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2B4C7214-ED43-4F23-8B54-26BBA72BE3AA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2B4C7214-ED43-4F23-8B54-26BBA72BE3AA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2B4C7214-ED43-4F23-8B54-26BBA72BE3AA}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
