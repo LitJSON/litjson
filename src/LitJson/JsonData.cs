@@ -31,6 +31,7 @@ namespace LitJson
         private string                        inst_string;
         private string                        json;
         private JsonType                      type;
+        private float                         inst_float;
 
         // Used to implement the IOrderedDictionary interface
         private IList<KeyValuePair<string, JsonData>> object_list;
@@ -68,6 +69,10 @@ namespace LitJson
 
         public bool IsString {
             get { return type == JsonType.String; }
+        }
+        public bool IsFloat
+        {
+            get { return type == JsonType.Float; }
         }
 
         public ICollection<string> Keys {
@@ -168,6 +173,10 @@ namespace LitJson
 
         bool IJsonWrapper.IsString {
             get { return IsString; }
+        }
+        bool IJsonWrapper.IsFloat
+        {
+            get { return IsFloat; }
         }
         #endregion
 
@@ -333,6 +342,11 @@ namespace LitJson
             type = JsonType.Long;
             inst_long = number;
         }
+        public JsonData(float number)
+        {
+            type = JsonType.Float;
+            inst_float = number;
+        }
 
         public JsonData (object obj)
         {
@@ -345,6 +359,13 @@ namespace LitJson
             if (obj is Double) {
                 type = JsonType.Double;
                 inst_double = (double) obj;
+                return;
+            }
+
+            if (obj is float)
+            {
+                type = JsonType.Float;
+                inst_float = (float)obj;
                 return;
             }
 
@@ -403,6 +424,10 @@ namespace LitJson
         {
             return new JsonData (data);
         }
+        public static implicit operator JsonData(float data)
+        {
+            return new JsonData (data);
+        }
         #endregion
 
 
@@ -450,6 +475,13 @@ namespace LitJson
                     "Instance of JsonData doesn't hold a string");
 
             return data.inst_string;
+        }
+        public static explicit operator float(JsonData data)
+        {
+            if(data.type!=JsonType.Float)
+                throw new InvalidCastException(
+                    "Instance of JsonData doesn't hold a float");
+            return data.inst_float;
         }
         #endregion
 
@@ -563,6 +595,14 @@ namespace LitJson
             return inst_string;
         }
 
+        float IJsonWrapper.GetFloat()
+        {
+            if(type!=JsonType.Float)
+                throw new InvalidOperationException(
+                    "JsonData instance doesn't hold a float");
+            return inst_float;
+        }
+
         void IJsonWrapper.SetBoolean (bool val)
         {
             type = JsonType.Boolean;
@@ -595,6 +635,13 @@ namespace LitJson
         {
             type = JsonType.String;
             inst_string = val;
+            json = null;
+        }
+
+        void IJsonWrapper.SetFloat(float val)
+        {
+            type = JsonType.Float;
+            inst_float = val;
             json = null;
         }
 
@@ -761,6 +808,12 @@ namespace LitJson
                 return;
             }
 
+            if (obj.IsFloat)
+            {
+                writer.Write(obj.GetFloat());
+                return;
+            }
+
             if (obj.IsInt) {
                 writer.Write (obj.GetInt ());
                 return;
@@ -849,6 +902,8 @@ namespace LitJson
 
             case JsonType.Boolean:
                 return this.inst_boolean.Equals (x.inst_boolean);
+            case JsonType.Float:
+                return this.inst_float.Equals(x.inst_float);
             }
 
             return false;
@@ -895,6 +950,9 @@ namespace LitJson
 
             case JsonType.Boolean:
                 inst_boolean = default (Boolean);
+                break;
+            case JsonType.Float:
+                inst_float = default(float);
                 break;
             }
 
@@ -950,6 +1008,8 @@ namespace LitJson
 
             case JsonType.String:
                 return inst_string;
+            case JsonType.Float:
+                return inst_float.ToString();
             }
 
             return "Uninitialized JsonData";

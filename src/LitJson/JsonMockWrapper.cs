@@ -26,6 +26,7 @@ namespace LitJson
         public bool IsLong    { get { return false; } }
         public bool IsObject  { get { return false; } }
         public bool IsString  { get { return false; } }
+        public bool IsFloat   { get { return false; } }
 
         public bool     GetBoolean ()  { return false; }
         public double   GetDouble ()   { return 0.0; }
@@ -33,6 +34,7 @@ namespace LitJson
         public JsonType GetJsonType () { return JsonType.None; }
         public long     GetLong ()     { return 0L; }
         public string   GetString ()   { return ""; }
+        public float    GetFloat() { return 0.0f; }
 
         public void SetBoolean  (bool val)      {}
         public void SetDouble   (double val)    {}
@@ -40,6 +42,7 @@ namespace LitJson
         public void SetJsonType (JsonType type) {}
         public void SetLong     (long val)      {}
         public void SetString   (string val)    {}
+        public void SetFloat    (float val)     {} 
 
         public string ToJson ()                  { return ""; }
         public void   ToJson (JsonWriter writer) {}

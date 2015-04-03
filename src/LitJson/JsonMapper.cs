@@ -327,9 +327,21 @@ namespace LitJson
                 reader.Token == JsonToken.Int ||
                 reader.Token == JsonToken.Long ||
                 reader.Token == JsonToken.String ||
-                reader.Token == JsonToken.Boolean) {
+                reader.Token == JsonToken.Boolean||
+                reader.Token==JsonToken.Float) {
 
                 Type json_type = reader.Value.GetType ();
+
+                //int32 cast to int64 add by Melon
+                if (json_type.Name.Equals("Int32") && inst_type.Name.Equals("Int64"))
+                {
+                    return reader.Value;
+                }
+                //int cast to float or double add by Melon
+                //if ((json_type.Name.Equals("Double") || json_type.Name.Equals("Float")) && inst_type.Name.Equals("Single"))
+                //{
+                //    return reader.Value;
+                //}
 
                 if (value_type.IsAssignableFrom (json_type))
                     return reader.Value;
@@ -498,6 +510,11 @@ namespace LitJson
                 instance.SetDouble ((double) reader.Value);
                 return instance;
             }
+            if (reader.Token == JsonToken.Float)
+            {
+                instance.SetFloat((float)reader.Value);
+                return instance;
+            }
 
             if (reader.Token == JsonToken.Int) {
                 instance.SetInt ((int) reader.Value);
@@ -598,8 +615,18 @@ namespace LitJson
                 delegate (object obj, JsonWriter writer) {
                     writer.Write ((ulong) obj);
                 };
+            base_exporters_table[typeof(float)] =
+                delegate(object obj, JsonWriter writer)
+                {
+                    writer.Write((float)obj);
+                };
+            base_exporters_table[typeof(Int64)] =
+                delegate(object obj, JsonWriter writer)
+                {
+                    writer.Write((Int64)obj);
+                };
         }
-
+                            
         private static void RegisterBaseImporters ()
         {
             ImporterFunc importer;
@@ -658,6 +685,12 @@ namespace LitJson
             RegisterImporter (base_importers_table, typeof (double),
                               typeof (decimal), importer);
 
+            importer = delegate(object input)
+            {
+                return Convert.ToSingle((float)input);
+            };
+            RegisterImporter(base_importers_table,typeof(float),
+                              typeof(decimal), importer);
 
             importer = delegate (object input) {
                 return Convert.ToUInt32 ((long) input);
@@ -719,6 +752,12 @@ namespace LitJson
 
             if (obj is Double) {
                 writer.Write ((double) obj);
+                return;
+            }
+
+            if (obj is float)
+            {
+                writer.Write((float)obj);
                 return;
             }
 
