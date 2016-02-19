@@ -436,11 +436,11 @@ namespace LitJson
 
         public static explicit operator Int64 (JsonData data)
         {
-            if (data.type != JsonType.Long)
+            if (data.type != JsonType.Long && data.type != JsonType.Int)
                 throw new InvalidCastException (
                     "Instance of JsonData doesn't hold an int");
 
-            return data.inst_long;
+            return (data.type == JsonType.Long) ? data.inst_long : data.inst_int;
         }
 
         public static explicit operator String (JsonData data)
