@@ -19,6 +19,18 @@ using System.Reflection;
 
 namespace LitJson
 {
+    public class JsonName : Attribute
+    {
+        public string Name { get; protected set; }
+        public JsonName(string name)
+        {
+            this.Name = name;
+        }
+    }
+    public class JsonIgnore : Attribute
+    {
+    }
+
     internal struct PropertyMetadata
     {
         public MemberInfo Info;
@@ -208,6 +220,9 @@ namespace LitJson
             data.Properties = new Dictionary<string, PropertyMetadata> ();
 
             foreach (PropertyInfo p_info in type.GetProperties ()) {
+                if (p_info.GetCustomAttributes(typeof(JsonIgnore), true).Length > 0)
+                    continue;
+                
                 if (p_info.Name == "Item") {
                     ParameterInfo[] parameters = p_info.GetIndexParameters ();
 
@@ -224,16 +239,19 @@ namespace LitJson
                 p_data.Info = p_info;
                 p_data.Type = p_info.PropertyType;
 
-                data.Properties.Add (p_info.Name, p_data);
+                data.Properties.Add (getPropertyName(p_info), p_data);
             }
 
             foreach (FieldInfo f_info in type.GetFields ()) {
+                if (f_info.GetCustomAttributes(typeof(JsonIgnore), true).Length > 0)
+                    continue;
+
                 PropertyMetadata p_data = new PropertyMetadata ();
                 p_data.Info = f_info;
                 p_data.IsField = true;
                 p_data.Type = f_info.FieldType;
 
-                data.Properties.Add (f_info.Name, p_data);
+                data.Properties.Add (getPropertyName(f_info), p_data);
             }
 
             lock (object_metadata_lock) {
@@ -804,7 +822,7 @@ namespace LitJson
             writer.WriteObjectStart ();
             foreach (PropertyMetadata p_data in props) {
                 if (p_data.IsField) {
-                    writer.WritePropertyName (p_data.Info.Name);
+                    writer.WritePropertyName (getPropertyName(p_data.Info));
                     WriteValue (((FieldInfo) p_data.Info).GetValue (obj),
                                 writer, writer_is_private, depth + 1);
                 }
@@ -812,13 +830,23 @@ namespace LitJson
                     PropertyInfo p_info = (PropertyInfo) p_data.Info;
 
                     if (p_info.CanRead) {
-                        writer.WritePropertyName (p_data.Info.Name);
+                        writer.WritePropertyName (getPropertyName(p_data.Info));
                         WriteValue (p_info.GetValue (obj, null),
                                     writer, writer_is_private, depth + 1);
                     }
                 }
             }
             writer.WriteObjectEnd ();
+        }
+
+        //When the field has the JSONName property it will 
+        private static string getPropertyName(MemberInfo memInfo)
+        {
+            var attrs = memInfo.GetCustomAttributes(typeof(JsonName), true);
+            if (attrs.Length > 0)
+                return ((JsonName)attrs[0]).Name;
+            else
+                return memInfo.Name;
         }
         #endregion
 
