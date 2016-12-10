@@ -239,7 +239,9 @@ namespace LitJson
                 p_data.Info = p_info;
                 p_data.Type = p_info.PropertyType;
 
-                data.Properties.Add (getPropertyName(p_info), p_data);
+                foreach(var name in getPropertyNames(p_info)) {
+                    data.Properties.Add (name, p_data);
+                }
             }
 
             foreach (FieldInfo f_info in type.GetFields ()) {
@@ -251,7 +253,9 @@ namespace LitJson
                 p_data.IsField = true;
                 p_data.Type = f_info.FieldType;
 
-                data.Properties.Add (getPropertyName(f_info), p_data);
+                foreach(var name in getPropertyNames(f_info)) {
+                    data.Properties.Add (name, p_data);
+                }
             }
 
             lock (object_metadata_lock) {
@@ -843,10 +847,23 @@ namespace LitJson
         private static string getPropertyName(MemberInfo memInfo)
         {
             var attrs = memInfo.GetCustomAttributes(typeof(JsonName), true);
-            if (attrs.Length > 0)
-                return ((JsonName)attrs[0]).Name;
+            if(attrs.Length > 0) {
+                var names = ((JsonName)attrs[0]).Name.Split(',');
+                return names[0];
+            }
             else
                 return memInfo.Name;
+        }
+
+        //When the field has the JSONName property it will 
+        private static string[] getPropertyNames(MemberInfo memInfo)
+        {
+            var attrs = memInfo.GetCustomAttributes(typeof(JsonName), true);
+            if(attrs.Length > 0) {
+                return ((JsonName)attrs[0]).Name.Split(',');
+            }
+            else
+                return new string[] { memInfo.Name };
         }
         #endregion
 
