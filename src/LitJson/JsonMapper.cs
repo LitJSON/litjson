@@ -849,7 +849,7 @@ namespace LitJson
             var attrs = memInfo.GetCustomAttributes(typeof(JsonName), true);
             if(attrs.Length > 0) {
                 var names = ((JsonName)attrs[0]).Name.Split(',');
-                return names[0];
+                return names[0].Trim();
             }
             else
                 return memInfo.Name;
@@ -860,7 +860,7 @@ namespace LitJson
         {
             var attrs = memInfo.GetCustomAttributes(typeof(JsonName), true);
             if(attrs.Length > 0) {
-                return ((JsonName)attrs[0]).Name.Split(',');
+                return ((JsonName)attrs[0]).Name.Split(new char[] {',', ' '}, StringSplitOptions.RemoveEmptyEntries);
             }
             else
                 return new string[] { memInfo.Name };
