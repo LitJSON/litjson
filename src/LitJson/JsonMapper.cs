@@ -21,10 +21,10 @@ namespace LitJson
 {
     public class JsonName : Attribute
     {
-        public string Name { get; protected set; }
-        public JsonName(string name)
+        public string[] Names { get; protected set; }
+        public JsonName(params string[] names)
         {
-            this.Name = name;
+            this.Names = names;
         }
     }
     public class JsonIgnore : Attribute
@@ -848,8 +848,7 @@ namespace LitJson
         {
             var attrs = memInfo.GetCustomAttributes(typeof(JsonName), true);
             if(attrs.Length > 0) {
-                var names = ((JsonName)attrs[0]).Name.Split(',');
-                return names[0].Trim();
+                return ((JsonName)attrs[0]).Names[0];
             }
             else
                 return memInfo.Name;
@@ -860,7 +859,7 @@ namespace LitJson
         {
             var attrs = memInfo.GetCustomAttributes(typeof(JsonName), true);
             if(attrs.Length > 0) {
-                return ((JsonName)attrs[0]).Name.Split(new char[] {',', ' '}, StringSplitOptions.RemoveEmptyEntries);
+                return ((JsonName)attrs[0]).Names;
             }
             else
                 return new string[] { memInfo.Name };
