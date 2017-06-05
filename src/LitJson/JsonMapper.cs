@@ -412,6 +412,8 @@ namespace LitJson
 
                 if (! t_data.IsArray) {
                     list = (IList) Activator.CreateInstance (inst_type);
+                    // JsonData needs this to properly initialize in the empty case
+                    list.Clear();
                     elem_type = t_data.ElementType;
                 } else {
                     list = new ArrayList ();
@@ -428,10 +430,10 @@ namespace LitJson
 
                 if (t_data.IsArray) {
                     int n = list.Count;
-                    instance = Array.CreateInstance (elem_type, n);
+                    instance = Array.CreateInstance(elem_type, n);
 
-                    for (int i = 0; i < n; i++)
-                        ((Array) instance).SetValue (list[i], i);
+                    for(int i = 0; i < n; i++)
+                        ((Array)instance).SetValue(list[i], i);
                 } else
                     instance = list;
 
@@ -440,6 +442,10 @@ namespace LitJson
                 ObjectMetadata t_data = object_metadata[value_type];
 
                 instance = Activator.CreateInstance (value_type);
+                if(t_data.IsDictionary) {
+                    // JsonData needs this to properly initialize in the empty case
+                    ((IDictionary)instance).Clear();
+                }
 
                 while (true) {
                     reader.Read ();
