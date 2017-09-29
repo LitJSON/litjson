@@ -409,47 +409,53 @@ namespace LitJson
         #region Explicit Conversions
         public static explicit operator Boolean (JsonData data)
         {
-            if (data.type != JsonType.Boolean)
-                throw new InvalidCastException (
-                    "Instance of JsonData doesn't hold a double");
-
-            return data.inst_boolean;
+            if (data.type == JsonType.Boolean)
+                return data.inst_boolean;
+            else
+                throw new InvalidCastException(
+                    "Instance of JsonData doesn't hold a boolean");
         }
 
         public static explicit operator Double (JsonData data)
         {
-            if (data.type != JsonType.Double)
-                throw new InvalidCastException (
+            if (data.type == JsonType.Double)
+                return data.inst_double;
+            else if (data.type == JsonType.Int)
+                return data.inst_int;
+            else if (data.type == JsonType.Long)
+                return data.inst_long;
+            else
+                throw new InvalidCastException(
                     "Instance of JsonData doesn't hold a double");
-
-            return data.inst_double;
         }
 
         public static explicit operator Int32 (JsonData data)
         {
-            if (data.type != JsonType.Int)
-                throw new InvalidCastException (
-                    "Instance of JsonData doesn't hold an int");
-
-            return data.inst_int;
+            if (data.type == JsonType.Int)
+                return data.inst_int;
+            else
+                throw new InvalidCastException(
+                        "Instance of JsonData doesn't hold an int");
         }
 
         public static explicit operator Int64 (JsonData data)
         {
-            if (data.type != JsonType.Long)
-                throw new InvalidCastException (
-                    "Instance of JsonData doesn't hold an int");
-
-            return data.inst_long;
+            if (data.type == JsonType.Long)
+                return data.inst_long;
+            else if (data.type == JsonType.Int)
+                return data.inst_int;
+            else
+                throw new InvalidCastException(
+                        "Instance of JsonData doesn't hold an int64");
         }
 
         public static explicit operator String (JsonData data)
         {
-            if (data.type != JsonType.String)
-                throw new InvalidCastException (
-                    "Instance of JsonData doesn't hold a string");
-
-            return data.inst_string;
+            if (data.type == JsonType.String)
+                return data.inst_string;
+            else
+                throw new InvalidCastException(
+                        "Instance of JsonData doesn't hold a string");
         }
         #endregion
 
