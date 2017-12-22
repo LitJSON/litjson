@@ -877,6 +877,13 @@ namespace LitJson
 
             return (T) ReadValue (typeof (T), reader);
         }
+        
+        public static object ToObject(string json, Type ConvertType )
+        {
+            JsonReader reader = new JsonReader(json);
+
+            return ReadValue(ConvertType, reader);
+        }
 
         public static IJsonWrapper ToWrapper (WrapperFactory factory,
                                               JsonReader reader)
