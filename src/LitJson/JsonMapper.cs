@@ -97,9 +97,19 @@ namespace LitJson
     public delegate IJsonWrapper WrapperFactory ();
 
 
+    [Flags]
+    public enum JsonMapperOptions
+    {
+	None = 0x00,
+	DateTimesAlwaysUniversal = 0x01,
+    }
+
+
     public class JsonMapper
     {
         #region Fields
+	public static JsonMapperOptions Options;
+
         private static int max_nesting_depth;
 
         private static IFormatProvider datetime_format;
@@ -667,7 +677,11 @@ namespace LitJson
                               typeof (char), importer);
 
             importer = delegate (object input) {
-                return Convert.ToDateTime ((string) input, datetime_format);
+		DateTime result = Convert.ToDateTime((string) input, datetime_format);
+		if ((JsonMapper.Options & JsonMapperOptions.DateTimesAlwaysUniversal) != 0) {
+		    result = result.ToUniversalTime();
+		}
+		return result;
             };
             RegisterImporter (base_importers_table, typeof (string),
                               typeof (DateTime), importer);
