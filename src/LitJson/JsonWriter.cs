@@ -332,6 +332,21 @@ namespace LitJson
             context.ExpectingValue = false;
         }
 
+        public void Write(float number)
+        {
+            DoValidation(Condition.Value);
+            PutNewline();
+
+            string str = Convert.ToString(number, number_format);
+            Put(str);
+
+            if (str.IndexOf('.') == -1 &&
+                str.IndexOf('E') == -1)
+                writer.Write(".0");
+
+            context.ExpectingValue = false;
+        }
+
         public void Write (int number)
         {
             DoValidation (Condition.Value);

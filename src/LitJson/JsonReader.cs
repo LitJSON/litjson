@@ -13,6 +13,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using System.Globalization;
 
 
 namespace LitJson
@@ -35,7 +36,8 @@ namespace LitJson
         String,
 
         Boolean,
-        Null
+        Null,
+        Float
     }
 
 
@@ -266,10 +268,18 @@ namespace LitJson
                 number.IndexOf ('E') != -1) {
 
                 double n_double;
+                float n_float;
                 if (Double.TryParse (number, out n_double)) {
-                    token = JsonToken.Double;
-                    token_value = n_double;
-
+                    if (float.TryParse(number, NumberStyles.Float, null, out n_float))
+                    {
+                        token = JsonToken.Float;
+                        token_value = n_float;
+                    }
+                    else
+                    {
+                        token = JsonToken.Double;
+                        token_value = n_double;
+                    }
                     return;
                 }
             }
