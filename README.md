@@ -1,6 +1,8 @@
 LitJSON
 =======
 
+[![Build status](https://ci.appveyor.com/api/projects/status/ciq9vo4caq0wmxap/branch/develop?svg=true)](https://ci.appveyor.com/project/litjson/litjson/branch/develop)
+
 A *.Net* library to handle conversions from and to JSON (JavaScript Object
 Notation) strings.
 
@@ -50,9 +52,24 @@ $ make PKG_CONFIG=/Library/Frameworks/Mono.framework/Commands/pkg-config test
 
 ## Using LitJSON from an application
 
-Reference the `LitJson.dll` file when compiling your code. For a link to
-download this file, see the *Download* section in the project's
-[website][litjson].
+#### Package manager
+
+```PowerShell
+Install-Package LitJson -Version 0.9.0
+```
+
+#### .NET CLI
+
+```PowerShell
+dotnet add package LitJson --version 0.9.0
+```
+
+#### Paket CLI
+
+```PowerShell
+paket add LitJson --version 0.9.0
+```
+
 
 Alternatively, just copy the whole tree of files under `src/LitJSON` to your
 own project's source tree and integrate it with your development environment.
@@ -62,7 +79,7 @@ own project's source tree and integrate it with your development environment.
 [Unlicense][unlicense] (public domain).
 
 
-[litjson]: http://lbv.github.io/litjson/
+[litjson]: [unlicense](http://unlicense.org/
 [nunit]: http://www.nunit.org/
 [pkg-config]: http://www.freedesktop.org/wiki/Software/pkg-config
 [unlicense]: http://unlicense.org/

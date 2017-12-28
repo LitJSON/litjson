@@ -1,0 +1,14 @@
+version: 1.0.{build}
+image: Visual Studio 2017
+install:
+- ps: >-
+    choco install make
+
+
+    mkdir bin
+build_script:
+- cmd: >-
+    cd build/make
+
+    make CSC='"C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\MSBuild\15.0\Bin\Roslyn\csc.exe"'
+test: off
