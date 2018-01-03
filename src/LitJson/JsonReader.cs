@@ -395,7 +395,9 @@ namespace LitJson
             end_of_json  = true;
 
             if (reader_is_owned)
-                reader.Close ();
+            {
+                using(reader){}
+            }
 
             reader = null;
         }
