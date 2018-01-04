@@ -1,0 +1,23 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFrameworks>netcoreapp2.0;net45</TargetFrameworks>
+
+    <IsPackable>false</IsPackable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="nunit" Version="3.9.0" />
+    <PackageReference Include="NUnit3TestAdapter" Version="3.9.0" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.5.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\src\LitJson\LitJSON.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="**/*.txt" />
+  </ItemGroup>
+
+</Project>

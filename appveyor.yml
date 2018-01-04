@@ -1,14 +1,9 @@
-version: 1.0.{build}
-image: Visual Studio 2017
-install:
-- ps: >-
-    choco install make
+# Operating system (build VM template)
+os: Visual Studio 2017
 
-
-    mkdir bin
+# Build script
 build_script:
-- cmd: >-
-    cd build/make
+  - ps: .\build.ps1  --target="AppVeyor" --verbosity=Verbose
 
-    make CSC='"C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\MSBuild\15.0\Bin\Roslyn\csc.exe"'
+# Tests
 test: off
