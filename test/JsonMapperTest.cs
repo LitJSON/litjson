@@ -465,7 +465,7 @@ namespace LitJson.Test
             Assembly asmb = typeof (JsonMapperTest).Assembly;
 
             StreamReader stream = new StreamReader (
-                asmb.GetManifestResourceStream ("json-example.txt"));
+                asmb.GetManifestResourceStream (asmb.GetName().Name + ".json-example.txt"));
 
             using (stream) {
                 data = JsonMapper.ToObject (stream);
@@ -753,7 +753,6 @@ namespace LitJson.Test
         }
 
         [Test]
-        [ExpectedException (typeof (JsonException))]
         public void ImportObjectNonMembersTest()
         {
             string json = @"
@@ -771,12 +770,13 @@ namespace LitJson.Test
             JsonReader reader = new JsonReader(json);
             reader.SkipNonMembers = false;
 
-            UiWindow window = JsonMapper.ToObject<UiWindow>(reader);
-            window.title = "Unreachable";
+            Assert.Throws<JsonException>(() => {
+                UiWindow window = JsonMapper.ToObject<UiWindow>(reader);
+                window.title = "Unreachable";
+            });
         }
 
         [Test]
-        [ExpectedException (typeof (JsonException))]
         public void ImportStrictCommentsTest ()
         {
             string json = @"
@@ -790,14 +790,15 @@ namespace LitJson.Test
             JsonReader reader = new JsonReader (json);
             reader.AllowComments = false;
 
-            JsonData data = JsonMapper.ToObject (reader);
+            Assert.Throws<JsonException>(() => {
+                JsonData data = JsonMapper.ToObject (reader);
 
-            if (data.Count != 3)
-                data = JsonMapper.ToObject (reader);
+                if (data.Count != 3)
+                    data = JsonMapper.ToObject (reader);
+            });
         }
 
         [Test]
-        [ExpectedException (typeof (JsonException))]
         public void ImportStrictStringsTest ()
         {
             string json = "[ 'Look! Single quotes' ]";
@@ -805,10 +806,12 @@ namespace LitJson.Test
             JsonReader reader = new JsonReader (json);
             reader.AllowSingleQuotedStrings = false;
 
-            JsonData data = JsonMapper.ToObject (reader);
+            Assert.Throws<JsonException>(() => {
+                JsonData data = JsonMapper.ToObject (reader);
 
-            if (data[0] == null)
-                data = JsonMapper.ToObject (reader);
+                if (data[0] == null)
+                    data = JsonMapper.ToObject (reader);
+            });
         }
 
         [Test]

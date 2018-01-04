@@ -1,3 +1,10 @@
 /bin
 /src/LitJson/AssemblyInfo.cs
 /website
+[Oo]bj/
+[Bb]in/
+.vscode/
+[Tt]ools/*
+![Tt]ools/packages.config
+[Aa]rtifacts/
+.[Dd]otnet/
