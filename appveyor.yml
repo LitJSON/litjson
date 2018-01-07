@@ -7,3 +7,6 @@ build_script:
 
 # Tests
 test: off
+
+init:
+  - git config --global core.autocrlf true
