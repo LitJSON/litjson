@@ -83,7 +83,7 @@ Task("Clean")
             "./test/bin",
             "./src/obj",
             "./test/obj",
-            "./artifacts/nuget"   
+            "./artifacts/nuget"
         }
     );
 });
@@ -102,7 +102,8 @@ Task("Build")
     DotNetCoreBuild("./LitJSON.sln",
         new DotNetCoreBuildSettings {
             Configuration = configuration,
-            MSBuildSettings = msBuildSettings
+            MSBuildSettings = msBuildSettings,
+            ArgumentCustomization = args => args.Append("--no-restore")
         }
     );
 });
@@ -114,7 +115,8 @@ Task("Test")
         new DotNetCoreTestSettings {
             Configuration = configuration,
             Framework = "netcoreapp2.0",
-            NoBuild = true
+            NoBuild = true,
+            ArgumentCustomization = args => args.Append("--no-restore")
         }
     );
 
@@ -123,8 +125,19 @@ Task("Test")
     });
 });
 
+Task("Test-SourceLink")
+    .IsDependentOn("Build")
+    .WithCriteria(IsRunningOnWindows())
+    .Does(() => {
+    foreach(var asssembly in GetFiles("./src/LitJSON/bin/" + configuration + "/**/*.dll"))
+    {
+        DotNetCoreTool("./src/LitJSON/LitJSON.csproj", "sourcelink", $"test {asssembly}");
+    }
+});
+
 Task("Package")
     .IsDependentOn("Test")
+    .IsDependentOn("Test-SourceLink")
     .Does(() => {
     DotNetCorePack("./src/LitJSON/LitJSON.csproj",
         new DotNetCorePackSettings {
@@ -132,7 +145,8 @@ Task("Package")
             NoBuild = true,
             IncludeSymbols = true,
             OutputDirectory = "./artifacts/nuget",
-            MSBuildSettings = msBuildSettings
+            MSBuildSettings = msBuildSettings,
+            ArgumentCustomization = args => args.Append("--no-restore")
         }
     );
 });
@@ -141,7 +155,6 @@ Task("Upload-AppVeyor-Artifacts")
     .IsDependentOn("Package")
     .WithCriteria(AppVeyor.IsRunningOnAppVeyor)
     .Does(() => {
-
     foreach(var artifact in GetFiles("./artifacts/**/*.*"))
     {
         AppVeyor.UploadArtifact(artifact);
@@ -165,7 +178,7 @@ Task("Publish-MyGet")
     if(string.IsNullOrEmpty(apiUrl)) {
         throw new InvalidOperationException("Could not resolve MyGet API url.");
     }
-    
+
     foreach(var package in (GetFiles("./artifacts/nuget/*.nupkg") - GetFiles("./artifacts/nuget/*.symbols.nupkg")))
     {
         DotNetCoreNuGetPush(package.FullPath,
@@ -194,7 +207,7 @@ Task("Publish-NuGet")
     if(string.IsNullOrEmpty(apiUrl)) {
         throw new InvalidOperationException("Could not resolve MyGet API url.");
     }
-    
+
     foreach(var package in (GetFiles("./artifacts/nuget/*.nupkg") - GetFiles("./artifacts/nuget/*.symbols.nupkg")))
     {
         DotNetCoreNuGetPush(package.FullPath,
