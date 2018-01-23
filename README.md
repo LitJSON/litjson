@@ -82,9 +82,10 @@ LitJSON currently targets and supports
 * .NET Standard 2.0
 * .NET Standard 1.5
 * .NET Framework 4.5 and above
+* .NET Framework 4.0
+* .NET Framework 3.5 (including SQLCLR, for which [WCOMAB/SqlServerSlackAPI](https://github.com/WCOMAB/SqlServerSlackAPI) is an example of)
+* .NET Framework 2.0
 * Mono 4.4.2 and above
-
-But the code is very portable and can even be compiled under SQLCLR, which [WCOMAB/SqlServerSlackAPI](https://github.com/WCOMAB/SqlServerSlackAPI) is an example of.
 
 #### Prereleases
 
