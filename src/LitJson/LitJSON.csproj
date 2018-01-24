@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>netstandard2.0;net45;netstandard1.5;net40;net35</TargetFrameworks>
+    <TargetFrameworks>netstandard2.0;net45;netstandard1.5;net40;net35;net20</TargetFrameworks>
   </PropertyGroup>
 
   <PropertyGroup>
@@ -29,6 +29,11 @@ It's quick and lean, without external dependencies.</Description>
     <RepositoryType>git</RepositoryType>
     <PackageTags>JSON;Serializer</PackageTags>
     <IncludeSource>true</IncludeSource>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(TargetFramework)' == 'net20' ">
+    <DefineConstants>$(DefineConstants);LEGACY</DefineConstants>
+    <FrameworkPathOverride Condition="'$(TargetFramework)' == 'net20' and '$(OS)' == 'Windows_NT'">C:\Windows\Microsoft.NET\Framework\v2.0.50727</FrameworkPathOverride>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(TargetFramework)' == 'net35' ">
