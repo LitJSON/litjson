@@ -232,21 +232,24 @@ namespace LitJson.Test
         {
             JsonWriter writer = new JsonWriter ();
 
-            string json = @"
-[
-    {
-        ""precision"" : ""zip"",
-        ""Latitude""  : 37.7668,
-        ""Longitude"" : -122.3959,
-        ""City""      : ""SAN FRANCISCO""
-    },
-  {
-    ""precision"" : ""zip"",
-    ""Latitude""  : 37.371991,
-    ""Longitude"" : -122.02602,
-    ""City""      : ""SUNNYVALE""
-  }
-]";
+            string json = string.Join(
+                Environment.NewLine,
+                new [] {
+                    "",
+                    "[",
+                    "    {",
+                    "        \"precision\" : \"zip\",",
+                    "        \"Latitude\"  : 37.7668,",
+                    "        \"Longitude\" : -122.3959,",
+                    "        \"City\"      : \"SAN FRANCISCO\"",
+                    "    },",
+                    "  {",
+                    "    \"precision\" : \"zip\",",
+                    "    \"Latitude\"  : 37.371991,",
+                    "    \"Longitude\" : -122.02602,",
+                    "    \"City\"      : \"SUNNYVALE\"",
+                    "  }",
+                    "]"});
 
             writer.PrettyPrint = true;
 
@@ -276,7 +279,7 @@ namespace LitJson.Test
             writer.WriteObjectEnd ();
             writer.WriteArrayEnd ();
 
-            Assert.AreEqual (writer.ToString (), json);
+            Assert.AreEqual (json, writer.ToString ());
         }
 
         [Test]
