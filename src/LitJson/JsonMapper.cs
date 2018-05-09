@@ -622,6 +622,12 @@ namespace LitJson
                               typeof (ulong), importer);
 
             importer = delegate (object input) {
+                return Convert.ToInt64((int)input);
+            };
+            RegisterImporter(base_importers_table, typeof(int),
+                              typeof(long), importer);
+
+            importer = delegate (object input) {
                 return Convert.ToSByte ((int) input);
             };
             RegisterImporter (base_importers_table, typeof (int),
@@ -681,6 +687,12 @@ namespace LitJson
             };
             RegisterImporter (base_importers_table, typeof (string),
                               typeof (DateTime), importer);
+
+            importer = delegate (object input) {
+                return DateTimeOffset.Parse((string)input, datetime_format);
+            };
+            RegisterImporter(base_importers_table, typeof(string),
+                typeof(DateTimeOffset), importer);
         }
 
         private static void RegisterImporter (

@@ -9,4 +9,4 @@ build_script:
 test: off
 
 init:
-  - git config --global core.autocrlf true
+  - git config --global core.autocrlf input

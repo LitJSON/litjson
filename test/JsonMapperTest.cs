@@ -351,12 +351,15 @@ namespace LitJson.Test
             sample["flaming"] = "pie";
             sample["nine"] = 9;
 
-            string expected = @"
-{
-    ""rolling"" : ""stones"",
-    ""flaming"" : ""pie"",
-    ""nine""    : 9
-}";
+            string expected =string.Join(
+                Environment.NewLine,
+                new [] {
+                    "",
+                    "{",
+                    "    \"rolling\" : \"stones\",",
+                    "    \"flaming\" : \"pie\",",
+                    "    \"nine\"    : 9",
+                    "}"});
 
             JsonWriter writer = new JsonWriter ();
             writer.PrettyPrint = true;
@@ -368,12 +371,15 @@ namespace LitJson.Test
             writer.Reset ();
             writer.IndentValue = 8;
 
-            expected = @"
-{
-        ""rolling"" : ""stones"",
-        ""flaming"" : ""pie"",
-        ""nine""    : 9
-}";
+            expected = string.Join(
+                Environment.NewLine,
+                new [] {
+                    "",
+                    "{",
+                    "        \"rolling\" : \"stones\",",
+                    "        \"flaming\" : \"pie\",",
+                    "        \"nine\"    : 9",
+                    "}"});
             JsonMapper.ToJson (sample, writer);
 
             Assert.AreEqual (expected, writer.ToString (), "A2");
