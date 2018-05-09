@@ -147,8 +147,9 @@ namespace LitJson.Test
             b = 10L;
             Assert.IsTrue (a.Equals (b), "A4");
 
+            // Int now comparable to long
             b = 10;
-            Assert.IsFalse (a.Equals (b), "A5");
+            Assert.IsTrue (a.Equals (b), "A5");
             b = 11L;
             Assert.IsFalse (a.Equals (b), "A6");
 
