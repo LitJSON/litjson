@@ -73,6 +73,16 @@ namespace LitJson
         public ICollection<string> Keys {
             get { EnsureDictionary (); return inst_object.Keys; }
         }
+        
+        /// <summary>
+        /// Determines whether the json contains an element that has the specified key.
+        /// </summary>
+        /// <param name="key">The key to locate in the json.</param>
+        /// <returns>true if the json contains an element that has the specified key; otherwise, false.</returns>
+        public Boolean ContainsKey(String key) {
+            EnsureDictionary();
+            return this.inst_object.Keys.Contains(key);
+        }
         #endregion
 
 
