@@ -1,4 +1,4 @@
-#region Header
+﻿#region Header
 /**
  * JsonMapperTest.cs
  *   Tests for the JsonMapper class.
@@ -1032,6 +1032,23 @@ namespace LitJson.Test
             value = new NullableEnumTest() { TestEnum = null };
             expectedJson = "{\"TestEnum\":null}";
             Assert.AreEqual(expectedJson, JsonMapper.ToJson(value));
+        }
+
+        [Test]
+        public void ExportNotUnicodeTest()
+        {
+            string[] strs = new[]
+            {
+                "Россия\tРусский",
+                "Україна\tУкраїнська",
+                "대한민국\t한국어 ",
+                "中国\t简体中文",
+                "台灣\t繁體中文",
+            };
+
+            string json = JsonMapper.ToJson(strs, false);
+
+            Assert.AreEqual("[\"" + string.Join("\",\"", strs).Replace("\t", "\\t") + "\"]", json);
         }
     }
 }

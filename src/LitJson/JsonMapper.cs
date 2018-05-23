@@ -855,6 +855,13 @@ namespace LitJson
                 return static_writer.ToString ();
             }
         }
+        public static string ToJson(object obj,bool isUnicode)
+        {
+            static_writer.IsUnicode = isUnicode;
+            string json= ToJson(obj);
+            static_writer.IsUnicode = true;
+            return json;
+        }
 
         public static void ToJson (object obj, JsonWriter writer)
         {

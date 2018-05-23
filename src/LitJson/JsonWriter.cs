@@ -52,6 +52,7 @@ namespace LitJson
         private bool                 validate;
         private bool                 lower_case_properties;
         private TextWriter           writer;
+        private bool _isUnicode=true;
         #endregion
 
 
@@ -81,6 +82,12 @@ namespace LitJson
         public bool LowerCaseProperties {
             get { return lower_case_properties; }
             set { lower_case_properties = value; }
+        }
+
+        public bool IsUnicode
+        {
+            get { return _isUnicode; }
+            set { _isUnicode = value; }
         }
         #endregion
 
@@ -231,46 +238,88 @@ namespace LitJson
             Put (String.Empty);
 
             writer.Write ('"');
+            if (_isUnicode)
+            {
+                int n = str.Length;
+                for (int i = 0; i < n; i++) {
+                    switch (str[i]) {
+                        case '\n':
+                            writer.Write("\\n");
+                            continue;
 
-            int n = str.Length;
-            for (int i = 0; i < n; i++) {
-                switch (str[i]) {
-                case '\n':
-                    writer.Write ("\\n");
-                    continue;
+                        case '\r':
+                            writer.Write("\\r");
+                            continue;
 
-                case '\r':
-                    writer.Write ("\\r");
-                    continue;
+                        case '\t':
+                            writer.Write("\\t");
+                            continue;
 
-                case '\t':
-                    writer.Write ("\\t");
-                    continue;
+                        case '"':
+                        case '\\':
+                            writer.Write('\\');
+                            writer.Write(str[i]);
+                            continue;
 
-                case '"':
-                case '\\':
-                    writer.Write ('\\');
-                    writer.Write (str[i]);
-                    continue;
+                        case '\f':
+                            writer.Write("\\f");
+                            continue;
 
-                case '\f':
-                    writer.Write ("\\f");
-                    continue;
+                        case '\b':
+                            writer.Write("\\b");
+                            continue;
+                    }
 
-                case '\b':
-                    writer.Write ("\\b");
-                    continue;
+                    if ((int) str[i] >= 32 && (int) str[i] <= 126) {
+                        writer.Write(str[i]);
+                        continue;
+                    }
+
+                    // Default, turn into a \uXXXX sequence
+                    IntToHex((int) str[i], hex_seq);
+                    writer.Write("\\u");
+                    writer.Write(hex_seq);
                 }
-
-                if ((int) str[i] >= 32 && (int) str[i] <= 126) {
-                    writer.Write (str[i]);
-                    continue;
+            }
+            else
+            {
+                StringBuilder sb = new StringBuilder(str);
+                for (int i = 0; i < sb.Length; i++)
+                {
+                    switch (sb[i])
+                    {
+                        case '\n':
+                            sb.Remove(i, 1);
+                            sb.Insert(i,"\\n");
+                            i++;
+                            continue;
+                        case '\r':
+                            sb.Remove(i, 1);
+                            i++;
+                            continue;
+                        case '\t':
+                            sb.Remove(i, 1);
+                            sb.Insert(i, "\\t");
+                            i++;
+                            continue;
+                        case '"':
+                        case '\\':
+                            sb.Insert(i, '\\');
+                            i++;
+                            continue;
+                        case '\f':
+                            sb.Remove(i, 1);
+                            sb.Insert(i, "\\f");
+                            i++;
+                            continue;
+                        case '\b':
+                            sb.Remove(i, 1);
+                            sb.Insert(i, "\\b");
+                            i++;
+                            continue;
+                    }
                 }
-
-                // Default, turn into a \uXXXX sequence
-                IntToHex ((int) str[i], hex_seq);
-                writer.Write ("\\u");
-                writer.Write (hex_seq);
+                writer.Write(sb.ToString());
             }
 
             writer.Write ('"');
