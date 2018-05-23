@@ -52,6 +52,7 @@ namespace LitJson
         private bool                 validate;
         private bool                 lower_case_properties;
         private TextWriter           writer;
+        private bool _isUnicode=true;
         #endregion
 
 
@@ -81,6 +82,12 @@ namespace LitJson
         public bool LowerCaseProperties {
             get { return lower_case_properties; }
             set { lower_case_properties = value; }
+        }
+
+        public bool IsUnicode
+        {
+            get { return _isUnicode; }
+            set { _isUnicode = value; }
         }
         #endregion
 
@@ -231,7 +238,8 @@ namespace LitJson
             Put (String.Empty);
 
             writer.Write ('"');
-
+            if (_isUnicode)
+            {
             int n = str.Length;
             for (int i = 0; i < n; i++) {
                 switch (str[i]) {
@@ -271,6 +279,48 @@ namespace LitJson
                 IntToHex ((int) str[i], hex_seq);
                 writer.Write ("\\u");
                 writer.Write (hex_seq);
+            }
+
+            }
+            else
+            {
+                StringBuilder sb = new StringBuilder(str);
+                for (int i = 0; i < sb.Length; i++)
+                {
+                    switch (sb[i])
+                    {
+                        case '\n':
+                            sb.Remove(i, 1);
+                            sb.Insert(i,"\\n");
+                            i++;
+                            continue;
+                        case '\r':
+                            sb.Remove(i, 1);
+                            i++;
+                            continue;
+                        case '\t':
+                            sb.Remove(i, 1);
+                            sb.Insert(i, "\\t");
+                            i++;
+                            continue;
+                        case '"':
+                        case '\\':
+                            sb.Insert(i, '\\');
+                            i++;
+                            continue;
+                        case '\f':
+                            sb.Remove(i, 1);
+                            sb.Insert(i, "\\f");
+                            i++;
+                            continue;
+                        case '\b':
+                            sb.Remove(i, 1);
+                            sb.Insert(i, "\\b");
+                            i++;
+                            continue;
+                    }
+                }
+                writer.Write(sb.ToString());
             }
 
             writer.Write ('"');
