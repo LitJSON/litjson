@@ -8,3 +8,8 @@
 ![Tt]ools/packages.config
 [Aa]rtifacts/
 .[Dd]otnet/
+/.vs/LitJSON/v15/Server/sqlite3/storage.ide-wal
+/.vs/LitJSON/v15/Server/sqlite3/storage.ide-shm
+/.vs/LitJSON/v15/Server/sqlite3/storage.ide
+/.vs/LitJSON/v15/Server/sqlite3/db.lock
+/.vs/LitJSON/v15/.suo
