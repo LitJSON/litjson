@@ -232,6 +232,49 @@ namespace LitJson.Test
         }
 
         [Test]
+        public void RemoveValueFromObject()
+        {
+            string json = "{\"test1\":1}";
+
+            JsonData data = new JsonData();
+            data["test1"] = 1;
+            data["test2"] = 2;
+            data.Remove("test2");
+
+            Assert.AreEqual(json, data.ToJson());
+        }
+
+        [Test]
+        public void RemoveValueFromNestedObject()
+        {
+            string json = "{\"test1\":{\"test3\":3}}";
+
+            JsonData data = new JsonData();
+            data["test1"] = new JsonData();
+            data["test1"]["test2"] = 2;
+            data["test1"]["test3"] = 3;
+            data["test1"].Remove("test2");
+
+            Assert.AreEqual(json, data.ToJson());
+        }
+
+        [Test]
+        public void RemoveValueFromArray()
+        {
+            string json = "[\"test1\",2.0]";
+
+            JsonData data = new JsonData();
+            data.Add("test1");
+            data.Add("test2");
+            data.Remove("test2");
+            data.Add(1);
+            data.Add(2.0);
+            data.Remove(1);
+
+            Assert.AreEqual(json, data.ToJson());
+        }
+
+        [Test]
         public void PropertiesOrderTest ()
         {
             JsonData data = new JsonData ();
