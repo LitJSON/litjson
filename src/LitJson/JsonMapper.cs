@@ -832,11 +832,12 @@ namespace LitJson
                 }
                 else {
                     PropertyInfo p_info = (PropertyInfo) p_data.Info;
-                    object prop_obj = p_info.GetValue(obj, null);
-
-                    if (prop_obj != obj && p_info.CanRead) {
-                        writer.WritePropertyName (p_data.Info.Name);
-                        WriteValue (prop_obj, writer, writer_is_private, depth + 1);
+                    if (p_info.CanRead) {
+                        object prop_obj = p_info.GetValue(obj, null);
+                        if (prop_obj != obj) {
+                            writer.WritePropertyName (p_data.Info.Name);
+                            WriteValue (prop_obj, writer, writer_is_private, depth + 1);
+                        }
                     }
                 }
             }
