@@ -18,6 +18,8 @@ string  version = null,
         semVersion = null,
         milestone = null;
 
+FilePath litjsonProjectPath = "./src/LitJson/LitJSON.csproj";
+
 ///////////////////////////////////////////////////////////////////////////////
 // SETUP / TEARDOWN
 ///////////////////////////////////////////////////////////////////////////////
@@ -129,9 +131,9 @@ Task("Test-SourceLink")
     .IsDependentOn("Build")
     .WithCriteria(IsRunningOnWindows())
     .Does(() => {
-    foreach(var asssembly in GetFiles("./src/LitJSON/bin/" + configuration + "/**/*.dll"))
+    foreach(var asssembly in GetFiles("./src/LitJson/bin/" + configuration + "/**/*.dll"))
     {
-        DotNetCoreTool("./src/LitJSON/LitJSON.csproj", "sourcelink", $"test {asssembly}");
+        DotNetCoreTool(litjsonProjectPath.FullPath, "sourcelink", $"test {asssembly}");
     }
 });
 
@@ -139,7 +141,7 @@ Task("Package")
     .IsDependentOn("Test")
     .IsDependentOn("Test-SourceLink")
     .Does(() => {
-    DotNetCorePack("./src/LitJSON/LitJSON.csproj",
+    DotNetCorePack(litjsonProjectPath.FullPath,
         new DotNetCorePackSettings {
             Configuration = configuration,
             NoBuild = true,
