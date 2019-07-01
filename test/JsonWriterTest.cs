@@ -35,7 +35,6 @@ namespace LitJson.Test
         }
 
         [Test]
-        [ExpectedException (typeof (JsonException))]
         public void ErrorExcessDataTest ()
         {
             JsonWriter writer = new JsonWriter ();
@@ -43,31 +42,34 @@ namespace LitJson.Test
             writer.WriteArrayStart ();
             writer.Write (true);
             writer.WriteArrayEnd ();
-            writer.Write (false);
+            Assert.Throws<JsonException>(() => {
+                writer.Write (false);
+            });
         }
 
         [Test]
-        [ExpectedException (typeof (JsonException))]
         public void ErrorArrayClosingTest ()
         {
             JsonWriter writer = new JsonWriter ();
 
             writer.WriteArrayStart ();
             writer.Write (true);
-            writer.WriteObjectEnd ();
+            Assert.Throws<JsonException>(() => {
+                writer.WriteObjectEnd ();
+            });
         }
 
         [Test]
-        [ExpectedException (typeof (JsonException))]
         public void ErrorNoArrayOrObjectTest ()
         {
             JsonWriter writer = new JsonWriter ();
 
-            writer.Write (true);
+            Assert.Throws<JsonException>(() => {
+                writer.Write (true);
+            });
         }
 
         [Test]
-        [ExpectedException (typeof (JsonException))]
         public void ErrorObjectClosingTest ()
         {
             JsonWriter writer = new JsonWriter ();
@@ -75,29 +77,32 @@ namespace LitJson.Test
             writer.WriteObjectStart ();
             writer.WritePropertyName ("foo");
             writer.Write ("bar");
-            writer.WriteArrayEnd ();
+            Assert.Throws<JsonException>(() => {
+                writer.WriteArrayEnd ();
+            });
         }
 
         [Test]
-        [ExpectedException (typeof (JsonException))]
         public void ErrorPropertyExpectedTest ()
         {
             JsonWriter writer = new JsonWriter ();
 
             writer.WriteObjectStart ();
-            writer.Write (10);
-            writer.WriteObjectEnd ();
+            Assert.Throws<JsonException>(() => {
+                writer.Write (10);
+            });
         }
 
         [Test]
-        [ExpectedException (typeof (JsonException))]
         public void ErrorValueExpectedTest ()
         {
             JsonWriter writer = new JsonWriter ();
 
             writer.WriteObjectStart ();
             writer.WritePropertyName ("foo");
-            writer.WriteObjectEnd ();
+            Assert.Throws<JsonException>(() => {
+                writer.WriteObjectEnd ();
+            });
         }
 
         [Test]
@@ -153,13 +158,13 @@ namespace LitJson.Test
         }
 
         [Test]
-        [ExpectedException (typeof (ArgumentNullException))]
         public void NullWriterTest ()
         {
             TextWriter text_writer = null;
-            JsonWriter writer = new JsonWriter (text_writer);
 
-            writer.Write (123);
+            Assert.Throws<ArgumentNullException>(() => {
+                JsonWriter writer = new JsonWriter (text_writer);
+            });
         }
 
         [Test]
@@ -227,21 +232,24 @@ namespace LitJson.Test
         {
             JsonWriter writer = new JsonWriter ();
 
-            string json = @"
-[
-    {
-        ""precision"" : ""zip"",
-        ""Latitude""  : 37.7668,
-        ""Longitude"" : -122.3959,
-        ""City""      : ""SAN FRANCISCO""
-    },
-  {
-    ""precision"" : ""zip"",
-    ""Latitude""  : 37.371991,
-    ""Longitude"" : -122.02602,
-    ""City""      : ""SUNNYVALE""
-  }
-]";
+            string json = string.Join(
+                Environment.NewLine,
+                new [] {
+                    "",
+                    "[",
+                    "    {",
+                    "        \"precision\" : \"zip\",",
+                    "        \"Latitude\"  : 37.7668,",
+                    "        \"Longitude\" : -122.3959,",
+                    "        \"City\"      : \"SAN FRANCISCO\"",
+                    "    },",
+                    "  {",
+                    "    \"precision\" : \"zip\",",
+                    "    \"Latitude\"  : 37.371991,",
+                    "    \"Longitude\" : -122.02602,",
+                    "    \"City\"      : \"SUNNYVALE\"",
+                    "  }",
+                    "]"});
 
             writer.PrettyPrint = true;
 
@@ -271,7 +279,7 @@ namespace LitJson.Test
             writer.WriteObjectEnd ();
             writer.WriteArrayEnd ();
 
-            Assert.AreEqual (writer.ToString (), json);
+            Assert.AreEqual (json, writer.ToString ());
         }
 
         [Test]

@@ -147,8 +147,9 @@ namespace LitJson.Test
             b = 10L;
             Assert.IsTrue (a.Equals (b), "A4");
 
+            // Int now comparable to long
             b = 10;
-            Assert.IsFalse (a.Equals (b), "A5");
+            Assert.IsTrue (a.Equals (b), "A5");
             b = 11L;
             Assert.IsFalse (a.Equals (b), "A6");
 
@@ -194,27 +195,29 @@ namespace LitJson.Test
         }
 
         [Test]
-        [ExpectedException (typeof (InvalidOperationException))]
         public void GetKeysInvalidTypeTest ()
         {
             JsonData data = new JsonData ();
             data.Add (42);  // turns it into an array
 
             // .. but an array doesn't have keys
-            ICollection<string> keys = data.Keys;
-            Assert.IsNotNull (keys);
+            Assert.Throws<InvalidOperationException>(() => {
+                ICollection<string> keys = data.Keys;
+                Assert.IsNotNull (keys);
+            });
         }
 
         [Test]
-        [ExpectedException (typeof (InvalidCastException))]
         public void InvalidCastTest ()
         {
             JsonData data = 35;
 
-            string str = (string) data;
+            Assert.Throws<InvalidCastException>(() => {
+                string str = (string) data;
 
-            if (str != (string) data)
-                str = (string) data;
+                if (str != (string) data)
+                    str = (string) data;
+            });
         }
 
         [Test]

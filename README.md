@@ -1,68 +1,115 @@
 LitJSON
 =======
 
+[![NuGet](https://img.shields.io/nuget/v/LitJson.svg)](https://www.nuget.org/packages/LitJson) [![MyGet](https://img.shields.io/myget/litjson/vpre/LitJson.svg?label=myget)](https://www.myget.org/gallery/litjson)
+
 A *.Net* library to handle conversions from and to JSON (JavaScript Object
 Notation) strings.
 
-[Project website][litjson].
+> _It's quick and lean, without external dependencies.
+> Just a few classes so easily embeddable in your own code or a very small assembly to ship with your code.
+> The code is highly portable, which in general makes it easy to adapt for new platforms._
+
+
+## Continuous integration
+
+| Build server                | Platform      | Build status                                                                                                                                                   |
+|-----------------------------|---------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| AppVeyor                    | Windows       | [![AppVeyor branch](https://img.shields.io/appveyor/ci/litjson/litjson/develop.svg)](https://ci.appveyor.com/project/litjson/litjson/branch/develop)           |
+| Bitrise                     | MacOS         | [![Build Status](https://www.bitrise.io/app/5975a00ca2666fb1/status.svg?token=OZnv4YWRw71IVax38Wi50Q&branch=develop)](https://www.bitrise.io/app/5975a00ca2666fb1) |
+| Bitrise                     | Linux         | [![Build Status](https://www.bitrise.io/app/4c9ee62c6ba13630/status.svg?token=RBH8UKw-68lQYjageT8VoQ&branch=develop)](https://www.bitrise.io/app/4c9ee62c6ba13630) |
+| Travis                      | Linux / MacOS | [![Travis build status](https://travis-ci.org/LitJSON/litjson.svg?branch=develop)](https://travis-ci.org/LitJSON/litjson)                                      |
 
 
 ## Compiling
 
-See the files under the `build` directory.
+Code can be compiled using .NET CLI or by launching the bootstrappers in the root of the repository.
 
-### Using GNU Make
+#### Windows
 
-Change directory to `build/make/` and run `make` from it. This tries to use
-the `gmcs` compiler by default. Feel free to open the `Makefile` and tweak
-it according to your needs.
+```powershell
+./build.ps1
+```
 
-### Using other tools
+#### Linux / OS X
 
-Currently, LitJSON doesn't have any other auxiliary files for compiling this
-library with other tools.
+```console
+./build.sh
+```
 
-If you want to contribute your own solutions to compile it with tools like
-*NAnt* or *MSBuild*, that would be most appreciated. Please create those
-auxiliary files under the path `build/some-tool`. Thanks.
+#### Prerequisites
 
-## Tests
+The bootstrappers will (locally in repo)
+  
+  * Fetch and install .NET Core CLI / SDK version needed to compile LitJSON.
+  * Fetch and install Cake runner
+  * Execute build script with supplied target (`--target=[Target]`) or by default
+    1. Clean previous artifacts
+    1. Restore build dependencies from NuGet
+    1. Build
+    1. Run unit tests
+    1. Create NuGet package
+  
+#### Testing
 
 This library comes with a set of unit tests using the [NUnit][nunit]
 framework.
 
-If you have [pkg-config][pkg-config] in your system, and the *Mono* suite
-provides the `mono-nunit.pc` file, you can try running these tests by running
-`make test` from the `build/make` directory.
-
-You can specify which `pkg-config` is invoked by passing a `PKG_CONFIG`
-variable to `make test`. This is useful when you have mutiple conflicting
-`pkg-config`s on your system and need to select the correct one (i.e. to
-avoid conflicts with Homebrew on Mac OSX).
-
-Example of running the tests on Mac OSX:
-
-```bash
-# In litjson/ directory
-$ cd build/make
-$ make PKG_CONFIG=/Library/Frameworks/Mono.framework/Commands/pkg-config test
-```
-
 ## Using LitJSON from an application
 
-Reference the `LitJson.dll` file when compiling your code. For a link to
-download this file, see the *Download* section in the project's
-[website][litjson].
+#### Package manager
+
+```PowerShell
+Install-Package LitJson -Version 0.10.0
+```
+
+#### .NET CLI
+
+```PowerShell
+dotnet add package LitJson --version 0.10.0
+```
+
+#### Paket CLI
+
+```PowerShell
+paket add LitJson --version 0.10.0
+```
 
 Alternatively, just copy the whole tree of files under `src/LitJSON` to your
 own project's source tree and integrate it with your development environment.
+
+#### Requirements
+
+LitJSON currently targets and supports
+* .NET Standard 2.0
+* .NET Standard 1.5
+* .NET Framework 4.5 and above
+* .NET Framework 4.0
+* .NET Framework 3.5 (including SQLCLR, for which [WCOMAB/SqlServerSlackAPI](https://github.com/WCOMAB/SqlServerSlackAPI) is an example of)
+* .NET Framework 2.0
+* Mono 4.4.2 and above
+
+#### Prereleases
+
+Each merge to develop is published to our NuGet feed on [MyGet](mygetgallery).
+
+## Contributing
+
+So you’re thinking about contributing to LitJSON? Great! It’s **really** appreciated.
+
+* Create an issue
+* Fork the repository.
+* Create a feature branch from `develop` to work in.
+* Make your feature addition or bug fix.
+* Don't forget the unit tests.
+* Send a pull request.
 
 ## License
 
 [Unlicense][unlicense] (public domain).
 
-
-[litjson]: http://lbv.github.io/litjson/
+[mygetgallery]: [https://www.myget.org/gallery/litjson]
+[litjson]: [unlicense](http://unlicense.org/
 [nunit]: http://www.nunit.org/
 [pkg-config]: http://www.freedesktop.org/wiki/Software/pkg-config
 [unlicense]: http://unlicense.org/
