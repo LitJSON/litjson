@@ -162,15 +162,16 @@ namespace LitJson.Test
 
     public class ValueTypesTest
     {
-        public byte     TestByte;
-        public char     TestChar;
-        public DateTime TestDateTime;
-        public decimal  TestDecimal;
-        public sbyte    TestSByte;
-        public short    TestShort;
-        public ushort   TestUShort;
-        public uint     TestUInt;
-        public ulong    TestULong;
+        public byte           TestByte;
+        public char           TestChar;
+        public DateTime       TestDateTime;
+        public decimal        TestDecimal;
+        public sbyte          TestSByte;
+        public short          TestShort;
+        public ushort         TestUShort;
+        public uint           TestUInt;
+        public ulong          TestULong;
+        public DateTimeOffset TestDateTimeOffset;
     }
 
     public class NullableTypesTest
@@ -399,13 +400,17 @@ namespace LitJson.Test
             test.TestUShort   = 30000;
             test.TestUInt     = 90000000;
             test.TestULong    = 0xFFFFFFFFFFFFFFFF; // = =18446744073709551615
+            test.TestDateTimeOffset =
+                new DateTimeOffset(2019, 9, 18, 16, 47, 
+                    50, 123, TimeSpan.FromHours(8)).AddTicks(4567);
 
             string json = JsonMapper.ToJson (test);
             string expected =
                 "{\"TestByte\":200,\"TestChar\":\"P\",\"TestDateTime\":" +
                 "\"12/22/2012 00:00:00\",\"TestDecimal\":10.333," +
                 "\"TestSByte\":-5,\"TestShort\":1024,\"TestUShort\":30000" +
-                ",\"TestUInt\":90000000,\"TestULong\":18446744073709551615}";
+                ",\"TestUInt\":90000000,\"TestULong\":18446744073709551615" +
+                ",\"TestDateTimeOffset\":\"2019-09-18T16:47:50.1234567+08:00\"}";
 
             Assert.AreEqual (expected, json);
         }
@@ -825,15 +830,16 @@ namespace LitJson.Test
         {
             string json = @"
 {
-  ""TestByte"":     200,
-  ""TestChar"":     'P',
-  ""TestDateTime"": ""12/22/2012 00:00:00"",
-  ""TestDecimal"":  10.333,
-  ""TestSByte"":    -5,
-  ""TestShort"":    1024,
-  ""TestUShort"":   30000,
-  ""TestUInt"":     90000000,
-  ""TestULong"":    18446744073709551615
+  ""TestByte"":           200,
+  ""TestChar"":           'P',
+  ""TestDateTime"":       ""12/22/2012 00:00:00"",
+  ""TestDecimal"":        10.333,
+  ""TestSByte"":          -5,
+  ""TestShort"":          1024,
+  ""TestUShort"":         30000,
+  ""TestUInt"":           90000000,
+  ""TestULong"":          18446744073709551615,
+  ""TestDateTimeOffset"": ""2019-09-18T16:47:50.1234567+08:00""
 }";
 
             ValueTypesTest test = JsonMapper.ToObject<ValueTypesTest> (json);
@@ -848,6 +854,10 @@ namespace LitJson.Test
             Assert.AreEqual (30000, test.TestUShort, "A7");
             Assert.AreEqual (90000000, test.TestUInt, "A8");
             Assert.AreEqual (18446744073709551615L, test.TestULong, "A9");
+            Assert.AreEqual(
+                new DateTimeOffset(2019, 9, 18, 16, 47, 
+                    50, 123, TimeSpan.FromHours(8)).AddTicks(4567),
+                test.TestDateTimeOffset, "A10");
         }
 
         [Test]
