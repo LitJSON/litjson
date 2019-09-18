@@ -1,6 +1,11 @@
+// Install modules
+#module nuget:?package=Cake.DotNetTool.Module&version=0.3.0
 
-#tool "nuget:https://api.nuget.org/v3/index.json?package=GitVersion.CommandLine&version=3.6.2"
+// Install tools
 #tool nuget:?package=NUnit.ConsoleRunner&version=3.4.0
+
+// Install .NET Core Global tools.
+#tool "dotnet:https://api.nuget.org/v3/index.json?package=GitVersion.Tool&version=5.0.1"
 
 ///////////////////////////////////////////////////////////////////////////////
 // ARGUMENTS
@@ -56,7 +61,16 @@ Setup(ctx =>
 
     if(!IsRunningOnWindows())
     {
-        var frameworkPathOverride = new FilePath(typeof(object).Assembly.Location).GetDirectory().FullPath + "/";
+        var frameworkPathOverride = ctx.Environment.Runtime.IsCoreClr
+                                        ?   new []{
+                                                new DirectoryPath("/Library/Frameworks/Mono.framework/Versions/Current/lib/mono"),
+                                                new DirectoryPath("/usr/lib/mono"),
+                                                new DirectoryPath("/usr/local/lib/mono")
+                                            }
+                                            .Select(directory =>directory.Combine("4.5"))
+                                            .FirstOrDefault(directory => ctx.DirectoryExists(directory))
+                                            ?.FullPath + "/"
+                                        : new FilePath(typeof(object).Assembly.Location).GetDirectory().FullPath + "/";
 
         // Use FrameworkPathOverride when not running on Windows.
         Information("Build will use FrameworkPathOverride={0} since not building on Windows.", frameworkPathOverride);
