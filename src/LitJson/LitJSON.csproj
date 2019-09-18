@@ -24,12 +24,16 @@ It's quick and lean, without external dependencies.</Description>
     <Authors>Leonardo Boshell, Mattias Karlsson and contributors</Authors>
     <Company>Leonardo Boshell, Mattias Karlsson and contributors</Company>
     <PackageLicenseExpression>Unlicense</PackageLicenseExpression>
-    <PackageIconUrl>https://litjson.net/assets/img/logo.png</PackageIconUrl>
+    <PackageIcon>litjson.png</PackageIcon>
     <RepositoryUrl>https://github.com/LitJSON/litjson</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <PackageTags>JSON;Serializer</PackageTags>
     <IncludeSource>true</IncludeSource>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="litjson.png" Pack="true" PackagePath="" />
+  </ItemGroup>
 
   <PropertyGroup Condition="'$(TargetFramework)' == 'net20' ">
     <DefineConstants>$(DefineConstants);LEGACY</DefineConstants>
