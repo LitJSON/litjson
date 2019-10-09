@@ -284,12 +284,12 @@ namespace LitJson.Test
             hash.Add ("product", "ACME rocket skates");
             hash.Add ("quantity", 5);
             hash.Add ("price", 45.95);
+            hash.Add (1L, "Cast long to string");
 
             string expected = "{\"product\":\"ACME rocket skates\"," +
-                "\"quantity\":5,\"price\":45.95}";
+                "\"quantity\":5,\"price\":45.95,\"1\":\"Cast long to string\"}";
 
             string json = JsonMapper.ToJson (hash);
-
             Assert.AreEqual (expected, json);
         }
 
