@@ -307,6 +307,22 @@ namespace LitJson.Test
         }
 
         [Test]
+        public void ExportEnumDictionaryTest()
+        {
+            Dictionary<Planets, int> planets = new Dictionary<Planets, int>();
+            
+            planets.Add(Planets.Jupiter, 5);
+            planets.Add(Planets.Saturn, 6);
+            planets.Add(Planets.Uranus, 7);
+            planets.Add(Planets.Neptune, 8);
+            planets.Add(Planets.Pluto, 9);
+            
+            string json = JsonMapper.ToJson(planets);
+
+            Assert.AreEqual("{\"Jupiter\":5,\"Saturn\":6,\"Uranus\":7,\"Neptune\":8,\"Pluto\":9}", json);
+        }
+
+        [Test]
         public void ExportObjectTest ()
         {
             UiSample sample = new UiSample ();
