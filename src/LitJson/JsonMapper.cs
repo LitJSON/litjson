@@ -9,6 +9,7 @@
 #endregion
 
 
+using LitJSON;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -833,6 +834,14 @@ namespace LitJson
 
             writer.WriteObjectStart ();
             foreach (PropertyMetadata p_data in props) {
+
+                var skipAttributesList = p_data.Info.GetCustomAttributes(typeof(JsonSkipAttribute), true);
+                var skipAttributes = skipAttributesList as ICollection<Attribute>;
+                if ( skipAttributes.Count > 0 )
+                {
+                    continue;
+                }
+
                 if (p_data.IsField) {
                     writer.WritePropertyName (p_data.Info.Name);
                     WriteValue (((FieldInfo) p_data.Info).GetValue (obj),

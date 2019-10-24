@@ -10,6 +10,7 @@
 
 
 using LitJson;
+using LitJSON;
 using NUnit.Framework;
 using System;
 using System.Collections;
@@ -200,6 +201,93 @@ namespace LitJson.Test
     public class NullableEnumTest
     {
         public NullableEnum? TestEnum;
+    }
+
+    public class ClassWithSkippedProperty
+    {
+        private int _x;
+        private int _y;
+        public ClassWithSkippedProperty(int x, int y)
+        {
+            this._x = x;
+            this._y = y;
+        }
+
+        [JsonSkip]
+        public static ClassWithSkippedProperty Zero
+        {
+            get
+            {
+                return new ClassWithSkippedProperty(0, 0);
+            }
+        }
+
+        public int X
+        {
+            get
+            {
+                return _x;
+            }
+            set
+            {
+                _x = value;
+            }
+        }
+        public int Y
+        {
+            get
+            {
+                return _y;
+            }
+            set
+            {
+                _y = value;
+            }
+        }
+        
+    }
+
+    public class ClassWithSkippedField
+    {
+        private int _x;
+        private int _y;
+        private ClassWithSkippedField(int x, int y)
+        {
+            this._x = x;
+            this._y = y;
+        }
+
+        [JsonSkip]
+        public ClassWithSkippedField Instance;
+
+        public static ClassWithSkippedField GetNewInstance(int x, int y)
+        {
+            return new ClassWithSkippedField(x, y);
+        }
+
+        public int X
+        {
+            get
+            {
+                return _x;
+            }
+            set
+            {
+                _x = value;
+            }
+        }
+        public int Y
+        {
+            get
+            {
+                return _y;
+            }
+            set
+            {
+                _y = value;
+            }
+        }
+
     }
 
     [TestFixture]
@@ -429,6 +517,24 @@ namespace LitJson.Test
                 ",\"TestDateTimeOffset\":\"2019-09-18T16:47:50.1234567+08:00\"}";
 
             Assert.AreEqual (expected, json);
+        }
+
+        [Test]
+        public void ExportSkippedPropertyTest()
+        {
+            ClassWithSkippedProperty objWithSkippedProperty = new ClassWithSkippedProperty(2, 4);
+            var json = JsonMapper.ToJson(objWithSkippedProperty);
+            var expectedJSON = "{\"X\":2,\"Y\":4}";
+            Assert.AreEqual(json, expectedJSON);
+        }
+
+        [Test]
+        public void ExportSkippedFieldTest()
+        {
+            ClassWithSkippedField objWithSkippedField = ClassWithSkippedField.GetNewInstance(2, 4);
+            var json = JsonMapper.ToJson(objWithSkippedField);
+            var expectedJSON = "{\"X\":2,\"Y\":4}";
+            Assert.AreEqual(json, expectedJSON);
         }
 
         [Test]
@@ -1058,6 +1164,24 @@ namespace LitJson.Test
             value = new NullableEnumTest() { TestEnum = null };
             expectedJson = "{\"TestEnum\":null}";
             Assert.AreEqual(expectedJson, JsonMapper.ToJson(value));
+        }
+
+        [Test]
+        public void SKipAttribute_PropertyTest()
+        {
+            var result = JsonMapper.ToJson(new ClassWithSkippedProperty(8, 2));
+            string expectedJson = "{\"X\":8,\"Y\":2}";
+            Assert.AreEqual(expectedJson, result);
+            
+        }
+
+        [Test]
+        public void SKipAttribute_FieldTest()
+        {
+            var result = JsonMapper.ToJson(ClassWithSkippedField.GetNewInstance(8, 2));
+            string expectedJson = "{\"X\":8,\"Y\":2}";
+            Assert.AreEqual(expectedJson, result);
+
         }
     }
 }
