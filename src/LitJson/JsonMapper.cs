@@ -405,6 +405,8 @@ namespace LitJson
                     list = new ArrayList ();
                     elem_type = inst_type.GetElementType ();
                 }
+                
+                list.Clear();
 
                 while (true) {
                     object item = ReadValue (elem_type, reader);

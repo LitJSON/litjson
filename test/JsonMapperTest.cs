@@ -202,6 +202,17 @@ namespace LitJson.Test
         public NullableEnum? TestEnum;
     }
 
+    class EmptyArrayInJsonDataTest
+    {
+        public int[] array;
+        public string name;
+    }
+
+    class EmptyArrayInJsonDataTestWrapper
+    {
+        public JsonData data = null;
+    }
+
     [TestFixture]
     public class JsonMapperTest
     {
@@ -310,13 +321,13 @@ namespace LitJson.Test
         public void ExportEnumDictionaryTest()
         {
             Dictionary<Planets, int> planets = new Dictionary<Planets, int>();
-            
+
             planets.Add(Planets.Jupiter, 5);
             planets.Add(Planets.Saturn, 6);
             planets.Add(Planets.Uranus, 7);
             planets.Add(Planets.Neptune, 8);
             planets.Add(Planets.Pluto, 9);
-            
+
             string json = JsonMapper.ToJson(planets);
 
             Assert.AreEqual("{\"Jupiter\":5,\"Saturn\":6,\"Uranus\":7,\"Neptune\":8,\"Pluto\":9}", json);
@@ -417,7 +428,7 @@ namespace LitJson.Test
             test.TestUInt     = 90000000;
             test.TestULong    = 0xFFFFFFFFFFFFFFFF; // = =18446744073709551615
             test.TestDateTimeOffset =
-                new DateTimeOffset(2019, 9, 18, 16, 47, 
+                new DateTimeOffset(2019, 9, 18, 16, 47,
                     50, 123, TimeSpan.FromHours(8)).AddTicks(4567);
 
             string json = JsonMapper.ToJson (test);
@@ -871,7 +882,7 @@ namespace LitJson.Test
             Assert.AreEqual (90000000, test.TestUInt, "A8");
             Assert.AreEqual (18446744073709551615L, test.TestULong, "A9");
             Assert.AreEqual(
-                new DateTimeOffset(2019, 9, 18, 16, 47, 
+                new DateTimeOffset(2019, 9, 18, 16, 47,
                     50, 123, TimeSpan.FromHours(8)).AddTicks(4567),
                 test.TestDateTimeOffset, "A10");
         }
@@ -1058,6 +1069,35 @@ namespace LitJson.Test
             value = new NullableEnumTest() { TestEnum = null };
             expectedJson = "{\"TestEnum\":null}";
             Assert.AreEqual(expectedJson, JsonMapper.ToJson(value));
+        }
+
+        [Test]
+        public void EmptyArrayInJsonDataExportTest()
+        {
+            string testJson = @"
+            {
+                ""data"":
+                {
+                    ""array"": [],
+                    ""name"": ""testName""
+                }
+            }";
+
+            var response = JsonMapper.ToObject<EmptyArrayInJsonDataTestWrapper>(testJson);
+            var toJsonResult = response.data.ToJson();
+            string expectedJson = "{\"array\":[],\"name\":\"testName\"}";
+            Assert.AreEqual(toJsonResult, expectedJson);
+        }
+
+        [Test]
+        public void EmptyArrayInJsonDataTest()
+        {
+            var toJsonResult = JsonMapper.ToJson(new EmptyArrayInJsonDataTest {
+                name = "testName",
+                array = new int[0]
+            });
+            string expectedJson = "{\"array\":[],\"name\":\"testName\"}";
+            Assert.AreEqual(toJsonResult, expectedJson);
         }
     }
 }
