@@ -202,6 +202,17 @@ namespace LitJson.Test
         public NullableEnum? TestEnum;
     }
 
+    class EmptyArrayInJsonDataTest
+    {
+        public int[] array;
+        public string name;
+    }
+
+    class EmptyArrayInJsonDataTestWrapper
+    {
+        public JsonData data;
+    }
+
     [TestFixture]
     public class JsonMapperTest
     {
@@ -1059,5 +1070,23 @@ namespace LitJson.Test
             expectedJson = "{\"TestEnum\":null}";
             Assert.AreEqual(expectedJson, JsonMapper.ToJson(value));
         }
+        
+        [Test]
+        public void EmptyArrayInJsonDataExportTest()
+        {
+            string testJson = @"
+            {
+                ""data"":
+                {
+                    ""array"": [],
+                    ""name"": ""testName""
+                }
+            }";
+            
+            var response = JsonMapper.ToObject<EmptyArrayInJsonDataTestWrapper>(testJson);
+            var toJsonResult = response.data.ToJson();
+            string expectedJson = "{\"array\":[],\"name\":\"testName\"}";
+            Assert.AreEqual(toJsonResult, expectedJson);
+        }        
     }
 }
