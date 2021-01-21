@@ -1099,5 +1099,40 @@ namespace LitJson.Test
             string expectedJson = "{\"array\":[],\"name\":\"testName\"}";
             Assert.AreEqual(toJsonResult, expectedJson);
         }
+        public enum UshortEnum : ushort
+        {
+            Test = 0,
+        }
+        public enum ShortEnum : short
+        {
+            Test = 0,
+        }
+        public enum ByteEnum : byte
+        {
+            Test = 0,
+        }
+        
+        public enum SbyteEnum : sbyte
+        {
+            Test = 0,
+        }
+            
+        public class EnumWrapper
+        {
+            public UshortEnum ushortEnum;
+            public ShortEnum shortEnum;
+            public ByteEnum byteEnum;
+            public SbyteEnum sbyteEnum;
+        }
+        
+        [Test]
+        public void shortAndByteBasedEnumToJsonTest()
+        {
+            var enumWrapper = new EnumWrapper();
+            Assert.DoesNotThrow(() =>
+            {
+                var json = JsonMapper.ToJson(enumWrapper);
+            });
+        }
     }
 }
