@@ -12,25 +12,31 @@ jobs:
             inputs:
                 packageType: 'sdk'
                 version: '${{ sdkVersion }}'
+
           - task: DotNetCoreCLI@2
             displayName: 'Create project'
             inputs:
                 command: 'custom'
                 custom: 'new'
                 arguments: 'console'
+                workingDirectory: $(System.DefaultWorkingDirectory)/build
             env:
               DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 1
+
           - task: DotNetCoreCLI@2
             displayName: 'Add package'
             inputs:
                 command: 'custom'
                 custom: 'add'
                 arguments: 'package LitJSON'
+                workingDirectory: $(System.DefaultWorkingDirectory)/build
             env:
               DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 1
+
           - task: DotNetCoreCLI@2
             displayName: 'Build'
             inputs:
                 command: 'build'
+                workingDirectory: $(System.DefaultWorkingDirectory)/build
             env:
               DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 1
