@@ -1,3 +1,6 @@
+trigger:
+- develop
+
 strategy:
   matrix:
     linux:

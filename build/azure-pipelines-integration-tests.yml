@@ -1,5 +1,6 @@
 trigger:
 - develop
+- feature/integration-tests
 
 jobs:
 - template: azure-pipelines-integration-test.yml
