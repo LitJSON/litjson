@@ -405,7 +405,7 @@ namespace LitJson
                     list = new ArrayList ();
                     elem_type = inst_type.GetElementType ();
                 }
-                
+
                 list.Clear();
 
                 while (true) {
@@ -829,10 +829,20 @@ namespace LitJson
             if (obj is Enum) {
                 Type e_type = Enum.GetUnderlyingType (obj_type);
 
-                if (e_type == typeof (long)
-                    || e_type == typeof (uint)
-                    || e_type == typeof (ulong))
+                if (e_type == typeof (long))
+                    writer.Write ((long) obj);
+                else if (e_type == typeof (uint))
+                    writer.Write ((uint) obj);
+                else if (e_type == typeof (ulong))
                     writer.Write ((ulong) obj);
+                else if (e_type == typeof(ushort))
+                    writer.Write ((ushort)obj);
+                else if (e_type == typeof(short))
+                    writer.Write ((short)obj);
+                else if (e_type == typeof(byte))
+                    writer.Write ((byte)obj);
+                else if (e_type == typeof(sbyte))
+                    writer.Write ((sbyte)obj);
                 else
                     writer.Write ((int) obj);
 
@@ -920,7 +930,7 @@ namespace LitJson
 
             return (T) ReadValue (typeof (T), reader);
         }
-        
+
         public static object ToObject(string json, Type ConvertType )
         {
             JsonReader reader = new JsonReader(json);
