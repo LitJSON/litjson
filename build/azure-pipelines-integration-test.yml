@@ -1,0 +1,36 @@
+jobs:
+  - ${{ each image in parameters.images }}:
+    - ${{ each sdkVersion in parameters.sdkVersions }}:
+      - job:
+        displayName: ${{ format('OS:{0} SDK:{1}', image, sdkVersion) }}
+        pool:
+            vmImage: ${{ image }}
+        steps:
+          - task: UseDotNet@2
+            env:
+              DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 1
+            inputs:
+                packageType: 'sdk'
+                version: '${{ sdkVersion }}'
+          - task: DotNetCoreCLI@2
+            displayName: 'Create project'
+            inputs:
+                command: 'custom'
+                custom: 'new'
+                arguments: 'console'
+            env:
+              DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 1
+          - task: DotNetCoreCLI@2
+            displayName: 'Add package'
+            inputs:
+                command: 'custom'
+                custom: 'add'
+                arguments: 'package LitJSON'
+            env:
+              DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 1
+          - task: DotNetCoreCLI@2
+            displayName: 'Build'
+            inputs:
+                command: 'build'
+            env:
+              DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 1

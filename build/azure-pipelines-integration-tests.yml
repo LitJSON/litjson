@@ -1,0 +1,8 @@
+trigger:
+- develop
+
+jobs:
+- template: azure-pipelines-integration-test.yml
+  parameters:
+    images: [ 'ubuntu-latest', 'macOS-latest', 'windows-latest' ]
+    sdkVersions: ['2.1.202', '2.1.812', '3.1.405', '5.0.102']
