@@ -17,9 +17,11 @@ jobs:
             env:
               DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 1
             inputs:
+              workingDirectory: $(Build.SourcesDirectory)/build
               targetType: 'inline'
               script: |
-                rm global.json
-                dotnet new console
+                rm ../global.json
+                dotnet new console -n LitJsonTest
+                cd LitJsonTest
                 dotnet add package LitJson
                 dotnet build
