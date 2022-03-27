@@ -236,7 +236,10 @@ Task("Publish-NuGet")
 
 Task("Push-GitHub-Packages")
   .IsDependentOn("Package")
-    .WithCriteria(GitHubActions.IsRunningOnGitHubActions && !GitHubActions.Environment.PullRequest.IsPullRequest)
+    .WithCriteria(
+        GitHubActions.IsRunningOnGitHubActions &&
+        !GitHubActions.Environment.PullRequest.IsPullRequest &&
+        IsRunningOnWindows())
     .Does(() => {
 
       // Resolve the API key.
