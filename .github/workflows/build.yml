@@ -1,0 +1,37 @@
+name: Build
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+      - develop
+      - hotfix/*
+
+jobs:
+  build:
+    name: Build
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [windows-2019, ubuntu-latest, macos-latest]
+    steps:
+      - name: Get the sources
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      - name: Install .NET Core SDK
+        uses: actions/setup-dotnet@v1
+
+      - name: Run Cake script
+        uses: cake-build/cake-action@v1
+        env:
+          GH_PACKAGES_NUGET_SOURCE: https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json
+          GH_PACKAGES_NUGET_APIKEY: ${{ secrets.GITHUB_TOKEN }}
+          NUGET_SOURCE: ${{ secrets.NUGET_API_URL }}
+          NUGET_APIKEY: ${{ secrets.NUGET_API_KEY }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          cake-version: tool-manifest
+          target: GitHub-Actions
