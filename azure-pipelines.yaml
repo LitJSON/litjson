@@ -1,7 +1,7 @@
 strategy:
   matrix:
     linux:
-      imageName: 'ubuntu-16.04'
+      imageName: 'ubuntu-20.04'
     mac:
       imageName: 'macos-10.15'
     windows:
@@ -11,11 +11,6 @@ pool:
   vmImage: $(imageName)
 
 steps:
-- task: UseDotNet@2
-  displayName: 'Use .NET Core sdk 2.1.202'
-  inputs:
-    version: 2.1.202
-
 - task: UseDotNet@2
   displayName: 'Use .NET Core sdk'
   inputs:

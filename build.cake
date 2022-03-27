@@ -1,11 +1,8 @@
-// Install modules
-#module nuget:?package=Cake.DotNetTool.Module&version=0.3.0
-
 // Install tools
 #tool nuget:?package=NUnit.ConsoleRunner&version=3.4.0
 
 // Install .NET Core Global tools.
-#tool "dotnet:https://api.nuget.org/v3/index.json?package=GitVersion.Tool&version=5.0.1"
+#tool "dotnet:?package=GitVersion.Tool&version=5.9.0"
 
 ///////////////////////////////////////////////////////////////////////////////
 // ARGUMENTS
@@ -18,7 +15,7 @@ var configuration = Argument("configuration", "Release");
 // PARAMETERS
 //////////////////////////////////////////////////////////////////////
 
-DotNetCoreMSBuildSettings msBuildSettings = null;
+DotNetMSBuildSettings msBuildSettings = null;
 string  version = null,
         semVersion = null,
         milestone = null;
@@ -54,10 +51,12 @@ Setup(ctx =>
 
     Information("Calculated Semantic Version: {0}", semVersion);
 
-    msBuildSettings = new DotNetCoreMSBuildSettings()
+    msBuildSettings = new DotNetMSBuildSettings()
                             .WithProperty("Version", semVersion)
                             .WithProperty("AssemblyVersion", version)
-                            .WithProperty("FileVersion", version);
+                            .WithProperty("FileVersion", version)
+                            .WithProperty("ContinuousIntegrationBuild", BuildSystem.IsLocalBuild ? bool.FalseString : bool.TrueString);
+
 
     if(!IsRunningOnWindows())
     {
@@ -107,16 +106,16 @@ Task("Clean")
 Task("Restore")
     .IsDependentOn("Clean")
     .Does(() => {
-    DotNetCoreRestore("./LitJSON.sln",
-        new DotNetCoreRestoreSettings { MSBuildSettings = msBuildSettings }
+    DotNetRestore("./LitJSON.sln",
+        new DotNetRestoreSettings { MSBuildSettings = msBuildSettings }
     );
 });
 
 Task("Build")
     .IsDependentOn("Restore")
     .Does(() => {
-    DotNetCoreBuild("./LitJSON.sln",
-        new DotNetCoreBuildSettings {
+    DotNetBuild("./LitJSON.sln",
+        new DotNetBuildSettings {
             Configuration = configuration,
             MSBuildSettings = msBuildSettings,
             ArgumentCustomization = args => args.Append("--no-restore")
@@ -127,10 +126,10 @@ Task("Build")
 Task("Test")
     .IsDependentOn("Build")
     .Does(() => {
-    DotNetCoreTest("./test/LitJSON.Tests.csproj",
-        new DotNetCoreTestSettings {
+    DotNetTest("./test/LitJSON.Tests.csproj",
+        new DotNetTestSettings {
             Configuration = configuration,
-            Framework = "netcoreapp2.0",
+            Framework = "net6.0",
             NoBuild = true,
             ArgumentCustomization = args => args.Append("--no-restore")
         }
@@ -143,11 +142,11 @@ Task("Test")
 
 Task("Test-SourceLink")
     .IsDependentOn("Build")
-    .WithCriteria(IsRunningOnWindows())
+    .WithCriteria(IsRunningOnWindows() && AppVeyor.IsRunningOnAppVeyor)
     .Does(() => {
     foreach(var asssembly in GetFiles("./src/LitJson/bin/" + configuration + "/**/*.dll"))
     {
-        DotNetCoreTool(litjsonProjectPath.FullPath, "sourcelink", $"test {asssembly}");
+        DotNetTool(litjsonProjectPath.FullPath, "sourcelink", $"test {asssembly}");
     }
 });
 
@@ -155,8 +154,8 @@ Task("Package")
     .IsDependentOn("Test")
     .IsDependentOn("Test-SourceLink")
     .Does(() => {
-    DotNetCorePack(litjsonProjectPath.FullPath,
-        new DotNetCorePackSettings {
+    DotNetPack(litjsonProjectPath.FullPath,
+        new DotNetPackSettings {
             Configuration = configuration,
             NoBuild = true,
             IncludeSymbols = true,
@@ -197,8 +196,8 @@ Task("Publish-MyGet")
 
     foreach(var package in (GetFiles("./artifacts/nuget/*.nupkg") - GetFiles("./artifacts/nuget/*.symbols.nupkg")))
     {
-        DotNetCoreNuGetPush(package.FullPath,
-        new DotNetCoreNuGetPushSettings {
+        DotNetNuGetPush(package.FullPath,
+        new DotNetNuGetPushSettings {
             ApiKey = apiKey,
             Source = apiUrl
         }
@@ -215,19 +214,47 @@ Task("Publish-NuGet")
       // Resolve the API key.
     var apiKey = EnvironmentVariable("NUGET_API_KEY");
     if(string.IsNullOrEmpty(apiKey)) {
-        throw new InvalidOperationException("Could not resolve MyGet API key.");
+        throw new InvalidOperationException("Could not resolve NuGet API key.");
     }
 
     // Resolve the API url.
     var apiUrl = EnvironmentVariable("NUGET_API_URL");
     if(string.IsNullOrEmpty(apiUrl)) {
-        throw new InvalidOperationException("Could not resolve MyGet API url.");
+        throw new InvalidOperationException("Could not resolve NuGet API url.");
     }
 
     foreach(var package in (GetFiles("./artifacts/nuget/*.nupkg") - GetFiles("./artifacts/nuget/*.symbols.nupkg")))
     {
-        DotNetCoreNuGetPush(package.FullPath,
-        new DotNetCoreNuGetPushSettings {
+        DotNetNuGetPush(package.FullPath,
+        new DotNetNuGetPushSettings {
+            ApiKey = apiKey,
+            Source = apiUrl
+        }
+    );
+    }
+});
+
+Task("Push-GitHub-Packages")
+  .IsDependentOn("Package")
+    .WithCriteria(GitHubActions.IsRunningOnGitHubActions && !GitHubActions.Environment.PullRequest.IsPullRequest)
+    .Does(() => {
+
+      // Resolve the API key.
+    var apiKey = EnvironmentVariable("GH_PACKAGES_NUGET_APIKEY");
+    if(string.IsNullOrEmpty(apiKey)) {
+        throw new InvalidOperationException("Could not resolve GitHub API key.");
+    }
+
+    // Resolve the API url.
+    var apiUrl = EnvironmentVariable("GH_PACKAGES_NUGET_SOURCE");
+    if(string.IsNullOrEmpty(apiUrl)) {
+        throw new InvalidOperationException("Could not resolve GitHub API url.");
+    }
+
+    foreach(var package in (GetFiles("./artifacts/nuget/*.nupkg") - GetFiles("./artifacts/nuget/*.symbols.nupkg")))
+    {
+        DotNetNuGetPush(package.FullPath,
+        new DotNetNuGetPushSettings {
             ApiKey = apiKey,
             Source = apiUrl
         }
@@ -239,6 +266,9 @@ Task("AppVeyor")
   .IsDependentOn("Upload-AppVeyor-Artifacts")
   .IsDependentOn("Publish-MyGet")
   .IsDependentOn("Publish-NuGet");
+
+Task("GitHub-Actions")
+  .IsDependentOn("Push-GitHub-Packages");
 
 Task("Default")
   .IsDependentOn("Package");
