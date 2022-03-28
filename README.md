@@ -81,6 +81,8 @@ own project's source tree and integrate it with your development environment.
 #### Requirements
 
 LitJSON currently targets and supports
+* .NET 6
+* .NET Standard 2.1
 * .NET Standard 2.0
 * .NET Standard 1.5
 * .NET Framework 4.5 and above
