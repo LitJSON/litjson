@@ -21,6 +21,9 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Fetch all history for all tags and branches
+        run: git fetch --prune --unshallow
+
       - name: Install .NET Core SDK
         uses: actions/setup-dotnet@v1
 
