@@ -93,7 +93,7 @@ LitJSON currently targets and supports
 
 #### Prereleases
 
-Each merge to develop is published to our NuGet feed on [MyGet](mygetgallery).
+Each merge to develop is published to our NuGet feed on [MyGet](mygetgallery) and also [GitHub Packages](ghpackages).
 
 ## Contributing
 
@@ -115,3 +115,4 @@ So you’re thinking about contributing to LitJSON? Great! It’s **really** app
 [nunit]: http://www.nunit.org/
 [pkg-config]: http://www.freedesktop.org/wiki/Software/pkg-config
 [unlicense]: http://unlicense.org/
+[ghpackages]: https://github.com/orgs/LitJSON/packages?repo_name=litjson
