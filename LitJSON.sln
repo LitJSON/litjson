@@ -1,4 +1,4 @@
-
+﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.26124.0
@@ -6,6 +6,8 @@ MinimumVisualStudioVersion = 15.0.26124.0
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LitJSON", "src\LitJson\LitJSON.csproj", "{CFBC33D5-BB2D-4F22-B157-0862C4A77039}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LitJSON.Tests", "test\LitJSON.Tests.csproj", "{E031C1B4-CD87-475E-9283-4571435C65DB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LitJson.Source", "src\LitJson.Source\LitJSON.Source.csproj", "{F982E34E-F80C-4C9F-AF9B-0E5A34D69A35}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -44,5 +46,17 @@ Global
 		{E031C1B4-CD87-475E-9283-4571435C65DB}.Release|x64.Build.0 = Release|x64
 		{E031C1B4-CD87-475E-9283-4571435C65DB}.Release|x86.ActiveCfg = Release|x86
 		{E031C1B4-CD87-475E-9283-4571435C65DB}.Release|x86.Build.0 = Release|x86
+		{F982E34E-F80C-4C9F-AF9B-0E5A34D69A35}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F982E34E-F80C-4C9F-AF9B-0E5A34D69A35}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F982E34E-F80C-4C9F-AF9B-0E5A34D69A35}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{F982E34E-F80C-4C9F-AF9B-0E5A34D69A35}.Debug|x64.Build.0 = Debug|Any CPU
+		{F982E34E-F80C-4C9F-AF9B-0E5A34D69A35}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{F982E34E-F80C-4C9F-AF9B-0E5A34D69A35}.Debug|x86.Build.0 = Debug|Any CPU
+		{F982E34E-F80C-4C9F-AF9B-0E5A34D69A35}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F982E34E-F80C-4C9F-AF9B-0E5A34D69A35}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F982E34E-F80C-4C9F-AF9B-0E5A34D69A35}.Release|x64.ActiveCfg = Release|Any CPU
+		{F982E34E-F80C-4C9F-AF9B-0E5A34D69A35}.Release|x64.Build.0 = Release|Any CPU
+		{F982E34E-F80C-4C9F-AF9B-0E5A34D69A35}.Release|x86.ActiveCfg = Release|Any CPU
+		{F982E34E-F80C-4C9F-AF9B-0E5A34D69A35}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
