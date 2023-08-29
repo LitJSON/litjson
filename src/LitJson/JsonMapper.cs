@@ -344,15 +344,6 @@ namespace LitJson
 
                 // If there's a custom importer that fits, use it
                 lock (custom_importers_table_lock) {
-                    //if (custom_importers_table.ContainsKey (json_type) &&
-                    //    custom_importers_table[json_type].ContainsKey (
-                    //        value_type)) {
-
-                    //    ImporterFunc importer =
-                    //        custom_importers_table[json_type][value_type];
-
-                    //    return importer (reader.Value);
-                    //}
                     if (custom_importers_table.TryGetValue(json_type, out IDictionary<Type, ImporterFunc> customImporterTablesValue) &&
                         customImporterTablesValue.TryGetValue(value_type, out ImporterFunc customImporter)) {
 
@@ -361,15 +352,6 @@ namespace LitJson
                 }
 
                 // Maybe there's a base importer that works
-                //if (base_importers_table.ContainsKey (json_type) &&
-                //    base_importers_table[json_type].ContainsKey (
-                //        value_type)) {
-
-                //    ImporterFunc importer =
-                //        base_importers_table[json_type][value_type];
-
-                //    return importer (reader.Value);
-                //}
                 if (base_importers_table.TryGetValue(json_type, out IDictionary<Type, ImporterFunc> baseImporterTablesValue) &&
                     baseImporterTablesValue.TryGetValue(value_type, out ImporterFunc baseImporter)) {
 
@@ -828,20 +810,6 @@ namespace LitJson
             Type obj_type = obj.GetType ();
 
             // See if there's a custom exporter for the object
-            //if (custom_exporters_table.ContainsKey (obj_type)) {
-            //    ExporterFunc exporter = custom_exporters_table[obj_type];
-            //    exporter (obj, writer);
-
-            //    return;
-            //}
-
-            //// If not, maybe there's a base exporter
-            //if (base_exporters_table.ContainsKey (obj_type)) {
-            //    ExporterFunc exporter = base_exporters_table[obj_type];
-            //    exporter (obj, writer);
-
-            //    return;
-            //}
             lock (custom_exporters_table_lock) {
                 if (custom_exporters_table.TryGetValue(obj_type, out ExporterFunc customExporter)) {
                     customExporter(obj, writer);
