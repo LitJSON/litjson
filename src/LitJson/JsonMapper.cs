@@ -359,10 +359,10 @@ namespace LitJson
                 }
 
                 // Maybe it's an enum
-#if NETSTANDARD1_5
+                #if NETSTANDARD1_5
                 if (value_type.IsEnum())
                     return Enum.ToObject (value_type, reader.Value);
-#else
+                #else
                 if (value_type.IsEnum)
                     return Enum.ToObject (value_type, reader.Value);
                 #endif
@@ -559,7 +559,7 @@ namespace LitJson
             // This method is only called from the static initializer,
             // so there is no need to explicitly lock any static members here
             base_exporters_table[typeof (byte)] =
-            delegate (object obj, JsonWriter writer) {
+                delegate (object obj, JsonWriter writer) {
                     writer.Write (Convert.ToInt32 ((byte) obj));
                 };
 
