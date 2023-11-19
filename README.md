@@ -60,19 +60,19 @@ framework.
 #### Package manager
 
 ```PowerShell
-Install-Package LitJson -Version 0.10.0
+Install-Package LitJson -Version 0.19.0
 ```
 
 #### .NET CLI
 
 ```PowerShell
-dotnet add package LitJson --version 0.10.0
+dotnet add package LitJson --version 0.19.0
 ```
 
 #### Paket CLI
 
 ```PowerShell
-paket add LitJson --version 0.10.0
+paket add LitJson --version 0.19.0
 ```
 
 Alternatively, just copy the whole tree of files under `src/LitJSON` to your
@@ -81,11 +81,14 @@ own project's source tree and integrate it with your development environment.
 #### Requirements
 
 LitJSON currently targets and supports
+
+* .NET 8
 * .NET 6
 * .NET Standard 2.1
 * .NET Standard 2.0
 * .NET Standard 1.5
-* .NET Framework 4.5 and above
+* .NET Framework 4.8
+* .NET Framework 4.5
 * .NET Framework 4.0
 * .NET Framework 3.5 (including SQLCLR, for which [WCOMAB/SqlServerSlackAPI](https://github.com/WCOMAB/SqlServerSlackAPI) is an example of)
 * .NET Framework 2.0
