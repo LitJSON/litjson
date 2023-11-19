@@ -1,8 +1,8 @@
 // Install tools
-#tool nuget:?package=NUnit.ConsoleRunner&version=3.4.0
+#tool nuget:?package=NUnit.ConsoleRunner&version=3.16.3
 
 // Install .NET Core Global tools.
-#tool "dotnet:?package=GitVersion.Tool&version=5.9.0"
+#tool dotnet:?package=GitVersion.Tool&version=5.12.0
 
 ///////////////////////////////////////////////////////////////////////////////
 // ARGUMENTS
@@ -20,7 +20,8 @@ string  version = null,
         semVersion = null,
         milestone = null;
 
-FilePath litjsonProjectPath = "./src/LitJson/LitJSON.csproj";
+FilePath    litjsonProjectPath = "./src/LitJson/LitJSON.csproj",
+            litjsonSourceProjectPath = "./src/LitJson.Source/LitJSON.Source.csproj";
 
 ///////////////////////////////////////////////////////////////////////////////
 // SETUP / TEARDOWN
@@ -56,25 +57,6 @@ Setup(ctx =>
                             .WithProperty("AssemblyVersion", version)
                             .WithProperty("FileVersion", version)
                             .WithProperty("ContinuousIntegrationBuild", BuildSystem.IsLocalBuild ? bool.FalseString : bool.TrueString);
-
-
-    if(!IsRunningOnWindows())
-    {
-        var frameworkPathOverride = ctx.Environment.Runtime.IsCoreClr
-                                        ?   new []{
-                                                new DirectoryPath("/Library/Frameworks/Mono.framework/Versions/Current/lib/mono"),
-                                                new DirectoryPath("/usr/lib/mono"),
-                                                new DirectoryPath("/usr/local/lib/mono")
-                                            }
-                                            .Select(directory =>directory.Combine("4.5"))
-                                            .FirstOrDefault(directory => ctx.DirectoryExists(directory))
-                                            ?.FullPath + "/"
-                                        : new FilePath(typeof(object).Assembly.Location).GetDirectory().FullPath + "/";
-
-        // Use FrameworkPathOverride when not running on Windows.
-        Information("Build will use FrameworkPathOverride={0} since not building on Windows.", frameworkPathOverride);
-        msBuildSettings.WithProperty("FrameworkPathOverride", frameworkPathOverride);
-    }
 
     // Executed BEFORE the first task.
     Information("Running tasks...");
@@ -157,11 +139,20 @@ Task("Package")
     DotNetPack(litjsonProjectPath.FullPath,
         new DotNetPackSettings {
             Configuration = configuration,
+            NoRestore = true,
             NoBuild = true,
             IncludeSymbols = true,
             OutputDirectory = "./artifacts/nuget",
-            MSBuildSettings = msBuildSettings,
-            ArgumentCustomization = args => args.Append("--no-restore")
+            MSBuildSettings = msBuildSettings
+        }
+    );
+    DotNetPack(litjsonSourceProjectPath.FullPath,
+        new DotNetPackSettings {
+            Configuration = configuration,
+            NoBuild = true,
+            NoRestore = true,
+            OutputDirectory = "./artifacts/nuget",
+            MSBuildSettings = msBuildSettings
         }
     );
 });
@@ -178,7 +169,15 @@ Task("Upload-AppVeyor-Artifacts")
 
 Task("Publish-MyGet")
     .IsDependentOn("Package")
-    .WithCriteria((AppVeyor.IsRunningOnAppVeyor && !AppVeyor.Environment.PullRequest.IsPullRequest)
+    .WithCriteria(
+        (
+            AppVeyor.IsRunningOnAppVeyor &&
+            !AppVeyor.Environment.PullRequest.IsPullRequest &&
+            (
+                !AppVeyor.Environment.Repository.Branch.Equals("master", StringComparison.OrdinalIgnoreCase) ||
+                AppVeyor.Environment.Repository.Tag.IsTag
+            )
+        )
         || StringComparer.OrdinalIgnoreCase.Equals(target, "Publish-MyGet"))
     .Does(() => {
 

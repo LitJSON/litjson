@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>netstandard2.1;netstandard2.0;net45;netstandard1.5;net40;net35;net20;net6.0</TargetFrameworks>
+    <TargetFrameworks>netstandard2.1;netstandard2.0;net45;net48;netstandard1.5;net40;net35;net20;net6.0;net8.0</TargetFrameworks>
   </PropertyGroup>
 
   <PropertyGroup>
@@ -10,17 +10,18 @@
     <EmbedUntrackedSources>true</EmbedUntrackedSources>
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
     <SourceLinkCreate Condition="'$(OS)' == 'Windows_NT'">true</SourceLinkCreate>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
   </PropertyGroup>
 
   <ItemGroup Condition="'$(OS)' == 'Windows_NT'">
-    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1" PrivateAssets="All" />
+    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="8.0.0" PrivateAssets="all" />
     <DotNetCliToolReference Include="dotnet-sourcelink-git" Version="2.8.3" />
     <DotNetCliToolReference Include="dotnet-sourcelink" Version="2.8.3" />
   </ItemGroup>
 
   <PropertyGroup>
     <PackageId>LitJson</PackageId>
-    <Description>A .Net library to handle conversions from and to JSON (JavaScript Object Notation) strings. Written in C#, and it’s intended to be small, fast and easy to use.
+    <Description>A .NET library to handle conversions from and to JSON (JavaScript Object Notation) strings. Written in C#, and it’s intended to be small, fast and easy to use.
 It's quick and lean, without external dependencies.</Description>
     <Copyright>The authors disclaim copyright to this source code.</Copyright>
     <Authors>Leonardo Boshell, Mattias Karlsson and contributors</Authors>
@@ -39,12 +40,10 @@ It's quick and lean, without external dependencies.</Description>
 
   <PropertyGroup Condition="'$(TargetFramework)' == 'net20' ">
     <DefineConstants>$(DefineConstants);LEGACY</DefineConstants>
-    <FrameworkPathOverride Condition="'$(TargetFramework)' == 'net20' and '$(OS)' == 'Windows_NT'">C:\Windows\Microsoft.NET\Framework\v2.0.50727</FrameworkPathOverride>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(TargetFramework)' == 'net35' ">
     <DefineConstants>$(DefineConstants);LEGACY</DefineConstants>
-    <FrameworkPathOverride Condition="'$(TargetFramework)' == 'net35' and '$(OS)' == 'Windows_NT'">C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v3.5\Profile\Client</FrameworkPathOverride>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(TargetFramework)' == 'net40' ">
@@ -52,10 +51,37 @@ It's quick and lean, without external dependencies.</Description>
   </PropertyGroup>
 
   <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard1.5' ">
-    <PackageReference Include="System.Collections.NonGeneric" Version="4.0.1" />
-    <PackageReference Include="System.Collections.Specialized" Version="4.0.1" />
+    <PackageReference Include="System.Collections.NonGeneric" Version="4.3.0" />
+    <PackageReference Include="System.Collections.Specialized" Version="4.3.0" />
     <PackageReference Include="System.Reflection" Version="4.3.0" />
-    <PackageReference Include="System.Reflection.TypeExtensions" Version="4.1.0" />
+    <PackageReference Include="System.Reflection.TypeExtensions" Version="4.7.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies.net20" Version="1.0.3" Condition="'$(TargetFramework)' == 'net20' ">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies.net35" Version="1.0.3" Condition="'$(TargetFramework)' == 'net35' ">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies.net40" Version="1.0.3" Condition="'$(TargetFramework)' == 'net40' ">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies.net45" Version="1.0.3" Condition="'$(TargetFramework)' == 'net45' ">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies.net48" Version="1.0.3" Condition="'$(TargetFramework)' == 'net48' ">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="../../README.md" Pack="true" PackagePath="\" />
   </ItemGroup>
 
 </Project>

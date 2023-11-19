@@ -18,8 +18,8 @@ Notation) strings.
 | AppVeyor                    | Windows       | [![AppVeyor branch](https://img.shields.io/appveyor/ci/litjson/litjson/develop.svg)](https://ci.appveyor.com/project/litjson/litjson/branch/develop)           |
 | Bitrise                     | MacOS         | [![Build Status](https://app.bitrise.io/app/5975a00ca2666fb1/status.svg?token=OZnv4YWRw71IVax38Wi50Q&branch=develop)](https://app.bitrise.io/app/5975a00ca2666fb1) |
 | Bitrise                     | Linux         | [![Build Status](https://app.bitrise.io/app/4c9ee62c6ba13630/status.svg?token=RBH8UKw-68lQYjageT8VoQ&branch=develop)](https://app.bitrise.io/app/4c9ee62c6ba13630)|
-| Travis                      | Linux / MacOS | [![Travis build status](https://travis-ci.org/LitJSON/litjson.svg?branch=develop)](https://travis-ci.org/LitJSON/litjson)                                      |
 | Azure Pipelines             | Linux / MacOS / Windows | [![Azure Pipelines Build Status](https://dev.azure.com/LitJSON/litjson/_apis/build/status/LitJSON.litjson?branchName=develop)](https://dev.azure.com/LitJSON/litjson/_build/latest?definitionId=3&branchName=develop) |
+| GitHub Actions              | Linux / MacOS / Windows  |[![Build](https://github.com/LitJSON/litjson/actions/workflows/build.yml/badge.svg?branch=develop)](https://github.com/LitJSON/litjson/actions/workflows/build.yml) |
 
 ## Compiling
 
@@ -60,19 +60,19 @@ framework.
 #### Package manager
 
 ```PowerShell
-Install-Package LitJson -Version 0.10.0
+Install-Package LitJson -Version 0.19.0
 ```
 
 #### .NET CLI
 
 ```PowerShell
-dotnet add package LitJson --version 0.10.0
+dotnet add package LitJson --version 0.19.0
 ```
 
 #### Paket CLI
 
 ```PowerShell
-paket add LitJson --version 0.10.0
+paket add LitJson --version 0.19.0
 ```
 
 Alternatively, just copy the whole tree of files under `src/LitJSON` to your
@@ -81,9 +81,14 @@ own project's source tree and integrate it with your development environment.
 #### Requirements
 
 LitJSON currently targets and supports
+
+* .NET 8
+* .NET 6
+* .NET Standard 2.1
 * .NET Standard 2.0
 * .NET Standard 1.5
-* .NET Framework 4.5 and above
+* .NET Framework 4.8
+* .NET Framework 4.5
 * .NET Framework 4.0
 * .NET Framework 3.5 (including SQLCLR, for which [WCOMAB/SqlServerSlackAPI](https://github.com/WCOMAB/SqlServerSlackAPI) is an example of)
 * .NET Framework 2.0
@@ -91,7 +96,7 @@ LitJSON currently targets and supports
 
 #### Prereleases
 
-Each merge to develop is published to our NuGet feed on [MyGet](mygetgallery).
+Each merge to develop is published to our NuGet feed on [MyGet](mygetgallery) and also [GitHub Packages](ghpackages).
 
 ## Contributing
 
@@ -113,3 +118,4 @@ So you’re thinking about contributing to LitJSON? Great! It’s **really** app
 [nunit]: http://www.nunit.org/
 [pkg-config]: http://www.freedesktop.org/wiki/Software/pkg-config
 [unlicense]: http://unlicense.org/
+[ghpackages]: https://github.com/orgs/LitJSON/packages?repo_name=litjson

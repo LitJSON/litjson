@@ -2,8 +2,8 @@ name: Build
 on:
   pull_request:
   push:
+    tags: [ '*.*.*' ]
     branches:
-      - main
       - develop
       - hotfix/*
 
@@ -14,18 +14,22 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [windows-2019, ubuntu-latest, macos-latest]
+        os: [windows-latest, ubuntu-latest, macos-latest]
     steps:
       - name: Get the sources
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           fetch-depth: 0
 
-      - name: Install .NET Core SDK
-        uses: actions/setup-dotnet@v1
+      - name: Install .NET SDK 6.0.x - 8.0.x
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: |
+            6.0.x
+            8.0.x
 
       - name: Run Cake script
-        uses: cake-build/cake-action@v1
+        uses: cake-build/cake-action@master
         env:
           GH_PACKAGES_NUGET_SOURCE: https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json
           GH_PACKAGES_NUGET_APIKEY: ${{ secrets.GITHUB_TOKEN }}
