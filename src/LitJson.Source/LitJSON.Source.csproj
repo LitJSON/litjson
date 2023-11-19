@@ -18,11 +18,13 @@
         <RepositoryUrl>https://github.com/LitJSON/litjson</RepositoryUrl>
         <RepositoryType>git</RepositoryType>
         <PackageTags>JSON;Serializer</PackageTags>
+        <PackageReadmeFile>README.md</PackageReadmeFile>
     </PropertyGroup>
 
     <ItemGroup>
         <PackageFile Include="../LitJson/**/*.cs" Exclude="../LitJson/obj/**;../LitJson/bin/**;../LitJson/AssemblyInfo.cs" PackagePath="$(ContentTargetFolders)\cs\any\LitJson\%(RelativeDir)%(Filename).g%(Extension)" />
         <None Include="../LitJson/litjson.png" Pack="true" PackagePath="" />
+        <None Include="../../README.md" Pack="true" PackagePath="\"/>
     </ItemGroup>
 
     <ItemGroup>
