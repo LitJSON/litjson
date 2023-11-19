@@ -1,5 +1,5 @@
 // Install tools
-#tool nuget:?package=NUnit.ConsoleRunner&version=3.4.0
+#tool nuget:?package=NUnit.ConsoleRunner&version=3.16.3
 
 // Install .NET Core Global tools.
 #tool dotnet:?package=GitVersion.Tool&version=5.12.0
