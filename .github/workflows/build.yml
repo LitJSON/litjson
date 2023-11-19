@@ -2,8 +2,8 @@ name: Build
 on:
   pull_request:
   push:
+    tags: [ '*.*.*' ]
     branches:
-      - main
       - develop
       - hotfix/*
 

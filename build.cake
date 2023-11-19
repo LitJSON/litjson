@@ -169,7 +169,15 @@ Task("Upload-AppVeyor-Artifacts")
 
 Task("Publish-MyGet")
     .IsDependentOn("Package")
-    .WithCriteria((AppVeyor.IsRunningOnAppVeyor && !AppVeyor.Environment.PullRequest.IsPullRequest)
+    .WithCriteria(
+        (
+            AppVeyor.IsRunningOnAppVeyor &&
+            !AppVeyor.Environment.PullRequest.IsPullRequest &&
+            (
+                !AppVeyor.Environment.Repository.Branch.Equals("master", StringComparison.OrdinalIgnoreCase) ||
+                AppVeyor.Environment.Repository.Tag.IsTag
+            )
+        )
         || StringComparer.OrdinalIgnoreCase.Equals(target, "Publish-MyGet"))
     .Does(() => {
 
