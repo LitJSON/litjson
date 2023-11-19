@@ -28,7 +28,7 @@
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="NuGetizer" Version="0.7.5" PrivateAssets="All" />
+        <PackageReference Include="NuGetizer" Version="1.2.0" PrivateAssets="all" />
     </ItemGroup>
 
     <ItemGroup Condition="'$(OS)' == 'Windows_NT'">
