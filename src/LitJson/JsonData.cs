@@ -551,6 +551,34 @@ namespace LitJson
             return inst_double;
         }
 
+        double[] IJsonWrapper.GetDoubleArray ()
+        {
+            if (type != JsonType.Array)
+            {
+                throw new InvalidOperationException (
+                    "JsonData instance doesn't hold a array");
+            }
+
+            if (inst_array.Count > 0)
+            {
+                if (!(inst_array[0] as IJsonWrapper).IsDouble)
+                {
+                    throw new InvalidOperationException (
+                        "JsonData instance doesn't hold a double[]");
+                }
+                
+                double[] array = new double[inst_array.Count];
+                for (int i = 0; i < inst_array.Count; i++)
+                {
+                    array[i] = (inst_array[i] as IJsonWrapper).GetDouble ();
+                }
+
+                return array;
+            }
+
+            return new double[0];
+        }
+
         int IJsonWrapper.GetInt ()
         {
             if (type != JsonType.Int)
