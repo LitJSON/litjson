@@ -446,11 +446,16 @@ namespace LitJson
                             PropertyInfo p_info =
                                 (PropertyInfo) prop_data.Info;
 
-                            if (p_info.CanWrite)
-                                p_info.SetValue (
-                                    instance,
-                                    ReadValue (prop_data.Type, reader),
-                                    null);
+                            if (p_info.CanWrite){
+                                //p_info.SetValue(
+                                //   instance,
+                                //   ReadValue(prop_data.Type, reader),
+                                //   null);
+                                //use the getSetMethod.invoke instead of SetValue is to suport more platform
+                                // such as mono run in ios,jit is forbidden,so the p_info.setValue cannot be used
+                                p_info.GetSetMethod().Invoke(instance, new object[] { ReadValue(prop_data.Type, reader) });
+                            }
+                               
                             else
                                 ReadValue (prop_data.Type, reader);
                         }
