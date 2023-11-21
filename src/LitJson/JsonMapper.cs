@@ -469,9 +469,24 @@ namespace LitJson
                             }
                         }
 
+                        object cvtVal = null;
+                        Type[] arguments = value_type.GetGenericArguments();
+                        Type keyType = arguments[0];
+                        Type valType = arguments[1];
+                        try
+                        {
+                            cvtVal = Convert.ChangeType(property, keyType);
+                        }
+                        catch (Exception ex)
+                        {
+                            throw new JsonException(String.Format(
+                                       "The key '{0}' can not convert to " +
+                                       " value {1}",
+                                       property, keyType));
+                        }
                         ((IDictionary) instance).Add (
-                            property, ReadValue (
-                                t_data.ElementType, reader));
+                            cvtVal, ReadValue (
+                                valType, reader));
                     }
 
                 }
